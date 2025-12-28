@@ -1,0 +1,18 @@
+---
+globs: components/**/*.ts,components/**/*.tsx,emails/**/*.tsx
+description: Règles UI (Shadcn) et Emails (React Email + Resend)
+---
+### UI (Shadcn, thèmes, composants)
+
+- Utiliser les composants de `components/ui` (alias `@/components/ui`).
+- Respecter le style New York et la sobriété visuelle, éviter l’audace excessive.
+- Préférer des composants Server quand possible, mais marquer `"use client"` pour interactivité.
+- Importer les icônes depuis `lucide-react`.
+
+### Emails (React Email + Resend)
+
+- Templates dans `emails/`. Préférer le composant `Container` de `react-email` pour la mise en page.
+- Rendu HTML via `@react-email/render`, envoi via `resend` (`lib/utils/resend.ts`).
+- Garder une langue FR, ton professionnel, et branding Biume (expéditeur `Biume <...@biume.com>`).
+- Centraliser les layouts mail dans `emails/EmailLayout.tsx` si besoin.
+

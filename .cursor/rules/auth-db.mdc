@@ -1,0 +1,26 @@
+---
+globs: lib/auth/**/*.ts,lib/utils/**/*.ts,lib/schemas/**/*.ts
+description: Règles Auth (Better Auth), Drizzle ORM et accès données
+---
+### Authentification (Better Auth)
+
+- Point d’entrée: `lib/auth/auth-server.ts`. Ne pas dupliquer la config; étendre via plugins Better Auth.
+- Plugins actifs: `organization`, `twoFactor`, `nextCookies`, `autumn`.
+- Emails d’auth: générer le HTML via `@react-email/render` et envoyer avec `resend`.
+- Pour ajouter des champs user, utiliser `user.additionalFields` dans `auth-server.ts` pour rester typé.
+
+### Rôles & organisations
+
+- Rôles et contrôle d’accès définis via `lib/auth/auth-constants.ts` et options `organization` dans `auth-server.ts`.
+- Après création d’organisation: création client Stripe via `autumn` puis mise à jour `organization.customerStripeId`.
+
+### Accès DB (Drizzle)
+
+- Utiliser l’instance `db` de `lib/utils/db.ts` (Neon serverless). Ne pas créer de connexions alternatives.
+- Schémas: `lib/schemas`. Réutiliser les types Drizzle pour l’inférence.
+- Migrations: `bun run db:generate` puis `bun run db:migrate` (voir `drizzle.config.ts`).
+
+### Sécurité & mots de passe
+
+- Hachage mot de passe via `crypto.scrypt` avec salt aléatoire (déjà implémenté), comparaison via `timingSafeEqual`.
+

@@ -1,0 +1,18 @@
+---
+globs: next.config.ts,vercel.json
+description: Variables d’environnement et configuration Next.js
+---
+### Variables d’environnement
+
+- Déclarées et exposées dans `next.config.ts` via `env`: `RESEND_API_KEY`, `DATABASE_URL`, `UPLOADTHING_TOKEN`, `NEXT_PUBLIC_APP_URL`, PostHog (`NEXT_PUBLIC_POSTHOG_*`), Better Auth (`BETTER_AUTH_*`), Stripe webhooks, `AUTUMN_SECRET_KEY`.
+- Ne pas référencer directement des secrets côté client. Utiliser les variables `NEXT_PUBLIC_*` pour exposition publique.
+- Vérifier la présence des variables critiques au démarrage serveur.
+
+### Images distantes
+
+- Autoriser explicitement les hôtes dans `images.remotePatterns` (uploadthing, imgur, utfs.io). Ajouter prudemment si besoin.
+
+### Déploiement
+
+- Utiliser `vercel.json` si nécessaire pour headers/redirects. Next 15 avec Turbopack est activé dans les scripts.
+

@@ -1,0 +1,49 @@
+---
+globs: **/*.ts,**/*.tsx
+description: Bonnes pratiques d’usage des libs (React Query, RHF, React-PDF, Tailwind v4, Autumn, Resend, Drizzle, Zustand, AI SDK, Trigger.dev)
+---
+### React Query
+
+- Préférer les Server Components pour le fetch initial, hydrater côté client si nécessaire.
+- Clés de cache explicites et stables. Éviter l’état dupliqué entre URL/Query/Zustand.
+
+### React Hook Form (+ Zod)
+
+- Schémas de validation dans `lib/utils/schemas`. Utiliser `zodResolver`.
+- Contrôles via composants `@/components/ui/*` pour cohérence visuelle.
+
+### React-PDF
+
+- Génération de PDF côté serveur quand possible. Côté client, isoler les composants `"use client"`.
+- Gérer les polices et assets de façon déterministe.
+
+### Tailwind CSS v4
+
+- Styles globaux dans `app/globals.css`. Respecter le design system Shadcn New York.
+- Utiliser `tailwind-merge` pour combiner les classes dynamiques.
+
+### Autumn (billing)
+
+- Utiliser `lib/utils/autumn.ts` pour les appels (ex: `customers.create/delete`).
+- Ne pas exposer de clés sensibles côté client.
+
+### Resend (emails)
+
+- Utiliser `lib/utils/resend.ts` et des templates `emails/*` rendus via `@react-email/render`.
+
+### Drizzle ORM
+
+- Utiliser `lib/utils/db.ts` (Neon). Schémas `lib/schemas`. Pas de connexions ad hoc.
+
+### Zustand
+
+- Stocker uniquement l’état UI local non dérivable. Éviter de dupliquer des données serveur déjà gérées par React Query.
+
+### AI SDK
+
+- Centraliser les appels et providers IA, éviter la logique métier dans les composants UI.
+
+### Trigger.dev
+
+- Déclarer les jobs en modules dédiés côté serveur, idempotents et observables.
+

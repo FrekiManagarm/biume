@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+---
+### Biume – Contexte produit et conventions générales
+
+- **Nom produit**: Biume — SaaS pour thérapeutes animaliers (rapports/comptes rendus, gestion clients/patients).
+- **Langue**: Français par défaut (métadonnées et UI), respecter `lang="fr"` et SEO FR.
+- **Ton & UI**: sobre, cohérent avec le thème existant (Shadcn New York).
+- **Package manager**: bun (`packageManager` défini dans `package.json`).
+- **Import aliases**: utiliser `@/components`, `@/lib`, `@/components/ui`, `@/hooks` (voir [components.json](mdc:components.json) et [tsconfig.json](mdc:tsconfig.json)).
+
+### Pile technique
+
+- **Framework**: Next.js App Router (pages dans `app/`).
+- **UI**: Shadcn UI (style New York), Lucide, Tailwind v4 (via `app/globals.css`).
+- **Formulaires**: `react-hook-form` + `zod` (schémas dans `lib/schemas`).
+- **Auth**: Better Auth avec plugins (2FA, organizations) configuré dans `lib/auth/auth-server.ts`.
+- **DB**: Drizzle ORM (Neon serverless) avec schémas dans `lib/schemas`, config dans `drizzle.config.ts`.
+- **Emails**: Resend + React Email (templates dans `emails/`).
+- **Stockage fichiers**: UploadThing.
+- **Analytique**: PostHog.
+
+### Conventions de code
+
+- Réutiliser les types existants dans `lib/schemas` et dans `lib/auth/auth-server.ts` plutôt que redéfinir.
+- Noms explicites, éviter abréviations. Respecter `strict: true` TypeScript.
+- Préférer loaders/serveurs Next (Server Components, RSC) plutôt que `useEffect` pour données serveur.
+- Conserver l’arborescence `app/(segment)/...` et les layouts imbriqués.
+

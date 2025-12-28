@@ -1,0 +1,22 @@
+---
+globs: app/**/*.ts,app/**/*.tsx
+description: Règles de structure App Router Next.js (segments, layouts, pages)
+---
+### Structure App Router & navigation
+
+- Utiliser l’App Router de Next.js (dossiers `app/`) avec segments groupés `()` comme `app/(auth)` et `app/(main)`.
+- Les pages sont `page.tsx`, les layouts `layout.tsx` au niveau de chaque segment.
+- Garder l’architecture tableau de bord dans `app/(main)/dashboard/` avec sous-sections `clients/`, `patients/`, `reports/`, `settings/`.
+- Les composants de layout de dashboard se trouvent dans `components/dashboard/layout/`.
+- Préférer les Server Components par défaut et ne passer en Client Component que si nécessaire (`"use client"`).
+
+### SEO & metadata
+
+- Utiliser `generateMetadata` dans `app/layout.tsx` ou localement si besoin.
+- `metadataBase` et URLs doivent utiliser `process.env.NEXT_PUBLIC_APP_URL`.
+
+### Liens, redirections, et state URL
+
+- Utiliser `next/navigation` (`redirect`, `notFound`) côté serveur et `useRouter` côté client si indispensable.
+- Pour l’état dans l’URL, préférer `nuqs` (déjà configuré via `NuqsAdapter`).
+
