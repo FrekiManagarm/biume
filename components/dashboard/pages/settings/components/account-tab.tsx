@@ -12,23 +12,44 @@ import {
   AlertCircle,
   FileText,
   Calendar,
-  Mail
+  Mail,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { deleteAccount, exportUserData, exportOrganizationData } from "@/lib/api/actions/user.action";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  deleteAccount,
+  exportUserData,
+  exportOrganizationData,
+} from "@/lib/api/actions/user.action";
 import { useSession } from "@/lib/auth/auth-client";
 
 const deleteAccountSchema = z.object({
-  confirmationText: z.string().refine(
-    (text) => text === "SUPPRIMER",
-    "Vous devez taper 'SUPPRIMER' pour confirmer la suppression"
-  ),
+  confirmationText: z.literal("SUPPRIMER"),
 });
 
 type DeleteAccountFormValues = z.infer<typeof deleteAccountSchema>;
@@ -41,14 +62,16 @@ const AccountTab = () => {
   const deleteForm = useForm<DeleteAccountFormValues>({
     resolver: zodResolver(deleteAccountSchema),
     defaultValues: {
-      confirmationText: "",
+      confirmationText: "SUPPRIMER",
     },
   });
 
   const onDeleteSubmit = async (data: DeleteAccountFormValues) => {
     setIsLoading(true);
     try {
-      await deleteAccount(data);
+      await deleteAccount({
+        confirmationText: data.confirmationText as "SUPPRIMER",
+      });
       toast.success("Compte supprimé avec succès");
       // La redirection sera gérée par la déconnexion automatique
     } catch (error) {
@@ -66,12 +89,12 @@ const AccountTab = () => {
 
       // Créer et télécharger le fichier JSON
       const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: 'application/json'
+        type: "application/json",
       });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `biume-donnees-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `biume-donnees-${new Date().toISOString().split("T")[0]}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -93,12 +116,12 @@ const AccountTab = () => {
 
       // Créer et télécharger le fichier JSON
       const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: 'application/json'
+        type: "application/json",
       });
       const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `biume-clients-patients-${new Date().toISOString().split('T')[0]}.json`;
+      link.download = `biume-clients-patients-${new Date().toISOString().split("T")[0]}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -141,7 +164,7 @@ const AccountTab = () => {
                 Email
               </h4>
               <p className="text-sm text-muted-foreground">
-                {session?.user?.email || 'Non disponible'}
+                {session?.user?.email || "Non disponible"}
               </p>
             </div>
             <div className="space-y-2">
@@ -151,13 +174,15 @@ const AccountTab = () => {
               </h4>
               <p className="text-sm text-muted-foreground">
                 {session?.user?.createdAt
-                  ? new Date(session.user.createdAt).toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })
-                  : 'Non disponible'
-                }
+                  ? new Date(session.user.createdAt).toLocaleDateString(
+                      "fr-FR",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      },
+                    )
+                  : "Non disponible"}
               </p>
             </div>
           </div>
@@ -179,17 +204,18 @@ const AccountTab = () => {
           <div className="space-y-2">
             <h4 className="font-medium">Télécharger vos données</h4>
             <p className="text-sm text-muted-foreground">
-              Vous pouvez télécharger toutes vos données personnelles stockées dans Biume.
-              Le fichier sera au format JSON et contiendra vos informations de profil,
-              préférences et paramètres.
+              Vous pouvez télécharger toutes vos données personnelles stockées
+              dans Biume. Le fichier sera au format JSON et contiendra vos
+              informations de profil, préférences et paramètres.
             </p>
           </div>
 
           <Alert>
             <FileText className="h-4 w-4" />
             <AlertDescription>
-              <strong>Note :</strong> L&apos;export inclut uniquement vos données personnelles.
-              Les rapports et documents clients ne sont pas inclus pour des raisons de confidentialité.
+              <strong>Note :</strong> L&apos;export inclut uniquement vos
+              données personnelles. Les rapports et documents clients ne sont
+              pas inclus pour des raisons de confidentialité.
             </AlertDescription>
           </Alert>
 
@@ -217,18 +243,22 @@ const AccountTab = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <h4 className="font-medium">Télécharger vos données clients et patients</h4>
+            <h4 className="font-medium">
+              Télécharger vos données clients et patients
+            </h4>
             <p className="text-sm text-muted-foreground">
-              Vous pouvez télécharger toutes les données clients et patients de votre organisation.
-              Le fichier contiendra les informations des clients, leurs animaux, et les types d&apos;animaux disponibles.
+              Vous pouvez télécharger toutes les données clients et patients de
+              votre organisation. Le fichier contiendra les informations des
+              clients, leurs animaux, et les types d&apos;animaux disponibles.
             </p>
           </div>
 
           <Alert>
             <FileText className="h-4 w-4" />
             <AlertDescription>
-              <strong>Note :</strong> Cet export inclut uniquement les données de votre organisation.
-              Les rapports médicaux et documents détaillés ne sont pas inclus.
+              <strong>Note :</strong> Cet export inclut uniquement les données
+              de votre organisation. Les rapports médicaux et documents
+              détaillés ne sont pas inclus.
             </AlertDescription>
           </Alert>
 
@@ -239,7 +269,9 @@ const AccountTab = () => {
             variant="outline"
           >
             <Download className="h-4 w-4" />
-            {isLoading ? "Export en cours..." : "Télécharger clients et patients"}
+            {isLoading
+              ? "Export en cours..."
+              : "Télécharger clients et patients"}
           </Button>
         </CardContent>
       </Card>
@@ -257,19 +289,22 @@ const AccountTab = () => {
         </CardHeader>
         <CardContent className="space-y-6 pb-6">
           <div className="space-y-3">
-            <h4 className="font-semibold text-red-900 text-base">Supprimer le compte</h4>
+            <h4 className="font-semibold text-red-900 text-base">
+              Supprimer le compte
+            </h4>
             <p className="text-sm text-red-800 leading-relaxed">
-              Supprimez définitivement votre compte et toutes les données associées.
-              Cette action est irréversible et ne peut pas être annulée.
+              Supprimez définitivement votre compte et toutes les données
+              associées. Cette action est irréversible et ne peut pas être
+              annulée.
             </p>
           </div>
 
-          <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+          <Dialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
             <DialogTrigger asChild>
-              <Button
-                variant="destructive"
-                size="lg"
-              >
+              <Button variant="destructive" size="lg">
                 <Trash2 className="h-5 w-5" />
                 Supprimer le compte
               </Button>
@@ -281,16 +316,20 @@ const AccountTab = () => {
                   Supprimer le compte
                 </DialogTitle>
                 <DialogDescription className="text-red-700 text-base leading-relaxed">
-                  Cette action est irréversible. Toutes vos données seront définitivement supprimées.
+                  Cette action est irréversible. Toutes vos données seront
+                  définitivement supprimées.
                 </DialogDescription>
               </DialogHeader>
 
               <Alert className="border-red-300 bg-red-50 shadow-sm">
                 <AlertCircle className="h-5 w-5 text-red-600" />
                 <AlertDescription className="text-red-800">
-                  <strong className="text-red-900">Attention :</strong> Cette action supprimera :
+                  <strong className="text-red-900">Attention :</strong> Cette
+                  action supprimera :
                   <ul className="mt-3 list-disc list-inside space-y-2 text-sm">
-                    <li>Votre profil et toutes vos informations personnelles</li>
+                    <li>
+                      Votre profil et toutes vos informations personnelles
+                    </li>
                     <li>Tous vos rapports et documents</li>
                     <li>L&apos;historique de vos transactions</li>
                     <li>Toutes les données associées à votre compte</li>
@@ -299,14 +338,21 @@ const AccountTab = () => {
               </Alert>
 
               <Form {...deleteForm}>
-                <form onSubmit={deleteForm.handleSubmit(onDeleteSubmit)} className="space-y-4">
+                <form
+                  onSubmit={deleteForm.handleSubmit(onDeleteSubmit)}
+                  className="space-y-4"
+                >
                   <FormField
                     control={deleteForm.control}
                     name="confirmationText"
                     render={({ field }) => (
                       <FormItem className="space-y-3">
                         <FormLabel className="text-red-800 font-semibold text-base">
-                          Tapez <span className="bg-red-100 px-2 py-1 rounded font-mono text-red-900">SUPPRIMER</span> pour confirmer
+                          Tapez{" "}
+                          <span className="bg-red-100 px-2 py-1 rounded font-mono text-red-900">
+                            SUPPRIMER
+                          </span>{" "}
+                          pour confirmer
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -334,10 +380,15 @@ const AccountTab = () => {
                     <Button
                       type="submit"
                       variant="destructive"
-                      disabled={isLoading || deleteForm.watch("confirmationText") !== "SUPPRIMER"}
+                      disabled={
+                        isLoading ||
+                        deleteForm.watch("confirmationText") !== "SUPPRIMER"
+                      }
                       className="px-6 bg-red-600 hover:bg-red-700 font-semibold"
                     >
-                      {isLoading ? "Suppression..." : "Supprimer définitivement"}
+                      {isLoading
+                        ? "Suppression..."
+                        : "Supprimer définitivement"}
                     </Button>
                   </div>
                 </form>
