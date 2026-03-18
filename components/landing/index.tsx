@@ -1,7 +1,7 @@
 import { HeroSection } from "./hero";
 import { FeaturesSection } from "./features";
 import { PricingSection } from "./pricing-section";
-import { CTASection } from "@/components/landing-legacy/sections/cta-section";
+import { CTASection } from "./cta-section";
 import LandingFooter from "./footer";
 
 export function LandingPage() {
@@ -17,4 +17,3 @@ export function LandingPage() {
     </div>
   );
 }
-
