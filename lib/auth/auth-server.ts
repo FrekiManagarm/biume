@@ -2,7 +2,6 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { organization, twoFactor } from "better-auth/plugins";
-import { autumn } from "autumn-js/better-auth";
 import { eq } from "drizzle-orm";
 import { randomBytes, timingSafeEqual } from "crypto";
 import * as crypto from "crypto";
@@ -168,18 +167,6 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    autumn({
-      customerScope: "organization",
-      identify: async (req) => {
-        if (!req.organization) {
-          throw new Error("Organization not found");
-        }
-
-        return {
-          customerId: req.organization.id,
-        };
-      },
-    }),
     nextCookies(),
     twoFactor(),
     organization({
