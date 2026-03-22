@@ -224,8 +224,8 @@ export const auth = betterAuth({
           },
         },
       },
-      organizationCreation: {
-        afterCreate: async (data) => {
+      organizationHooks: {
+        afterCreateOrganization: async (data) => {
           const { organization } = data;
 
           const org = await db.query.organization.findFirst({
@@ -237,8 +237,8 @@ export const auth = betterAuth({
           }
 
           try {
-            const customer = await autumnLib.customers.create({
-              id: organization.id,
+            const customer = await autumnLib.customers.getOrCreate({
+              customerId: organization.id,
               name: organization.name,
               email: org.email,
             });
@@ -246,16 +246,14 @@ export const auth = betterAuth({
             await db
               .update(organizationSchema)
               .set({
-                customerStripeId: customer.data?.id || "",
+                customerStripeId: customer.id || "",
               })
               .where(eq(organizationSchema.id, organization.id));
           } catch (error) {
             console.error(error);
           }
         },
-      },
-      organizationDeletion: {
-        beforeDelete: async (data) => {
+        afterDeleteOrganization: async (data) => {
           const { organization } = data;
 
           try {
@@ -268,7 +266,10 @@ export const auth = betterAuth({
             }
 
             if (org.customerStripeId) {
-              await autumnLib.customers.delete(org.customerStripeId);
+              await autumnLib.customers.delete({
+                customerId: org.customerStripeId,
+                deleteInStripe: true,
+              });
             }
           } catch (error) {
             console.error(error);
