@@ -8,7 +8,6 @@ import OrganizationConnect from "./organization-connect";
 import { Organization } from "@/lib/schemas";
 import { autumn } from "@/lib/utils/autumn";
 import NonPayedSubscriptionModal from "./non-payed-subscription-modal";
-import { ProductStatus } from "autumn-js";
 
 export const OnboardingGuard = async ({
   children,
@@ -21,11 +20,11 @@ export const OnboardingGuard = async ({
     headers: await headers(),
   });
 
-  const customer = await autumn.customers.get(organization?.id ?? "");
+  const customer = await autumn.customers.getOrCreate({
+    customerId: organization?.id || "",
+  });
 
-  // console.log(customer, "customer");
-
-  // console.log(customer.data, "customer.data");
+  console.log(customer, "customer");
 
   if (organizations?.length < 1) {
     return (
@@ -49,16 +48,14 @@ export const OnboardingGuard = async ({
       <OnboardingExplications
         open={Boolean(
           organization?.onBoardingComplete &&
-            !organization?.onBoardingExplications,
+          !organization?.onBoardingExplications,
         )}
       />
       <NonPayedSubscriptionModal
         open={
           (organization?.onBoardingComplete &&
-            customer?.data?.products?.length === 0) ||
-          customer?.data?.products?.some(
-            (product) => product.status === ProductStatus.Expired,
-          )
+            customer?.subscriptions?.length === 0) ||
+          customer?.subscriptions?.some((product) => product.status == "active")
         }
       />
       {children}

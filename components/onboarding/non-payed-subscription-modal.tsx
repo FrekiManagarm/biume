@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import React, { useMemo, useState } from "react"
-import Link from "next/link"
-import { Check } from "lucide-react"
+import React, { useMemo, useState } from "react";
+import Link from "next/link";
+import { Check } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,30 +13,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
-import { CheckoutDialog, useCustomer } from "autumn-js/react"
-import { allInclusiveMonthly, allInclusiveYearly } from "@/autumn.config"
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useCustomer } from "autumn-js/react";
+import { allInclusiveMonthly, allInclusiveYearly } from "@/autumn.config";
 
 type RequireSubscriptionDialogProps = {
-  open?: boolean
-  trigger?: React.ReactNode
-}
+  open?: boolean;
+  trigger?: React.ReactNode;
+};
 
 const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
   open,
   trigger,
 }) => {
-  const [isAnnual, setIsAnnual] = useState(true)
-  const { checkout, customer } = useCustomer()
+  const [isAnnual, setIsAnnual] = useState(true);
+  const { data: customer, attach } = useCustomer();
 
   const { monthlyPrice, annualPrice, annualTotal, savings } = useMemo(() => {
-    const monthlyPrice = 24.99
-    const annualPrice = 19.99
-    const annualTotal = annualPrice * 12
-    const savings = monthlyPrice * 12 - annualTotal
-    return { monthlyPrice, annualPrice, annualTotal, savings }
-  }, [])
+    const monthlyPrice = 24.99;
+    const annualPrice = 19.99;
+    const annualTotal = annualPrice * 12;
+    const savings = monthlyPrice * 12 - annualTotal;
+    return { monthlyPrice, annualPrice, annualTotal, savings };
+  }, []);
 
   const features = useMemo(
     () => [
@@ -47,14 +47,13 @@ const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
       "Suivi intelligent",
       "Support 7j/7",
     ],
-    []
-  )
+    [],
+  );
 
   const handleSubscribe = async () => {
     try {
-      await checkout({
-        productId: isAnnual ? allInclusiveYearly.id : allInclusiveMonthly.id,
-        dialog: CheckoutDialog,
+      await attach({
+        planId: isAnnual ? allInclusiveYearly.id : allInclusiveMonthly.id,
         successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/transactions/subscriptions/success?org=${customer?.id}`,
         checkoutSessionParams: {
           automatic_tax: {
@@ -62,29 +61,35 @@ const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
           },
           customer_update: {
             address: "auto",
-          }
-        }
-      })
+          },
+        },
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <AlertDialog open={open}>
-      {trigger ? <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger> : null}
+      {trigger ? (
+        <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+      ) : null}
       <AlertDialogContent className="sm:max-w-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Abonnement requis</AlertDialogTitle>
           <AlertDialogDescription>
-            Pour continuer à utiliser Biume sans limitation, choisissez une formule.
+            Pour continuer à utiliser Biume sans limitation, choisissez une
+            formule.
           </AlertDialogDescription>
         </AlertDialogHeader>
         {/* Cartes prix compactes */}
         <div className="grid grid-cols-2 gap-3">
           <div
-            className={`rounded-md border p-3 text-center ${!isAnnual ? "border-primary ring-1 ring-primary/20" : "border-border"
-              }`}
+            className={`rounded-md border p-3 text-center ${
+              !isAnnual
+                ? "border-primary ring-1 ring-primary/20"
+                : "border-border"
+            }`}
             onClick={() => setIsAnnual(false)}
           >
             <div className="text-xs text-muted-foreground mb-1">Mensuel</div>
@@ -93,8 +98,11 @@ const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
           </div>
 
           <div
-            className={`rounded-md border p-3 text-center ${isAnnual ? "border-primary ring-1 ring-primary/20" : "border-border"
-              }`}
+            className={`rounded-md border p-3 text-center ${
+              isAnnual
+                ? "border-primary ring-1 ring-primary/20"
+                : "border-border"
+            }`}
             onClick={() => setIsAnnual(true)}
           >
             <div className="flex items-center justify-center gap-1 text-xs mb-1">
@@ -133,7 +141,7 @@ const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};
 
-export default NonPayedSubscriptionModal
+export default NonPayedSubscriptionModal;
