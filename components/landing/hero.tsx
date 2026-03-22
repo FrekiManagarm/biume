@@ -8,87 +8,107 @@ import {
   ArrowRight,
   Play,
   Sparkles,
-  FileText,
-  Brain,
-  ChevronRight,
-  Search,
-  LayoutDashboard,
-  Calendar,
-  Settings,
-  History,
   Languages,
+  ChevronRight,
+  Star,
+  Zap,
 } from "lucide-react";
+
+const fadeUp = {
+  initial: { opacity: 0, y: 24 },
+  animate: { opacity: 1, y: 0 },
+};
 
 export function HeroSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "start end"],
+    offset: ["start start", "end start"],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const mockupY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const mockupOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-32 pb-20 md:pt-40 md:pb-32"
+      className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24"
     >
-      {/* Background Elements */}
+      {/* --- Background --- */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-background" />
-        {/* Animated Gradients - Plus subtils */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-[10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 rounded-full blur-[100px] animate-pulse delay-1000" />
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+        <div className="absolute top-[5%] left-[10%] w-[600px] h-[600px] bg-primary/[0.07] rounded-full blur-[140px]" />
+        <div className="absolute top-[15%] right-[5%] w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px]" />
+        <div className="absolute bottom-[5%] left-[35%] w-[400px] h-[400px] bg-primary/4 rounded-full blur-[100px]" />
+        <div
+          className="absolute inset-0 opacity-[0.4] dark:opacity-[0.15]"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle at 1px 1px, hsl(var(--muted-foreground) / 0.08) 1px, transparent 0)",
+            backgroundSize: "48px 48px",
+          }}
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-background via-transparent to-background" />
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-8 mb-12">
-          {/* Badge */}
+        {/* --- Text Content --- */}
+        <div className="flex flex-col items-center text-center max-w-4xl mx-auto space-y-7 mb-16 md:mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/5 border border-primary/10 text-primary text-sm font-medium backdrop-blur-sm"
+            {...fadeUp}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/6 border border-primary/10 text-primary text-sm font-medium"
           >
             <Sparkles className="w-3.5 h-3.5" />
-            <span>L'IA au service de la santé animale</span>
+            L&apos;IA au service de la santé animale
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight text-foreground text-balance"
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-tight leading-[1.1] text-balance"
           >
-            Simplifiez votre pratique <br />
-            <span className="bg-linear-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              avec intelligence
+            Vos rapports vétérinaires,{" "}
+            <span className="relative inline-block">
+              <span className="bg-linear-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
+                simplifiés par l&apos;IA
+              </span>
+              <svg
+                className="absolute -bottom-1.5 left-0 w-full h-3"
+                viewBox="0 0 300 12"
+                fill="none"
+                preserveAspectRatio="none"
+              >
+                <motion.path
+                  d="M2 9C60 3 120 3 160 6C200 9 250 5 298 7"
+                  stroke="hsl(148 71% 45% / 0.35)"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+                />
+              </svg>
             </span>
           </motion.h1>
 
-          {/* Subheadline */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl text-balance leading-relaxed"
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.16 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
           >
-            Générez des rapports détaillés, accédez à l'historique intelligent et vulgarisez vos diagnostics pour vos clients en un clic.
+            Biume génère des comptes rendus professionnels, analyse
+            l&apos;historique de vos patients et vulgarise vos diagnostics — pour
+            que vous puissiez vous concentrer sur le soin.
           </motion.p>
 
-          {/* CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto pt-4"
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.24 }}
+            className="flex flex-col sm:flex-row items-center gap-4 pt-2"
           >
             <Button
               size="lg"
-              className="rounded-full h-12 px-8 text-base shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all w-full sm:w-auto"
+              className="rounded-full h-12 px-8 text-base shadow-lg shadow-primary/20 hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
               asChild
             >
               <Link href="/sign-up">
@@ -98,181 +118,137 @@ export function HeroSection() {
             </Button>
             <Button
               size="lg"
-              variant="outline"
-              className="rounded-full h-12 px-8 text-base backdrop-blur-sm bg-background/50 w-full sm:w-auto group"
+              variant="ghost"
+              className="rounded-full h-12 px-8 text-base group"
               asChild
             >
               <Link
                 href="https://cal.com/mathieu-chambaud-biume"
                 target="_blank"
               >
-                <Play className="mr-2 w-4 h-4 fill-foreground group-hover:scale-110 transition-transform" />
+                <span className="w-8 h-8 rounded-full bg-muted/80 flex items-center justify-center mr-2 group-hover:bg-primary/10 transition-colors">
+                  <Play className="w-3 h-3 fill-foreground ml-0.5" />
+                </span>
                 Voir la démo
               </Link>
             </Button>
           </motion.div>
+
+          <motion.div
+            {...fadeUp}
+            transition={{ duration: 0.6, delay: 0.32 }}
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-2 text-sm text-muted-foreground"
+          >
+            <div className="flex items-center gap-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-3.5 h-3.5 fill-amber-400 text-amber-400"
+                />
+              ))}
+              <span className="ml-1.5 font-medium">4.9/5</span>
+            </div>
+            <span className="w-px h-4 bg-border hidden sm:block" />
+            <span>Essai gratuit 15 jours</span>
+            <span className="w-px h-4 bg-border hidden sm:block" />
+            <span className="hidden sm:block">Sans carte bancaire</span>
+          </motion.div>
         </div>
 
-        {/* Interface Unifiée Simplifiée */}
-        <motion.div
-          style={{ y, opacity }}
-          className="relative mx-auto max-w-5xl"
-        >
-          <div className="relative rounded-xl border border-border/40 bg-background/80 backdrop-blur-xl shadow-2xl overflow-hidden ring-1 ring-border/50">
-            {/* Window Bar */}
-            <div className="h-10 border-b border-border/40 bg-muted/30 flex items-center px-4 gap-4">
-              <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-400/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-green-400/80" />
+        {/* --- Product Mockup: Vulgarisation avant/après --- */}
+        <motion.div style={{ y: mockupY, opacity: mockupOpacity }}>
+          <div className="relative mx-auto max-w-4xl px-4 md:px-8">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10" />
+
+            <div className="relative flex flex-col items-center">
+              <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 min-h-[340px] md:min-h-[380px]">
+              {/* Carte "Avant" — jargon médical */}
+              <motion.div
+                initial={{ opacity: 0, x: -32 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full md:w-[42%] max-w-sm"
+              >
+                <div className="rounded-2xl border border-border/40 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-black/5 dark:shadow-black/15">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                      Avant
+                    </span>
+                    <span className="h-px flex-1 bg-border/50" />
+                  </div>
+                  <p className="text-sm leading-relaxed text-foreground/80 font-medium">
+                    Dysfonction somatique T12-L1, restriction de mobilité
+                    vertébrale. Hypomobilité sacro-iliaque droite.
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-3 italic">
+                    Langage professionnel
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Flèche / transformation animée */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
+                className="flex flex-col items-center gap-2 shrink-0"
+              >
+                <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <motion.span
+                  className="text-[10px] font-semibold uppercase tracking-wider text-primary"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.9 }}
+                >
+                  Vulgarisation IA
+                </motion.span>
+              </motion.div>
+
+              {/* Carte "Après" — langage client */}
+              <motion.div
+                initial={{ opacity: 0, x: 32 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full md:w-[42%] max-w-sm"
+              >
+                <div className="rounded-2xl border border-secondary/30 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-secondary/5 dark:shadow-secondary/5 ring-1 ring-secondary/10">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Languages className="w-3.5 h-3.5 text-secondary" />
+                    <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary">
+                      Pour le propriétaire
+                    </span>
+                    <span className="h-px flex-1 bg-secondary/20" />
+                  </div>
+                  <p className="text-sm leading-relaxed text-foreground font-medium">
+                    Blocage au niveau du dos (vertèbres T12-L1). Articulation
+                    bassin droite un peu figée.
+                  </p>
+                  <p className="text-xs text-secondary font-medium mt-3 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                    Compréhensible par tous
+                  </p>
+                </div>
+              </motion.div>
               </div>
-              <div className="flex-1 flex justify-center">
-                <div className="h-5 w-64 bg-background/50 rounded-md border border-border/20 flex items-center justify-center gap-2">
-                  <span className="w-3 h-3 text-muted-foreground/50">
-                    <Search className="w-3 h-3" />
+
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                className="mt-8"
+              >
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/90 backdrop-blur-md border border-border/50 shadow-lg">
+                  <Sparkles className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-medium">
+                    En un clic dans vos rapports
                   </span>
-                  <span className="text-[10px] text-muted-foreground/50">biume.app/dashboard/reports/edit</span>
                 </div>
-              </div>
-              <div className="w-16" />
-            </div>
-
-            <div className="flex h-[500px]">
-              {/* Sidebar Simplifiée */}
-              <div className="w-16 border-r border-border/40 bg-muted/10 flex flex-col items-center py-4 gap-6">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                  <LayoutDashboard className="w-4 h-4" />
-                </div>
-                <div className="w-8 h-8 rounded-lg bg-transparent text-muted-foreground hover:bg-muted/50 flex items-center justify-center">
-                  <Calendar className="w-4 h-4" />
-                </div>
-                <div className="w-8 h-8 rounded-lg bg-primary text-primary-foreground shadow-md shadow-primary/20 flex items-center justify-center">
-                  <FileText className="w-4 h-4" />
-                </div>
-                <div className="mt-auto w-8 h-8 rounded-lg bg-transparent text-muted-foreground hover:bg-muted/50 flex items-center justify-center">
-                  <Settings className="w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Main Content */}
-              <div className="flex-1 flex bg-background/50">
-                {/* Report Editor */}
-                <div className="flex-1 p-8 flex flex-col gap-6 overflow-hidden">
-                  {/* Header Rapport */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="text-xl font-semibold text-foreground">Rapport de consultation</h3>
-                      <p className="text-sm text-muted-foreground">Rocky • Ostéopathie • 28 Dec</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <div className="px-3 py-1.5 rounded-full bg-green-500/10 text-green-600 text-xs font-medium flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                        Sauvegardé
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Editor Area */}
-                  <div className="flex-1 space-y-6">
-                    {/* Section 1: Observation */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm font-medium text-foreground">
-                        <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-xs text-primary">1</div>
-                        Observations cliniques
-                      </div>
-                      <div className="p-4 rounded-lg border border-border/50 bg-background/50 space-y-2">
-                        <div className="h-4 bg-muted/50 rounded w-3/4" />
-                        <div className="h-4 bg-muted/50 rounded w-1/2" />
-                      </div>
-                    </div>
-
-                    {/* Section 2: Active Editing */}
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm font-medium text-primary">
-                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-xs text-primary-foreground">2</div>
-                        Dysfonctions anatomiques
-                      </div>
-                      <div className="p-4 rounded-lg border border-primary/20 bg-primary/5 space-y-4 ring-1 ring-primary/10">
-                        <div className="flex gap-2 flex-wrap">
-                          <span className="px-2 py-1 rounded bg-background border border-border text-xs text-foreground">T12</span>
-                          <span className="px-2 py-1 rounded bg-background border border-border text-xs text-foreground">L1</span>
-                          <span className="px-2 py-1 rounded bg-background border border-border text-xs text-foreground">Sacrum</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <span className="w-1 h-4 bg-primary animate-pulse" />
-                          Saisie en cours...
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI Sidebar Panel */}
-                <div className="w-80 border-l border-border/40 bg-muted/5 p-6 hidden md:flex flex-col gap-6">
-                  {/* AI Header */}
-                  <div className="flex items-center gap-2 text-sm font-semibold text-purple-600">
-                    <Brain className="w-4 h-4" />
-                    Assistant Biume
-                  </div>
-
-                  {/* Feature 1: History Analysis */}
-                  <div className="space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Analyse historique</p>
-                    <div className="p-3 rounded-lg bg-white/50 dark:bg-white/5 border border-purple-200/50 dark:border-purple-800/50 shadow-sm">
-                      <div className="flex items-start gap-2.5">
-                        <History className="w-4 h-4 text-purple-500 mt-0.5" />
-                        <div className="space-y-1">
-                          <p className="text-xs font-medium text-foreground">Récurrence détectée</p>
-                          <p className="text-[11px] text-muted-foreground leading-relaxed">
-                            Blocage L1 déjà présent lors des 2 dernières séances (Mai, Sept).
-                          </p>
-                          <div className="flex gap-2 pt-1">
-                            <span className="text-[10px] text-purple-600 bg-purple-100 dark:bg-purple-900/30 px-1.5 py-0.5 rounded">
-                              Attention requise
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Feature 2: Vulgarisation */}
-                  <div className="space-y-3">
-                    <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Vulgarisation Client</p>
-                    <div className="p-3 rounded-lg bg-white/50 dark:bg-white/5 border border-green-200/50 dark:border-green-800/50 shadow-sm">
-                      <div className="flex items-start gap-2.5">
-                        <Languages className="w-4 h-4 text-green-600 mt-0.5" />
-                        <div className="space-y-2">
-                          <div className="flex items-center justify-between">
-                            <p className="text-xs font-medium text-foreground">Traduction auto.</p>
-                            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                          </div>
-                          <div className="text-[11px] space-y-1">
-                            <p className="text-red-500 line-through opacity-60">Dysfonction somatique T12</p>
-                            <div className="flex items-center gap-1 text-green-600 font-medium">
-                              <ChevronRight className="w-3 h-3" />
-                              Blocage vertèbre dorsale
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div className="mt-auto">
-                    <Button className="w-full bg-linear-to-r from-primary to-purple-600 hover:opacity-90 transition-opacity text-xs h-9">
-                      <Sparkles className="w-3 h-3 mr-2" />
-                      Générer la synthèse
-                    </Button>
-                  </div>
-                </div>
-              </div>
+              </motion.div>
             </div>
           </div>
-
-          {/* Glow Effect Simplifié */}
-          <div className="absolute -inset-4 bg-linear-to-r from-primary/10 via-purple-500/10 to-blue-500/10 blur-3xl -z-10 opacity-50" />
         </motion.div>
       </div>
     </section>
