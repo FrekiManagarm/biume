@@ -11,7 +11,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { href: "/#features", label: "Fonctionnalités" },
   { href: "/#pricing", label: "Tarifs" },
-  { href: "/contact", label: "Contact" },
   { href: "/blog", label: "Blog" },
 ];
 
