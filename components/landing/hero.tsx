@@ -67,7 +67,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.08 }}
             className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold tracking-tight leading-[1.1] text-balance"
           >
-            Vos rapports vétérinaires,{" "}
+            Vos rapports,{" "}
             <span className="relative inline-block">
               <span className="bg-linear-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
                 simplifiés par l&apos;IA
@@ -162,75 +162,75 @@ export function HeroSection() {
 
             <div className="relative flex flex-col items-center">
               <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 min-h-[340px] md:min-h-[380px]">
-              {/* Carte "Avant" — jargon médical */}
-              <motion.div
-                initial={{ opacity: 0, x: -32 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full md:w-[42%] max-w-sm"
-              >
-                <div className="rounded-2xl border border-border/40 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-black/5 dark:shadow-black/15">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      Avant
-                    </span>
-                    <span className="h-px flex-1 bg-border/50" />
-                  </div>
-                  <p className="text-sm leading-relaxed text-foreground/80 font-medium">
-                    Dysfonction somatique T12-L1, restriction de mobilité
-                    vertébrale. Hypomobilité sacro-iliaque droite.
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-3 italic">
-                    Langage professionnel
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Flèche / transformation animée */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
-                className="flex flex-col items-center gap-2 shrink-0"
-              >
-                <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <motion.span
-                  className="text-[10px] font-semibold uppercase tracking-wider text-primary"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.9 }}
+                {/* Carte "Avant" — jargon médical */}
+                <motion.div
+                  initial={{ opacity: 0, x: -32 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                  className="w-full md:w-[42%] max-w-sm"
                 >
-                  Vulgarisation IA
-                </motion.span>
-              </motion.div>
-
-              {/* Carte "Après" — langage client */}
-              <motion.div
-                initial={{ opacity: 0, x: 32 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full md:w-[42%] max-w-sm"
-              >
-                <div className="rounded-2xl border border-secondary/30 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-secondary/5 dark:shadow-secondary/5 ring-1 ring-secondary/10">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Languages className="w-3.5 h-3.5 text-secondary" />
-                    <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary">
-                      Pour le propriétaire
-                    </span>
-                    <span className="h-px flex-1 bg-secondary/20" />
+                  <div className="rounded-2xl border border-border/40 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-black/5 dark:shadow-black/15">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        Avant
+                      </span>
+                      <span className="h-px flex-1 bg-border/50" />
+                    </div>
+                    <p className="text-sm leading-relaxed text-foreground/80 font-medium">
+                      Dysfonction somatique T12-L1, restriction de mobilité
+                      vertébrale. Hypomobilité sacro-iliaque droite.
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-3 italic">
+                      Langage professionnel
+                    </p>
                   </div>
-                  <p className="text-sm leading-relaxed text-foreground font-medium">
-                    Blocage au niveau du dos (vertèbres T12-L1). Articulation
-                    bassin droite un peu figée.
-                  </p>
-                  <p className="text-xs text-secondary font-medium mt-3 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-                    Compréhensible par tous
-                  </p>
-                </div>
-              </motion.div>
+                </motion.div>
+
+                {/* Flèche / transformation animée */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.65, ease: "easeOut" }}
+                  className="flex flex-col items-center gap-2 shrink-0"
+                >
+                  <div className="w-12 h-12 rounded-full bg-linear-to-r from-primary to-secondary flex items-center justify-center shadow-lg shadow-primary/20">
+                    <Zap className="w-5 h-5 text-white" />
+                  </div>
+                  <motion.span
+                    className="text-[10px] font-semibold uppercase tracking-wider text-primary"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.9 }}
+                  >
+                    Vulgarisation IA
+                  </motion.span>
+                </motion.div>
+
+                {/* Carte "Après" — langage client */}
+                <motion.div
+                  initial={{ opacity: 0, x: 32 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.7, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="w-full md:w-[42%] max-w-sm"
+                >
+                  <div className="rounded-2xl border border-secondary/30 bg-card/90 backdrop-blur-xl p-6 shadow-xl shadow-secondary/5 dark:shadow-secondary/5 ring-1 ring-secondary/10">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Languages className="w-3.5 h-3.5 text-secondary" />
+                      <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary">
+                        Pour le propriétaire
+                      </span>
+                      <span className="h-px flex-1 bg-secondary/20" />
+                    </div>
+                    <p className="text-sm leading-relaxed text-foreground font-medium">
+                      Blocage au niveau du dos (vertèbres T12-L1). Articulation
+                      bassin droite un peu figée.
+                    </p>
+                    <p className="text-xs text-secondary font-medium mt-3 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                      Compréhensible par tous
+                    </p>
+                  </div>
+                </motion.div>
               </div>
 
               {/* Badge */}
