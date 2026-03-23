@@ -1,10 +1,13 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { Database, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { InitializationDialog } from "@/components/reports-module/components/InitializationDialog";
+// import { useMutation } from "@tanstack/react-query";
+// import { toast } from "sonner";
+// import { seedAnatomicalParts } from "@/lib/api/actions/reports.action";
 
 interface ReportsHeaderProps {
   disabled?: boolean;
@@ -52,18 +55,18 @@ export function ReportsHeader({ disabled = false }: ReportsHeaderProps) {
               Nouveau compte rendu
             </Button>
             {/* {process.env.NODE_ENV === "development" && (
-            <Button
-              variant="default"
-              className="bg-green-600 hover:bg-green-700 text-white border-green-600"
-              onClick={handleSeedAnatomicalParts}
-              disabled={seedMutation.isPending}
-            >
-              <Database className="h-4 w-4 mr-2" />
-              {seedMutation.isPending
-                ? "Insertion..."
-                : "Seed Anatomical Parts"}
-            </Button>
-          )} */}
+              <Button
+                variant="default"
+                className="bg-green-600 hover:bg-green-700 text-white border-green-600"
+                onClick={handleSeedAnatomicalParts}
+                disabled={seedMutation.isPending}
+              >
+                <Database className="h-4 w-4 mr-2" />
+                {seedMutation.isPending
+                  ? "Insertion..."
+                  : "Seed Anatomical Parts"}
+              </Button>
+            )} */}
           </div>
         </CardContent>
       </Card>

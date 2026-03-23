@@ -257,8 +257,8 @@ export function PatientsTable({
                             <TableCell>
                               {getTypeBadge(
                                 patient.animal?.name ??
-                                  (patient.animal?.name as string) ??
-                                  "NAC",
+                                (patient.animal?.name as string) ??
+                                "NAC",
                               )}
                             </TableCell>
                             <TableCell className="text-muted-foreground text-sm">

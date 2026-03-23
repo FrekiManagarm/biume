@@ -167,7 +167,7 @@ export function WeekView({
                 date={date}
                 hours={HOURS}
                 appointments={getAppointmentsForDate(date)}
-                onDateSelect={onDateSelect || (() => {})}
+                onDateSelect={onDateSelect || (() => { })}
                 onNewAppointment={handleNewAppointmentClick}
                 getAppointmentStatus={getAppointmentStatus}
                 getAppointmentPosition={getAppointmentPosition}

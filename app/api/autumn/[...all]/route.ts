@@ -7,11 +7,12 @@ export const { GET, POST } = autumnHandler({
       headers: req.headers,
     });
 
+    if (!organization?.id) {
+      return null;
+    }
+
     return {
-      customerId: organization?.id,
-      customerData: {
-        ...organization,
-      },
+      customerId: organization.id,
     };
   },
 });

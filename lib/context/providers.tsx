@@ -19,13 +19,9 @@ export const queryClient = new QueryClient({
 const Providers = ({ children }: PropsWithChildren) => {
   if (process.env.NODE_ENV === "development") {
     return (
-      <AutumnProvider
-        includeCredentials
-        useBetterAuth
-        backendUrl={process.env.BETTER_AUTH_URL || ""}
-      >
-        <HotkeysProvider>
-          <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <AutumnProvider>
+          <HotkeysProvider>
             <ThemeProvider
               attribute="class"
               defaultTheme="light"
@@ -37,20 +33,16 @@ const Providers = ({ children }: PropsWithChildren) => {
                 <Toaster />
               </FocusModeProvider>
             </ThemeProvider>
-          </QueryClientProvider>
-        </HotkeysProvider>
-      </AutumnProvider>
+          </HotkeysProvider>
+        </AutumnProvider>
+      </QueryClientProvider>
     );
   }
 
   return (
-    <AutumnProvider
-      includeCredentials
-      useBetterAuth
-      backendUrl={process.env.BETTER_AUTH_URL || ""}
-    >
-      <HotkeysProvider>
-        <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <AutumnProvider>
+        <HotkeysProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
@@ -62,9 +54,9 @@ const Providers = ({ children }: PropsWithChildren) => {
               <Toaster />
             </FocusModeProvider>
           </ThemeProvider>
-        </QueryClientProvider>
-      </HotkeysProvider>
-    </AutumnProvider>
+        </HotkeysProvider>
+      </AutumnProvider>
+    </QueryClientProvider>
   );
 };
 

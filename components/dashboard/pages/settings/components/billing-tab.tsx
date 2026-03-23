@@ -49,6 +49,8 @@ const BillingTab = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
 
+  console.log(customer, "customer in settings");
+
   const handleUpgrade = async () => {
     try {
       setIsUpgrading(true);
@@ -118,8 +120,7 @@ const BillingTab = () => {
         showTrialIcon: false,
       };
     }
-    const onTrial =
-      sub.trialEndsAt != null && sub.trialEndsAt > Date.now();
+    const onTrial = sub.trialEndsAt != null && sub.trialEndsAt > Date.now();
     if (onTrial) {
       return {
         label: "Essai",

@@ -20,11 +20,9 @@ export const OnboardingGuard = async ({
     headers: await headers(),
   });
 
-  const customer = await autumn.customers.getOrCreate({
-    customerId: organization?.id || "",
-  });
+  console.log(organization, "current organization");
 
-  console.log(customer, "customer");
+  console.log(organizations, "organizations");
 
   if (organizations?.length < 1) {
     return (
@@ -43,6 +41,19 @@ export const OnboardingGuard = async ({
     );
   }
 
+  const customer = await autumn.customers.getOrCreate({
+    customerId: organization?.id || "",
+    name: organization?.name || "",
+    email: organization?.email || "",
+    metadata: {
+      organizationId: organization?.id || "",
+      organizationName: organization?.name || "",
+      organizationEmail: organization?.email || "",
+    },
+  });
+
+  console.log(customer, "customer");
+
   return (
     <>
       <OnboardingExplications
@@ -55,7 +66,7 @@ export const OnboardingGuard = async ({
         open={
           (organization?.onBoardingComplete &&
             customer?.subscriptions?.length === 0) ||
-          customer?.subscriptions?.some((product) => product.status == "active")
+          customer?.subscriptions?.some((product) => product.status != "active")
         }
       />
       {children}

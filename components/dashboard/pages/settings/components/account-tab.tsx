@@ -175,13 +175,13 @@ const AccountTab = () => {
               <p className="text-sm text-muted-foreground">
                 {session?.user?.createdAt
                   ? new Date(session.user.createdAt).toLocaleDateString(
-                      "fr-FR",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      },
-                    )
+                    "fr-FR",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  )
                   : "Non disponible"}
               </p>
             </div>

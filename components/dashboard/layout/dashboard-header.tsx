@@ -46,7 +46,7 @@ export function DashboardHeader() {
             (item as { items: { title: string; href: string }[] }).items,
           ) &&
           (item as { items: { title: string; href: string }[] }).items.length >
-            0
+          0
         ) {
           let deepest = null as null | { title: string; href: string };
           for (const sub of (
@@ -110,7 +110,7 @@ export function DashboardHeader() {
         </div>
         <div className="flex items-center justify-center gap-2">
           {(trialingProduct && trialingProduct.currentPeriodEnd) ||
-          isLoading ? (
+            isLoading ? (
             <TrialCountdownComponent
               endTime={trialingProduct?.currentPeriodEnd ?? 0}
               isLoading={isLoading}
