@@ -18,7 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { UseFormReturn } from "react-hook-form";
 import * as z from "zod";
 import { useCustomer } from "autumn-js/react";
-import { iaVulgarisation } from "@/autumn.config";
+import { autumnFeatureIds } from "@/lib/constants/autumn-ids";
 
 interface ProfileOnDemandSectionProps {
   org: Organization | undefined;
@@ -56,7 +56,7 @@ export const ProfileAiSection = ({
     );
   }
 
-  if (!check({ featureId: iaVulgarisation.id }).data.allowed) {
+  if (!check({ featureId: autumnFeatureIds.iaVulgarisation }).allowed) {
     return (
       <Card>
         <CardHeader className="pb-3">

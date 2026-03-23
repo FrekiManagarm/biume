@@ -1,6 +1,6 @@
 import { defineStepper } from "@stepperize/react";
 
-export const { steps, useStepper, utils } = defineStepper(
+export const { steps, useStepper } = defineStepper(
   {
     id: "start",
     title: "Bienvenue",

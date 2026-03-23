@@ -9,10 +9,11 @@ import {
   DialogFooter,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { getCheckoutContent } from "@/lib/autumn/checkout-content";
+import { getCheckoutContent, isPlanItemPricedRow } from "@/lib/autumn/checkout-content";
+import type { CheckoutPreviewResult } from "@/lib/autumn/checkout-types";
 import { useCustomer } from "autumn-js/react";
+import type { ClientAttachParams } from "autumn-js/react";
 import { ArrowRight, ChevronDown, Loader2 } from "lucide-react";
-import type { CheckoutParams, CheckoutResult, ProductItem } from "autumn-js";
 import {
   Accordion,
   AccordionContent,
@@ -25,12 +26,19 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 
+type PlanItem = NonNullable<
+  CheckoutPreviewResult["incoming"][0]["plan"]
+>["items"][number];
+
 export interface CheckoutDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  checkoutResult: CheckoutResult;
-  checkoutParams?: CheckoutParams;
+  checkoutResult: CheckoutPreviewResult;
+  /** Paramètres additionnels passés à `attach` (sans planId ni featureQuantities, gérés par le dialogue). */
+  checkoutParams?: Omit<ClientAttachParams, "planId" | "featureQuantities">;
 }
+
+const centsToMajor = (cents: number) => cents / 100;
 
 const formatCurrency = ({
   amount,
@@ -48,7 +56,7 @@ const formatCurrency = ({
 export default function CheckoutDialog(params: CheckoutDialogProps) {
   const { attach } = useCustomer();
   const [checkoutResult, setCheckoutResult] = useState<
-    CheckoutResult | undefined
+    CheckoutPreviewResult | undefined
   >(params?.checkoutResult);
 
   useEffect(() => {
@@ -66,7 +74,10 @@ export default function CheckoutDialog(params: CheckoutDialogProps) {
   const { open, setOpen } = params;
   const { title, message } = getCheckoutContent(checkoutResult);
 
-  const isFree = checkoutResult?.product.properties?.is_free;
+  const primaryIncoming = checkoutResult.incoming[0];
+  const primaryPlan = primaryIncoming?.plan;
+
+  const isFree = checkoutResult.total === 0;
   const isPaid = isFree === false;
 
   return (
@@ -77,7 +88,7 @@ export default function CheckoutDialog(params: CheckoutDialogProps) {
           {message}
         </div>
 
-        {isPaid && checkoutResult && (
+        {isPaid && checkoutResult && primaryIncoming && primaryPlan && (
           <PriceInformation
             checkoutResult={checkoutResult}
             setCheckoutResult={setCheckoutResult}
@@ -90,17 +101,16 @@ export default function CheckoutDialog(params: CheckoutDialogProps) {
             onClick={async () => {
               setLoading(true);
 
-              const options = checkoutResult.options.map((option) => {
-                return {
-                  featureId: option.feature_id,
+              const featureQuantities =
+                primaryIncoming?.featureQuantities.map((option) => ({
+                  featureId: option.featureId,
                   quantity: option.quantity,
-                };
-              });
+                })) ?? [];
 
               await attach({
-                productId: checkoutResult.product.id,
+                planId: primaryIncoming.planId,
                 ...(params.checkoutParams || {}),
-                options,
+                featureQuantities,
               });
               setOpen(false);
               setLoading(false);
@@ -128,8 +138,8 @@ function PriceInformation({
   checkoutResult,
   setCheckoutResult,
 }: {
-  checkoutResult: CheckoutResult;
-  setCheckoutResult: (checkoutResult: CheckoutResult) => void;
+  checkoutResult: CheckoutPreviewResult;
+  setCheckoutResult: (checkoutResult: CheckoutPreviewResult) => void;
 }) {
   return (
     <div className="px-6 mb-4 flex flex-col gap-4">
@@ -139,7 +149,7 @@ function PriceInformation({
       />
 
       <div className="flex flex-col gap-2">
-        {checkoutResult?.has_prorations && checkoutResult.lines.length > 0 && (
+        {checkoutResult.lineItems.length > 1 && (
           <CheckoutLines checkoutResult={checkoutResult} />
         )}
         <DueAmounts checkoutResult={checkoutResult} />
@@ -148,17 +158,20 @@ function PriceInformation({
   );
 }
 
-function DueAmounts({ checkoutResult }: { checkoutResult: CheckoutResult }) {
-  const { next_cycle, product } = checkoutResult;
-  const nextCycleAtStr = next_cycle
-    ? new Date(next_cycle.starts_at).toLocaleDateString()
+function DueAmounts({ checkoutResult }: { checkoutResult: CheckoutPreviewResult }) {
+  const { nextCycle } = checkoutResult;
+  const primaryPlan = checkoutResult.incoming[0]?.plan;
+  const nextCycleAtStr = nextCycle
+    ? new Date(nextCycle.startsAt).toLocaleDateString()
     : undefined;
 
-  const hasUsagePrice = product.items.some(
-    (item) => item.usage_model === "pay_per_use"
-  );
+  const hasUsagePrice =
+    primaryPlan?.items.some(
+      (item) => item.price?.billingMethod === "usage_based",
+    ) ?? false;
 
-  const showNextCycle = next_cycle && next_cycle.total !== checkoutResult.total;
+  const showNextCycle =
+    nextCycle && nextCycle.total !== checkoutResult.total;
 
   return (
     <div className="flex flex-col gap-1">
@@ -169,8 +182,8 @@ function DueAmounts({ checkoutResult }: { checkoutResult: CheckoutResult }) {
 
         <p className="font-medium text-md">
           {formatCurrency({
-            amount: checkoutResult?.total,
-            currency: checkoutResult?.currency,
+            amount: centsToMajor(checkoutResult.total),
+            currency: checkoutResult.currency,
           })}
         </p>
       </div>
@@ -181,8 +194,8 @@ function DueAmounts({ checkoutResult }: { checkoutResult: CheckoutResult }) {
           </div>
           <p className="text-md">
             {formatCurrency({
-              amount: next_cycle.total,
-              currency: checkoutResult?.currency,
+              amount: centsToMajor(nextCycle.total),
+              currency: checkoutResult.currency,
             })}
             {hasUsagePrice && <span> + usage prices</span>}
           </p>
@@ -196,27 +209,36 @@ function ProductItems({
   checkoutResult,
   setCheckoutResult,
 }: {
-  checkoutResult: CheckoutResult;
-  setCheckoutResult: (checkoutResult: CheckoutResult) => void;
+  checkoutResult: CheckoutPreviewResult;
+  setCheckoutResult: (checkoutResult: CheckoutPreviewResult) => void;
 }) {
-  const isUpdateQuantity =
-    checkoutResult?.product.scenario === "active" &&
-    checkoutResult.product.properties.updateable;
+  const primaryIncoming = checkoutResult.incoming[0];
+  const primaryPlan = primaryIncoming?.plan;
+  const eligibility = primaryPlan?.customerEligibility;
 
-  const isOneOff = checkoutResult?.product.properties.is_one_off;
+  const isUpdateQuantity =
+    eligibility?.status === "active" &&
+    (primaryPlan?.items.some((i) => i.price?.billingMethod === "prepaid") ??
+      false);
+
+  const isOneOff = primaryPlan?.price?.interval === "one_off";
+
+  if (!primaryPlan || !primaryIncoming) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-2">
       <p className="text-sm font-medium">Price</p>
-      {checkoutResult?.product.items
-        .filter((item) => item.type !== "feature")
+      {primaryPlan.items
+        .filter(isPlanItemPricedRow)
         .map((item, index) => {
-          if (item.usage_model == "prepaid") {
+          if (item.price?.billingMethod === "prepaid") {
             return (
               <PrepaidItem
-                key={index}
+                key={item.featureId ?? index}
                 item={item}
-                checkoutResult={checkoutResult!}
+                checkoutResult={checkoutResult}
                 setCheckoutResult={setCheckoutResult}
               />
             );
@@ -227,16 +249,16 @@ function ProductItems({
           }
 
           return (
-            <div key={index} className="flex justify-between">
+            <div key={item.featureId ?? index} className="flex justify-between">
               <p className="text-muted-foreground">
                 {item.feature
-                  ? item.feature.name
+                  ? item.feature.name ?? item.feature.display?.singular
                   : isOneOff
                     ? "Price"
                     : "Subscription"}
               </p>
               <p>
-                {item.display?.primary_text} {item.display?.secondary_text}
+                {item.display?.primaryText} {item.display?.secondaryText}
               </p>
             </div>
           );
@@ -245,7 +267,7 @@ function ProductItems({
   );
 }
 
-function CheckoutLines({ checkoutResult }: { checkoutResult: CheckoutResult }) {
+function CheckoutLines({ checkoutResult }: { checkoutResult: CheckoutPreviewResult }) {
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="total" className="border-b-0">
@@ -261,17 +283,19 @@ function CheckoutLines({ checkoutResult }: { checkoutResult: CheckoutResult }) {
           </div>
         </CustomAccordionTrigger>
         <AccordionContent className="mt-2 mb-0 pb-2 flex flex-col gap-2">
-          {checkoutResult?.lines
-            .filter((line) => line.amount != 0)
+          {checkoutResult.lineItems
+            .filter((line) => line.total !== 0)
             .map((line, index) => {
               return (
                 <div key={index} className="flex justify-between">
-                  <p className="text-muted-foreground">{line.description}</p>
+                  <p className="text-muted-foreground">
+                    {line.description || line.displayName}
+                  </p>
                   <p className="text-muted-foreground">
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
-                      currency: checkoutResult?.currency,
-                    }).format(line.amount)}
+                      currency: checkoutResult.currency,
+                    }).format(centsToMajor(line.total))}
                   </p>
                 </div>
               );
@@ -308,47 +332,50 @@ const PrepaidItem = ({
   checkoutResult,
   setCheckoutResult,
 }: {
-  item: ProductItem;
-  checkoutResult: CheckoutResult;
-  setCheckoutResult: (checkoutResult: CheckoutResult) => void;
+  item: PlanItem;
+  checkoutResult: CheckoutPreviewResult;
+  setCheckoutResult: (checkoutResult: CheckoutPreviewResult) => void;
 }) => {
-  const { quantity = 0, billing_units: billingUnits = 1 } = item;
+  const primaryIncoming = checkoutResult.incoming[0];
+  const fq = primaryIncoming?.featureQuantities.find(
+    (f) => f.featureId === item.featureId,
+  );
+  const quantity = fq?.quantity ?? item.included;
+  const billingUnits = item.price?.billingUnits ?? 1;
+
   const [quantityInput, setQuantityInput] = useState<string>(
     (quantity / billingUnits).toString()
   );
-  const { checkout } = useCustomer();
+  const { previewAttach } = useCustomer();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
-  const scenario = checkoutResult.product.scenario;
+  const primaryPlan = primaryIncoming?.plan;
+  const eligibility = primaryPlan?.customerEligibility;
 
   const handleSave = async () => {
+    if (!primaryIncoming) {
+      return;
+    }
     setLoading(true);
     try {
-      const newOptions = checkoutResult.options
-        .filter((option) => option.feature_id !== item.feature_id)
-        .map((option) => {
-          return {
-            featureId: option.feature_id,
-            quantity: option.quantity,
-          };
-        });
+      const newQuantities = primaryIncoming.featureQuantities
+        .filter((option) => option.featureId !== item.featureId)
+        .map((option) => ({
+          featureId: option.featureId,
+          quantity: option.quantity,
+        }));
 
-      newOptions.push({
-        featureId: item.feature_id!,
+      newQuantities.push({
+        featureId: item.featureId,
         quantity: Number(quantityInput) * billingUnits,
       });
 
-      const { data, error } = await checkout({
-        productId: checkoutResult.product.id,
-        options: newOptions,
-        dialog: CheckoutDialog,
+      const updated = await previewAttach({
+        planId: primaryIncoming.planId,
+        featureQuantities: newQuantities,
       });
 
-      if (error) {
-        console.error(error);
-        return;
-      }
-      setCheckoutResult(data!);
+      setCheckoutResult(updated);
     } catch (error) {
       console.error(error);
     } finally {
@@ -357,13 +384,13 @@ const PrepaidItem = ({
     }
   };
 
-  const disableSelection = scenario === "renew";
+  const disableSelection = eligibility?.canceling === true;
 
   return (
     <div className="flex justify-between gap-2">
       <div className="flex gap-2 items-start">
         <p className="text-muted-foreground whitespace-nowrap">
-          {item.feature?.name}
+          {item.feature?.name ?? item.feature?.display?.singular}
         </p>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger
@@ -382,9 +409,11 @@ const PrepaidItem = ({
             className="w-80 text-sm p-4 pt-3 flex flex-col gap-4"
           >
             <div className="flex flex-col gap-1">
-              <p className="text-sm font-medium">{item.feature?.name}</p>
+              <p className="text-sm font-medium">
+                {item.feature?.name ?? item.feature?.display?.singular}
+              </p>
               <p className="text-muted-foreground">
-                {item.display?.primary_text} {item.display?.secondary_text}
+                {item.display?.primaryText} {item.display?.secondaryText}
               </p>
             </div>
 
@@ -397,7 +426,7 @@ const PrepaidItem = ({
                 />
                 <p className="text-muted-foreground">
                   {billingUnits > 1 && `x ${billingUnits} `}
-                  {item.feature?.name}
+                  {item.feature?.name ?? item.feature?.display?.singular}
                 </p>
               </div>
 
@@ -417,7 +446,7 @@ const PrepaidItem = ({
         </Popover>
       </div>
       <p className="text-end">
-        {item.display?.primary_text} {item.display?.secondary_text}
+        {item.display?.primaryText} {item.display?.secondaryText}
       </p>
     </div>
   );

@@ -381,8 +381,8 @@ export const compareAnatomicalHistoryTool = createTool({
     summary: z.string(),
     detailedAnalysis: z.string(),
   }),
-  execute: async ({ context }) => {
-    return compareAnatomicalHistory(context);
+  execute: async (inputData) => {
+    return compareAnatomicalHistory(inputData);
   },
 });
 

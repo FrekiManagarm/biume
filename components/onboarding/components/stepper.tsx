@@ -6,36 +6,35 @@ import {
   CredenzaHeader,
   CredenzaTitle,
 } from "@/components/ui/credenza";
-import { useStepper, utils } from "../hooks/useStepper";
+import { useStepper } from "../hooks/useStepper";
 import IntroStep from "../pro/intro-step";
 import ProInformationsStep from "../pro/informations-step";
 import StepIndicator from "./step-indicator";
-import React from "react";
 
 const Stepper = () => {
-  const { next, prev, current, all, isLast, switch: switchStep } = useStepper();
-  const currentStep = utils.getIndex(current.id);
+  const { flow, navigation: { next, prev, goTo, reset }, state, lifecycle, lookup } = useStepper();
+  const currentStep = lookup.getIndex(state.current.data.id);
 
   return (
     <CredenzaContent className="min-w-4xl mx-auto w-full h-[700px] flex flex-col">
       <CredenzaHeader className="flex flex-row items-center space-x-4">
         <StepIndicator
           currentStep={currentStep + 1}
-          totalSteps={all.length}
-          isLast={isLast}
+          totalSteps={state.all.length}
+          isLast={state.isLast}
         />
         <div className="space-y-1 flex flex-col">
           <CredenzaTitle className="text-xl font-bold">
-            {current.title}
+            {state.current.data.title}
           </CredenzaTitle>
           <CredenzaDescription className="text-muted-foreground text-md">
-            {current.description}
+            {state.current.data.description}
           </CredenzaDescription>
         </div>
       </CredenzaHeader>
 
       <div className="flex-1 overflow-hidden">
-        {switchStep({
+        {flow.switch({
           start: () => <IntroStep nextStep={next} />,
           informations: () => (
             <ProInformationsStep nextStep={next} previousStep={prev} />

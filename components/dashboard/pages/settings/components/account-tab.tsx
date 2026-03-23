@@ -277,7 +277,7 @@ const AccountTab = () => {
       </Card>
 
       {/* Danger Zone */}
-      <Card className="border-red-300 bg-gradient-to-br from-red-50 to-red-100 shadow-lg py-0">
+      <Card className="border-red-300 bg-linear-to-br from-red-50 to-red-100 shadow-lg py-0">
         <CardHeader className="bg-red-600/10 border-b border-red-200 py-6">
           <CardTitle className="flex items-center gap-2 text-red-800 text-lg">
             <AlertCircle className="h-6 w-6 text-red-600" />

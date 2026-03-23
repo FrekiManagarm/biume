@@ -26,12 +26,12 @@ export function DashboardHeader() {
   const { toggleSidebar } = useSidebar();
   const pathname = usePathname();
   const params = useParams();
-  const { customer, isLoading } = useCustomer();
+  const { data: customer, isLoading } = useCustomer();
   const [aiDialogOpen, setAiDialogOpen] = useState(false);
 
   // Vérifier si le customer a un produit en statut "trialing"
-  const trialingProduct = customer?.products?.find(
-    (product) => product.status === "trialing",
+  const trialingProduct = customer?.subscriptions?.find(
+    (subscription) => subscription.status === "trialing",
   );
 
   const breadcrumb = breadcrumbProList(params?.reportId as string);
@@ -46,7 +46,7 @@ export function DashboardHeader() {
             (item as { items: { title: string; href: string }[] }).items,
           ) &&
           (item as { items: { title: string; href: string }[] }).items.length >
-          0
+            0
         ) {
           let deepest = null as null | { title: string; href: string };
           for (const sub of (
@@ -109,10 +109,10 @@ export function DashboardHeader() {
           </Breadcrumb>
         </div>
         <div className="flex items-center justify-center gap-2">
-          {(trialingProduct && trialingProduct.current_period_end) ||
-            isLoading ? (
+          {(trialingProduct && trialingProduct.currentPeriodEnd) ||
+          isLoading ? (
             <TrialCountdownComponent
-              endTime={trialingProduct?.current_period_end || 0}
+              endTime={trialingProduct?.currentPeriodEnd ?? 0}
               isLoading={isLoading}
             />
           ) : null}

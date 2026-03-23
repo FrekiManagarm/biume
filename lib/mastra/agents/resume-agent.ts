@@ -7,6 +7,7 @@ import { searchPetsTool } from "../tools/searchPetsTool";
 import { getPatientDetailsTool } from "../tools/getPatientsDetails";
 
 export const resumeAgent = new Agent({
+  id: "resume-agent",
   name: "Resume Agent",
   description:
     "Agent spécialisé dans les résumés et synthèses de consultations",
@@ -83,10 +84,5 @@ Exemple : "Synthèse : suivi stable, attention allergie saisonnière ; recontrô
     followupTool,
     searchPetsTool,
     getPatientDetailsTool,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 6,
-    temperature: 0.7,
-    maxTokens: 900,
   },
 });

@@ -1,7 +1,7 @@
 import { mastra } from "@/lib/mastra";
 import { buildContextPrompt, type AppContext } from "@/lib/ai/context-builder";
-import { toAISdkFormat } from "@mastra/ai-sdk"
-import { createUIMessageStream, createUIMessageStreamResponse } from "ai";
+import { toAISdkStream } from "@mastra/ai-sdk";
+import { createUIMessageStreamResponse } from "ai";
 
 export async function POST(req: Request) {
   const body = await req.json();
@@ -46,6 +46,6 @@ export async function POST(req: Request) {
   const agentStream = await myAgent.stream(enrichedMessages);
 
   return createUIMessageStreamResponse({
-    stream: toAISdkFormat(agentStream, { from: "agent" }),
-  })
+    stream: toAISdkStream(agentStream, { from: "agent", version: "v6" }),
+  });
 }

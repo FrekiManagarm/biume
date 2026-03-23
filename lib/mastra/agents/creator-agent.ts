@@ -7,6 +7,7 @@ import { searchPetsTool } from "../tools/searchPetsTool";
 import { searchClientsTool } from "../tools/searchClientsTool";
 
 export const creatorAgent = new Agent({
+  id: "creator-agent",
   name: "Creator Agent",
   description:
     "Agent spécialisé dans la création de clients, patients et rapports",
@@ -69,10 +70,5 @@ Tu es l'agent de création de Biume. Tu gères uniquement la création de client
     createClientTool,
     createPetTool,
     createReportTool,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 8,
-    temperature: 0.7,
-    maxTokens: 800,
   },
 });

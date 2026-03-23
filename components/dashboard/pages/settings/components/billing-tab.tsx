@@ -37,12 +37,15 @@ import {
   EmptyMedia,
 } from "@/components/ui/empty";
 import { useCustomer } from "autumn-js/react";
-import { allInclusiveYearly } from "@/autumn.config";
-import CheckoutDialog from "@/components/autumn/checkout-dialog";
+import { autumnPlanIds } from "@/lib/constants/autumn-ids";
 import { Spinner } from "@/components/ui/spinner";
 
 const BillingTab = () => {
-  const { attach, customer, cancel } = useCustomer({ expand: ["invoices"] });
+  const {
+    attach,
+    updateSubscription,
+    data: customer,
+  } = useCustomer({ expand: ["invoices"] });
   const [isLoading, setIsLoading] = useState(false);
   const [isUpgrading, setIsUpgrading] = useState(false);
 
@@ -50,8 +53,7 @@ const BillingTab = () => {
     try {
       setIsUpgrading(true);
       await attach({
-        productId: allInclusiveYearly.id,
-        dialog: CheckoutDialog,
+        planId: autumnPlanIds.allInclusiveYearly,
         successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/settings?tab=billing`,
       });
     } catch (error) {
@@ -62,10 +64,13 @@ const BillingTab = () => {
     }
   };
 
-  const handleCancelSubscription = async (productId: string) => {
+  const handleCancelSubscription = async (planId: string) => {
     try {
       setIsLoading(true);
-      await cancel({ productId });
+      await updateSubscription({
+        planId,
+        cancelAction: "cancel_end_of_cycle",
+      });
       toast.success("Abonnement annulé");
     } catch (error) {
       toast.error("Erreur lors de l'annulation de l'abonnement");
@@ -90,45 +95,65 @@ const BillingTab = () => {
     });
   };
 
-  const getSubscriptionStatus = (status: string) => {
-    switch (status) {
-      case "active":
-        return {
-          label: "Actif",
-          variant: "outline" as const,
-          color: "text-green-600",
-        };
-      case "canceled":
-        return {
-          label: "Annulé",
-          variant: "outline" as const,
-          color: "text-red-600",
-        };
-      case "past_due":
-        return {
-          label: "En retard",
-          variant: "outline" as const,
-          color: "text-red-600",
-        };
-      case "trialing":
-        return {
-          label: "Essai",
-          variant: "outline" as const,
-          color: "text-white",
-        };
-      default:
-        return {
-          label: status,
-          variant: "outline" as const,
-          color: "text-gray-600",
-        };
+  type SubscriptionLike = NonNullable<
+    NonNullable<typeof customer>["subscriptions"]
+  >[number];
+
+  const getSubscriptionDisplay = (sub: SubscriptionLike) => {
+    if (sub.pastDue) {
+      return {
+        label: "En retard",
+        variant: "outline" as const,
+        color: "text-red-600",
+        showActiveIcon: false,
+        showTrialIcon: false,
+      };
     }
+    if (sub.canceledAt != null) {
+      return {
+        label: "Annulé",
+        variant: "outline" as const,
+        color: "text-red-600",
+        showActiveIcon: false,
+        showTrialIcon: false,
+      };
+    }
+    const onTrial =
+      sub.trialEndsAt != null && sub.trialEndsAt > Date.now();
+    if (onTrial) {
+      return {
+        label: "Essai",
+        variant: "outline" as const,
+        color: "text-white",
+        showActiveIcon: false,
+        showTrialIcon: true,
+      };
+    }
+    if (sub.status === "active") {
+      return {
+        label: "Actif",
+        variant: "outline" as const,
+        color: "text-green-600",
+        showActiveIcon: true,
+        showTrialIcon: false,
+      };
+    }
+    return {
+      label: sub.status,
+      variant: "outline" as const,
+      color: "text-gray-600",
+      showActiveIcon: false,
+      showTrialIcon: false,
+    };
   };
 
-  // Utiliser les données du customer pour les abonnements
-  const activeSubscription = customer?.products?.find(
-    (product) => product.status === "active" || product.status === "trialing",
+  // Abonnement courant (API Autumn : subscriptions + plan embarqué)
+  const activeSubscription = customer?.subscriptions?.find(
+    (sub) => sub.status === "active",
   );
+  const subscriptionDisplay = activeSubscription
+    ? getSubscriptionDisplay(activeSubscription)
+    : null;
 
   if (!customer) {
     return (
@@ -159,7 +184,7 @@ const BillingTab = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {activeSubscription ? (
+          {activeSubscription && subscriptionDisplay ? (
             <>
               {/* Plan et statut */}
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 rounded-lg border bg-muted/30">
@@ -173,31 +198,31 @@ const BillingTab = () => {
                   <div className="flex items-baseline gap-2">
                     <span className="text-2xl font-bold">
                       {formatCurrency(
-                        (activeSubscription.items?.[0]?.price || 0) * 100,
+                        Math.round(
+                          (activeSubscription.plan?.price?.amount ?? 0) * 100,
+                        ),
                         "EUR",
                       )}
                     </span>
                     <span className="text-sm text-muted-foreground">
                       /
-                      {activeSubscription.items?.[0]?.interval === "year"
+                      {activeSubscription.plan?.price?.interval === "year"
                         ? "an"
                         : "mois"}
                     </span>
                   </div>
                 </div>
                 <Badge
-                  variant={
-                    getSubscriptionStatus(activeSubscription.status).variant
-                  }
-                  className={`${getSubscriptionStatus(activeSubscription.status).color} flex items-center gap-1`}
+                  variant={subscriptionDisplay.variant}
+                  className={`${subscriptionDisplay.color} flex items-center gap-1`}
                 >
-                  {activeSubscription.status === "active" && (
+                  {subscriptionDisplay.showActiveIcon && (
                     <CheckCircle className="h-3 w-3" />
                   )}
-                  {activeSubscription.status === "trialing" && (
+                  {subscriptionDisplay.showTrialIcon && (
                     <Clock className="h-3 w-3" />
                   )}
-                  {getSubscriptionStatus(activeSubscription.status).label}
+                  {subscriptionDisplay.label}
                 </Badge>
               </div>
 
@@ -212,13 +237,13 @@ const BillingTab = () => {
                     Du{" "}
                     {formatDate(
                       new Date(
-                        activeSubscription.current_period_start || 0,
+                        activeSubscription.currentPeriodStart ?? 0,
                       ).toISOString(),
                     )}{" "}
                     au{" "}
                     {formatDate(
                       new Date(
-                        activeSubscription.current_period_end || 0,
+                        activeSubscription.currentPeriodEnd ?? 0,
                       ).toISOString(),
                     )}
                   </p>
@@ -231,7 +256,7 @@ const BillingTab = () => {
                   <p className="text-sm text-muted-foreground">
                     {formatDate(
                       new Date(
-                        activeSubscription.current_period_end || 0,
+                        activeSubscription.currentPeriodEnd ?? 0,
                       ).toISOString(),
                     )}
                   </p>
@@ -243,7 +268,7 @@ const BillingTab = () => {
                 <Button
                   variant="outline"
                   onClick={() =>
-                    handleCancelSubscription(activeSubscription.id)
+                    handleCancelSubscription(activeSubscription.planId)
                   }
                   disabled={isLoading}
                   className="flex-1"
@@ -310,9 +335,9 @@ const BillingTab = () => {
               </TableHeader>
               <TableBody>
                 {customer.invoices.map((invoice) => (
-                  <TableRow key={invoice.stripe_id}>
+                  <TableRow key={invoice.stripeId}>
                     <TableCell>
-                      {formatDate(new Date(invoice.created_at).toISOString())}
+                      {formatDate(new Date(invoice.createdAt).toISOString())}
                     </TableCell>
                     <TableCell>
                       {formatCurrency(invoice.total, invoice.currency)}
@@ -327,13 +352,14 @@ const BillingTab = () => {
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {invoice.hosted_invoice_url && (
+                      {invoice.hostedInvoiceUrl && (
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() =>
-                            window.open(invoice.hosted_invoice_url, "_blank")
-                          }
+                          onClick={() => {
+                            const url = invoice.hostedInvoiceUrl;
+                            if (url) window.open(url, "_blank");
+                          }}
                         >
                           <Download className="h-4 w-4 mr-2" />
                           Télécharger

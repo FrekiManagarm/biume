@@ -25,7 +25,7 @@ export const createPetTool = createTool({
     petId: z.string().optional(),
     message: z.string(),
   }),
-  execute: async ({ context, runtimeContext }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
       if (!organization) throw new Error("Organization not found");
@@ -33,16 +33,16 @@ export const createPetTool = createTool({
       const [newPet] = await db
         .insert(pets)
         .values({
-          name: context.name,
-          breed: context.breed,
-          type: context.type,
-          weight: context.weight,
-          height: context.height,
-          birthDate: new Date(context.birthDate),
-          gender: context.gender,
-          ownerId: context.ownerId,
+          name: inputData.name,
+          breed: inputData.breed,
+          type: inputData.type,
+          weight: inputData.weight,
+          height: inputData.height,
+          birthDate: new Date(inputData.birthDate),
+          gender: inputData.gender,
+          ownerId: inputData.ownerId,
           organizationId: organization.id,
-          description: context.description,
+          description: inputData.description,
           createdAt: new Date(),
         })
         .returning({ id: pets.id });
@@ -53,7 +53,7 @@ export const createPetTool = createTool({
       return {
         success: true,
         petId: newPet.id,
-        message: `Patient ${context.name} créé avec succès.`,
+        message: `Patient ${inputData.name} créé avec succès.`,
       };
     } catch (error) {
       console.error("Erreur lors de la création du patient:", error);

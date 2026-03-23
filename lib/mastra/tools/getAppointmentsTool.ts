@@ -38,19 +38,19 @@ export const getAppointmentsTool = createTool({
     summary: z.string(),
     totalAppointments: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const appointments = await getAppointments();
 
       // Filtrage par dates si fournies
       let filteredAppointments = appointments;
 
-      if (context.startDate || context.endDate) {
-        const startDate = context.startDate
-          ? parseISO(context.startDate)
+      if (inputData.startDate || inputData.endDate) {
+        const startDate = inputData.startDate
+          ? parseISO(inputData.startDate)
           : new Date();
-        const endDate = context.endDate
-          ? parseISO(context.endDate)
+        const endDate = inputData.endDate
+          ? parseISO(inputData.endDate)
           : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // +7 jours par défaut
 
         filteredAppointments = appointments.filter((apt) => {

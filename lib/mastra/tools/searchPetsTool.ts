@@ -29,7 +29,7 @@ export const searchPetsTool = createTool({
     ),
     count: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
       if (!organization) throw new Error("Organization not found");
@@ -38,7 +38,7 @@ export const searchPetsTool = createTool({
         where: (pets, { ilike, and }) =>
           and(
             eq(pets.organizationId, organization.id),
-            ilike(pets.name, `%${context.query}%`),
+            ilike(pets.name, `%${inputData.query}%`),
           ),
         with: {
           owner: true,

@@ -25,7 +25,7 @@ export const searchClientsTool = createTool({
     ),
     count: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
       if (!organization) throw new Error("Organization not found");
@@ -42,8 +42,8 @@ export const searchClientsTool = createTool({
         .from(clients)
         .where(
           or(
-            ilike(clients.name, `%${context.query}%`),
-            ilike(clients.email, `%${context.query}%`),
+            ilike(clients.name, `%${inputData.query}%`),
+            ilike(clients.email, `%${inputData.query}%`),
           ),
         )
         .limit(10);

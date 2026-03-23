@@ -1,9 +1,9 @@
-import { openai } from "@ai-sdk/openai";
 import { Agent } from "@mastra/core/agent";
 import { analyzeAnatomyTool } from "../tools/analyzeAnatomyTool";
 import { compareAnatomicalHistoryTool } from "../tools/compareAnatomicalHistoryTool";
 
 export const analyseAgent = new Agent({
+  id: "analyse-agent",
   name: "Medical Analysis Agent",
   description:
     "Agent spécialisé dans l'analyse anatomique et les comparaisons médicales",
@@ -49,14 +49,9 @@ Compare l'évolution anatomique d'un patient entre deux périodes.
 - Mettre en évidence les points critiques
 - Proposer des recommandations d'action
 - Langue française uniquement`,
-  model: openai("gpt-4o-mini"),
+  model: "openai/gpt-4.1-mini",
   tools: {
     analyzeAnatomyTool,
     compareAnatomicalHistoryTool,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 5,
-    temperature: 0.6,
-    maxTokens: 800,
   },
 });

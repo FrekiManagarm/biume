@@ -54,18 +54,18 @@ export const createAppointmentTool = createTool({
       .boolean()
       .describe("Indique si des chevauchements ont été détectés"),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       // Parser les dates et retirer une heure pour corriger le décalage
-      const beginAtParsed = parseISO(context.beginAt);
-      const endAtParsed = parseISO(context.endAt);
+      const beginAtParsed = parseISO(inputData.beginAt);
+      const endAtParsed = parseISO(inputData.endAt);
       const beginAt = new Date(beginAtParsed.getTime() - 60 * 60 * 1000); // Retirer 1 heure
       const endAt = new Date(endAtParsed.getTime() - 60 * 60 * 1000); // Retirer 1 heure
 
       // Vérifier les chevauchements avant de créer
       const conflicts = await checkAppointmentConflicts(beginAt, endAt);
 
-      if (conflicts.length > 0 && !context.forceCreate) {
+      if (conflicts.length > 0 && !inputData.forceCreate) {
         // Il y a des chevauchements, informer l'utilisateur
         const conflictsList = conflicts.map((conflict) => ({
           id: conflict.id,
@@ -100,11 +100,11 @@ Souhaitez-vous créer ce rendez-vous malgré le chevauchement ?`,
 
       // Pas de conflit ou création forcée : créer le rendez-vous
       const newAppointment = await createAppointment({
-        patientId: context.patientId,
+        patientId: inputData.patientId,
         beginAt,
         endAt,
-        atHome: context.atHome,
-        note: context.note,
+        atHome: inputData.atHome,
+        note: inputData.note,
       });
 
       const dateStr = format(beginAt, "EEEE d MMMM 'à' HH:mm", { locale: fr });
@@ -117,7 +117,7 @@ Souhaitez-vous créer ce rendez-vous malgré le chevauchement ?`,
         success: true,
         hasConflicts: false,
         appointmentId: newAppointment.id,
-        message: context.forceCreate
+        message: inputData.forceCreate
           ? `✅ Rendez-vous créé malgré le chevauchement :\n📅 ${dateStr} (${duration})\n\nID : ${newAppointment.id}`
           : `✅ Rendez-vous créé avec succès !\n📅 ${dateStr} (${duration})\n\nID : ${newAppointment.id}`,
       };

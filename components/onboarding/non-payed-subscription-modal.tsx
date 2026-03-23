@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useCustomer } from "autumn-js/react";
-import { allInclusiveMonthly, allInclusiveYearly } from "@/autumn.config";
+import { autumnPlanIds } from "@/lib/constants/autumn-ids";
 
 type RequireSubscriptionDialogProps = {
   open?: boolean;
@@ -53,7 +53,9 @@ const NonPayedSubscriptionModal: React.FC<RequireSubscriptionDialogProps> = ({
   const handleSubscribe = async () => {
     try {
       await attach({
-        planId: isAnnual ? allInclusiveYearly.id : allInclusiveMonthly.id,
+        planId: isAnnual
+          ? autumnPlanIds.allInclusiveYearly
+          : autumnPlanIds.allInclusiveMonthly,
         successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/transactions/subscriptions/success?org=${customer?.id}`,
         checkoutSessionParams: {
           automatic_tax: {

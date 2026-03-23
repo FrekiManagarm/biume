@@ -5,6 +5,7 @@ import { searchPetsTool } from "../tools/searchPetsTool";
 import { getPatientDetailsTool } from "../tools/getPatientsDetails";
 
 export const searchAgent = new Agent({
+  id: "search-agent",
   name: "Search Agent",
   description:
     "Agent spécialisé dans la recherche de clients et patients",
@@ -52,10 +53,5 @@ Pour détails :
     searchClientsTool,
     searchPetsTool,
     getPatientDetailsTool,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 5,
-    temperature: 0.5,
-    maxTokens: 600,
   },
 });

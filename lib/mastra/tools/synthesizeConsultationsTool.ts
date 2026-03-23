@@ -19,12 +19,12 @@ export const synthesizeConsultationsTool = createTool({
     synthesis: z.string(),
     keyPoints: z.array(z.string()),
   }),
-  execute: async ({ context }) => {
-    const whereClauses = [eq(advancedReport.patientId, context.petId)];
-    if (context.from)
-      whereClauses.push(gte(advancedReport.createdAt, new Date(context.from)));
-    if (context.to)
-      whereClauses.push(lte(advancedReport.createdAt, new Date(context.to)));
+  execute: async (inputData) => {
+    const whereClauses = [eq(advancedReport.patientId, inputData.petId)];
+    if (inputData.from)
+      whereClauses.push(gte(advancedReport.createdAt, new Date(inputData.from)));
+    if (inputData.to)
+      whereClauses.push(lte(advancedReport.createdAt, new Date(inputData.to)));
 
     const rows = await db
       .select({
@@ -36,7 +36,7 @@ export const synthesizeConsultationsTool = createTool({
       .from(advancedReport)
       .where(and(...whereClauses))
       .orderBy(desc(advancedReport.createdAt))
-      .limit(context.limit);
+      .limit(inputData.limit ?? 100);
 
     const reasons: Record<string, number> = {};
     const keywordCounts: Record<string, number> = {};

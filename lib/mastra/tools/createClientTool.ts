@@ -21,7 +21,7 @@ export const createClientTool = createTool({
     clientId: z.string().optional(),
     message: z.string(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
       if (!organization) throw new Error("Organization not found");
@@ -29,11 +29,11 @@ export const createClientTool = createTool({
       const [newClient] = await db
         .insert(clients)
         .values({
-          name: context.name,
-          email: context.email,
-          phone: context.phone,
-          address: context.address,
-          city: context.city,
+          name: inputData.name,
+          email: inputData.email,
+          phone: inputData.phone,
+          address: inputData.address,
+          city: inputData.city,
           organizationId: organization.id,
           createdAt: new Date(),
         })
@@ -45,7 +45,7 @@ export const createClientTool = createTool({
       return {
         success: true,
         clientId: newClient.id,
-        message: `Client ${context.name} créé avec succès.`,
+        message: `Client ${inputData.name} créé avec succès.`,
       };
     } catch (error) {
       console.error("Erreur lors de la création du client:", error);

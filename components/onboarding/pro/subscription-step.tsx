@@ -9,8 +9,9 @@ import { toast } from "sonner";
 import { useActiveOrganization } from "@/lib/auth/auth-client";
 import { useState } from "react";
 import { useCustomer } from "autumn-js/react";
+import type { ClientAttachParams } from "autumn-js/react";
 import CheckoutDialog from "@/components/autumn/checkout-dialog";
-import { allInclusiveYearly, allInclusiveMonthly } from "@/autumn.config";
+import { autumnPlanIds } from "@/lib/constants/autumn-ids";
 import { logger } from "@/lib/utils/logger";
 
 const features = [
@@ -43,14 +44,14 @@ export function SubscriptionStep() {
       setIsLoading(true);
 
       const productId = isAnnual
-        ? allInclusiveYearly.id
-        : allInclusiveMonthly.id;
+        ? autumnPlanIds.allInclusiveYearly
+        : autumnPlanIds.allInclusiveMonthly;
 
       await attach({
-        productId: productId,
-        dialog: CheckoutDialog,
+        planId: productId,
         successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/transactions/subscriptions/success?org=${activeOrg?.id}`,
-      });
+        dialog: CheckoutDialog,
+      } as ClientAttachParams & { dialog: typeof CheckoutDialog });
     } catch (error) {
       setIsLoading(false);
       logger.error("Error subscribing to product", error);

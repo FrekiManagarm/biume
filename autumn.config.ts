@@ -1,45 +1,46 @@
 import { feature, item, plan } from "atmn";
+import { autumnFeatureIds, autumnPlanIds } from "@/lib/constants/autumn-ids";
 
 // Features
 export const supportPrioritaire = feature({
-  id: "support_prioritaire",
+  id: autumnFeatureIds.supportPrioritaire,
   name: "Support prioritaire",
   type: "boolean",
 });
 
 export const fichesClientsPatientsIllimits = feature({
-  id: "fiches_clients_patients_illimits",
+  id: autumnFeatureIds.fichesClientsPatientsIllimits,
   name: "Fiches clients patients illimités",
   type: "boolean",
 });
 
 export const suiviDeSantIntelligent = feature({
-  id: "suivi_de_sant_intelligent",
+  id: autumnFeatureIds.suiviDeSantIntelligent,
   name: "Suivi de santé intelligent",
   type: "boolean",
 });
 
 export const exportPdfProfessionnel = feature({
-  id: "export_pdf_professionnel",
+  id: autumnFeatureIds.exportPdfProfessionnel,
   name: "Export PDF Professionnel",
   type: "boolean",
 });
 
 export const iaVulgarisation = feature({
-  id: "ia_vulgarisation",
+  id: autumnFeatureIds.iaVulgarisation,
   name: "IA vulgarisation",
   type: "boolean",
 });
 
 export const rapportsIllimits = feature({
-  id: "rapports_illimits",
+  id: autumnFeatureIds.rapportsIllimits,
   name: "Rapports illimités",
   type: "boolean",
 });
 
 // Products
 export const allInclusiveMonthly = plan({
-  id: "all_inclusive_monthly",
+  id: autumnPlanIds.allInclusiveMonthly,
   name: "All inclusive monthly",
   price: {
     amount: 29.99,
@@ -75,7 +76,7 @@ export const allInclusiveMonthly = plan({
 });
 
 export const allInclusiveYearly = plan({
-  id: "all_inclusive_yearly",
+  id: autumnPlanIds.allInclusiveYearly,
   name: "All inclusive yearly",
   price: {
     amount: 299.88,

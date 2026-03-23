@@ -4,7 +4,6 @@ import { autumn } from "@/lib/utils/autumn";
 import { db } from "@/lib/utils/db";
 import { organization as organizationSchema } from "@/lib/schemas";
 import { eq } from "drizzle-orm";
-import { trialWorkflow } from "@/lib/trigger/trial.trigger";
 import { tasks } from "@trigger.dev/sdk/v3";
 
 /**
@@ -37,22 +36,22 @@ export async function startTrialWorkflow(organizationId: string) {
       `[Trial Action] Récupération des données Autumn pour le customer ${org.customerStripeId}`,
     );
 
-    const customerResponse = await autumn.customers.get(
-      org.customerStripeId,
-    );
+    const customerResponse = await autumn.customers.getOrCreate({
+      customerId: org.customerStripeId,
+    });
 
-    if (!customerResponse.data) {
+    if (!customerResponse) {
       throw new Error(`Failed to retrieve customer data from Autumn`);
     }
 
-    const customer = customerResponse.data;
-    const subscriptions = customer.products;
+    const customer = customerResponse;
+    const subscriptions = customer.subscriptions;
 
     // Trouver une subscription avec trial actif
     const trialSubscription = subscriptions?.find((sub) => {
       return (
         sub.status === "trialing" ||
-        (sub.current_period_end && new Date(sub.current_period_end) > new Date())
+        (sub.currentPeriodEnd && new Date(sub.currentPeriodEnd) > new Date())
       );
     });
 
@@ -67,12 +66,12 @@ export async function startTrialWorkflow(organizationId: string) {
     }
 
     // Extraire les dates de trial
-    const trialStart = trialSubscription.current_period_start
-      ? new Date(trialSubscription.current_period_start).toISOString()
+    const trialStart = trialSubscription.currentPeriodStart
+      ? new Date(trialSubscription.currentPeriodStart).toISOString()
       : new Date().toISOString();
 
-    const trialEnd = trialSubscription.current_period_end
-      ? new Date(trialSubscription.current_period_end).toISOString()
+    const trialEnd = trialSubscription.currentPeriodEnd
+      ? new Date(trialSubscription.currentPeriodEnd).toISOString()
       : new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString(); // 15 jours par défaut
 
     console.log(

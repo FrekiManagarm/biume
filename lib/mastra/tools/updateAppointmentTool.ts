@@ -59,25 +59,25 @@ export const updateAppointmentTool = createTool({
       .boolean()
       .describe("Indique si des chevauchements ont été détectés"),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       // Si les dates changent, vérifier les chevauchements
       if (
-        (context.beginAt || context.endAt) &&
-        context.beginAt &&
-        context.endAt
+        (inputData.beginAt || inputData.endAt) &&
+        inputData.beginAt &&
+        inputData.endAt
       ) {
-        const beginAt = parseISO(context.beginAt);
-        const endAt = parseISO(context.endAt);
+        const beginAt = parseISO(inputData.beginAt);
+        const endAt = parseISO(inputData.endAt);
 
         // Vérifier les chevauchements en excluant le rendez-vous actuel
         const conflicts = await checkAppointmentConflicts(
           beginAt,
           endAt,
-          context.appointmentId,
+          inputData.appointmentId,
         );
 
-        if (conflicts.length > 0 && !context.forceUpdate) {
+        if (conflicts.length > 0 && !inputData.forceUpdate) {
           // Il y a des chevauchements, informer l'utilisateur
           const conflictsList = conflicts.map((conflict) => ({
             id: conflict.id,
@@ -121,39 +121,39 @@ Souhaitez-vous modifier ce rendez-vous malgré le chevauchement ?`,
         status?: "CREATED" | "CONFIRMED" | "CANCELLED" | "COMPLETED";
       } = {};
 
-      if (context.patientId) updateData.patientId = context.patientId;
-      if (context.beginAt) updateData.beginAt = parseISO(context.beginAt);
-      if (context.endAt) updateData.endAt = parseISO(context.endAt);
-      if (context.atHome !== undefined) updateData.atHome = context.atHome;
-      if (context.note !== undefined) updateData.note = context.note;
-      if (context.status) updateData.status = context.status;
+      if (inputData.patientId) updateData.patientId = inputData.patientId;
+      if (inputData.beginAt) updateData.beginAt = parseISO(inputData.beginAt);
+      if (inputData.endAt) updateData.endAt = parseISO(inputData.endAt);
+      if (inputData.atHome !== undefined) updateData.atHome = inputData.atHome;
+      if (inputData.note !== undefined) updateData.note = inputData.note;
+      if (inputData.status) updateData.status = inputData.status;
 
-      await updateAppointment(context.appointmentId, updateData);
+      await updateAppointment(inputData.appointmentId, updateData);
 
       // Construire le message de succès
       let message = "✅ Rendez-vous modifié avec succès !\n\n";
-      
+
       const changes: string[] = [];
-      if (context.beginAt && context.endAt) {
-        const beginAt = parseISO(context.beginAt);
-        const endAt = parseISO(context.endAt);
+      if (inputData.beginAt && inputData.endAt) {
+        const beginAt = parseISO(inputData.beginAt);
+        const endAt = parseISO(inputData.endAt);
         const dateStr = format(beginAt, "EEEE d MMMM 'à' HH:mm", { locale: fr });
         const duration = formatDuration(beginAt, endAt);
         changes.push(`📅 Nouveau créneau : ${dateStr} (${duration})`);
       }
-      if (context.status) {
+      if (inputData.status) {
         const statusLabels = {
           CREATED: "Créé",
           CONFIRMED: "Confirmé",
           CANCELLED: "Annulé",
           COMPLETED: "Terminé",
         };
-        changes.push(`📊 Statut : ${statusLabels[context.status]}`);
+        changes.push(`📊 Statut : ${statusLabels[inputData.status]}`);
       }
-      if (context.atHome !== undefined) {
-        changes.push(`🏠 À domicile : ${context.atHome ? "Oui" : "Non"}`);
+      if (inputData.atHome !== undefined) {
+        changes.push(`🏠 À domicile : ${inputData.atHome ? "Oui" : "Non"}`);
       }
-      if (context.note) {
+      if (inputData.note) {
         changes.push(`📝 Note mise à jour`);
       }
 
@@ -161,7 +161,7 @@ Souhaitez-vous modifier ce rendez-vous malgré le chevauchement ?`,
         message += changes.join("\n");
       }
 
-      if (context.forceUpdate) {
+      if (inputData.forceUpdate) {
         message += "\n\n⚠️ Modifié malgré le chevauchement détecté";
       }
 

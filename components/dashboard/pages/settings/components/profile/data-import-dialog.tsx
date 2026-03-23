@@ -151,7 +151,7 @@ export const DataImportDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-125">
         <DialogHeader>
           <DialogTitle>Import {getFormatLabel()}</DialogTitle>
           <DialogDescription>

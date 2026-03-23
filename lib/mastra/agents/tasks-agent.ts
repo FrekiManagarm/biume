@@ -3,6 +3,7 @@ import { Agent } from "@mastra/core/agent";
 import { getAppointmentsWithoutReportTool } from "../tools/getAppointmentsWithoutReportTool";
 
 export const tasksAgent = new Agent({
+  id: "tasks-agent",
   name: "Tasks Agent",
   description:
     "Agent spécialisé dans la gestion des tâches et rappels",
@@ -43,10 +44,5 @@ Affiche les rendez-vous complétés qui n'ont pas encore de rapport associé.
   model: openai("gpt-4o-mini"),
   tools: {
     getAppointmentsWithoutReportTool,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 3,
-    temperature: 0.6,
-    maxTokens: 500,
   },
 });

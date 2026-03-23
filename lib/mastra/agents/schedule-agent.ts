@@ -6,6 +6,7 @@ import { updateAppointmentTool } from "../tools/updateAppointmentTool";
 import { searchPetsTool } from "../tools/searchPetsTool";
 
 export const scheduleAgent = new Agent({
+   id: "schedule-agent",
    name: "Schedule Agent",
    description:
       "Agent spécialisé dans la gestion des rendez-vous et de l'agenda",
@@ -93,10 +94,5 @@ Quand hasConflicts: true, expliquer clairement :
       createAppointmentTool,
       updateAppointmentTool,
       searchPetsTool,
-   },
-   defaultGenerateOptions: {
-      maxSteps: 10,
-      temperature: 0.6,
-      maxTokens: 1000,
    },
 });

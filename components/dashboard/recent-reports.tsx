@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -161,10 +160,7 @@ export function RecentReportsLoading() {
       <CardContent className="pt-0">
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, index) => (
-            <div
-              key={index}
-              className="rounded-lg border bg-card p-4"
-            >
+            <div key={index} className="rounded-lg border bg-card p-4">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex flex-1 gap-3">
                   <Skeleton className="size-10 rounded-lg" />

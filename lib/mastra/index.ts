@@ -22,13 +22,11 @@ export const mastra = new Mastra({
     tasksAgent,
   },
   storage: new LibSQLStore({
+    id: "biume-mastra",
     url: ":memory:",
   }),
   logger: new PinoLogger({
     name: "Mastra",
     level: "info",
   }),
-  observability: {
-    default: { enabled: false },
-  },
 });

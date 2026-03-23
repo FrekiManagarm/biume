@@ -1,142 +1,157 @@
-import { type CheckoutResult } from "autumn-js";
+import { AttachAction, PlanStatus } from "autumn-js";
+import type { ReactNode } from "react";
+import type { CheckoutPreviewResult } from "@/lib/autumn/checkout-types";
 
-export const getCheckoutContent = (checkoutResult: CheckoutResult) => {
-  const { product, current_product, next_cycle } = checkoutResult;
-  const { is_one_off, is_free, has_trial, updateable } = product.properties;
-  const scenario = product.scenario;
+function primaryPlan(preview: CheckoutPreviewResult) {
+  return preview.incoming[0]?.plan;
+}
 
-  const nextCycleAtStr = next_cycle
-    ? new Date(next_cycle.starts_at).toLocaleDateString()
+function outgoingPlan(preview: CheckoutPreviewResult) {
+  return preview.outgoing[0]?.plan;
+}
+
+export const getCheckoutContent = (preview: CheckoutPreviewResult) => {
+  const plan = primaryPlan(preview);
+  const currentPlan = outgoingPlan(preview);
+  const eligibility = plan?.customerEligibility;
+  const action = eligibility?.attachAction;
+  const status = eligibility?.status;
+
+  const nextCycleAtStr = preview.nextCycle
+    ? new Date(preview.nextCycle.startsAt).toLocaleDateString()
     : undefined;
 
-  const productName = product.name;
-
-  if (is_one_off) {
+  if (!plan) {
     return {
-      title: <p>Purchase {productName}</p>,
+      title: <p>Confirmation</p> as ReactNode,
+      message: (
+        <p>Confirmez pour appliquer les changements de facturation.</p>
+      ) as ReactNode,
+    };
+  }
+
+  const productName = plan.name;
+
+  if (plan.price?.interval === "one_off") {
+    return {
+      title: <p>Acheter {productName}</p>,
       message: (
         <p>
-          By clicking confirm, you will purchase {productName} and your card
-          will be charged immediately.
+          En confirmant, vous achetez {productName} et votre carte sera
+          débitée immédiatement.
         </p>
       ),
     };
   }
 
-  if (scenario == "active" && updateable) {
-    if (updateable) {
-      return {
-        title: <p>Update Plan</p>,
-        message: (
-          <p>
-            Update your prepaid quantity. You&apos;ll be charged or credited the
-            prorated difference based on your current billing cycle.
-          </p>
-        ),
-      };
-    }
-  }
-
-  if (has_trial) {
+  if (
+    status === PlanStatus.Scheduled ||
+    (action === AttachAction.None && preview.outgoing.length > 0)
+  ) {
     return {
-      title: <p>Start trial for {productName}</p>,
+      title: <p>{productName} déjà planifié</p>,
       message: (
         <p>
-          By clicking confirm, you will start a free trial of {productName}{" "}
-          which ends on {nextCycleAtStr}.
+          Vous êtes actuellement sur {currentPlan?.name ?? "votre formule"}{" "}
+          et passerez à {productName}
+          {nextCycleAtStr ? ` le ${nextCycleAtStr}` : ""}.
         </p>
       ),
     };
   }
 
-  switch (scenario) {
-    case "scheduled":
-      return {
-        title: <p>{productName} product already scheduled</p>,
-        message: (
-          <p>
-            You are currently on product {current_product.name} and are
-            scheduled to start {productName} on {nextCycleAtStr}.
-          </p>
-        ),
-      };
+  if (
+    plan.freeTrial &&
+    eligibility?.trialAvailable !== false &&
+    eligibility?.trialing !== true
+  ) {
+    return {
+      title: <p>Démarrer l&apos;essai : {productName}</p>,
+      message: (
+        <p>
+          En confirmant, vous démarrez un essai gratuit de {productName}
+          {nextCycleAtStr ? ` jusqu&apos;au ${nextCycleAtStr}` : ""}.
+        </p>
+      ),
+    };
+  }
 
-    case "active":
-      return {
-        title: <p>Product already active</p>,
-        message: <p>You are already subscribed to this product.</p>,
-      };
-
-    case "new":
-      if (is_free) {
+  switch (action) {
+    case AttachAction.None:
+      if (status === PlanStatus.Active) {
         return {
-          title: <p>Enable {productName}</p>,
+          title: <p>Produit déjà actif</p>,
+          message: <p>Vous êtes déjà abonné à cette offre.</p>,
+        };
+      }
+      break;
+
+    case AttachAction.Upgrade:
+      return {
+        title: <p>Passer à {productName}</p>,
+        message: (
+          <p>
+            En confirmant, vous passez à {productName} et votre moyen de
+            paiement sera débité immédiatement.
+          </p>
+        ),
+      };
+
+    case AttachAction.Downgrade:
+      return {
+        title: <p>Rétrograder vers {productName}</p>,
+        message: (
+          <p>
+            En confirmant, votre abonnement à {currentPlan?.name ?? "votre formule actuelle"} prendra fin et {productName} commencera
+            {nextCycleAtStr ? ` le ${nextCycleAtStr}` : ""}.
+          </p>
+        ),
+      };
+
+    case AttachAction.Activate:
+      if (preview.total === 0) {
+        return {
+          title: <p>Activer {productName}</p>,
           message: (
             <p>
-              By clicking confirm, {productName} will be enabled immediately.
+              En confirmant, {productName} sera activé immédiatement.
             </p>
           ),
         };
       }
-
       return {
-        title: <p>Subscribe to {productName}</p>,
+        title: <p>Souscrire à {productName}</p>,
         message: (
           <p>
-            By clicking confirm, you will be subscribed to {productName} and
-            your card will be charged immediately.
-          </p>
-        ),
-      };
-    case "renew":
-      return {
-        title: <p>Renew</p>,
-        message: (
-          <p>
-            By clicking confirm, you will renew your subscription to{" "}
-            {productName}.
+            En confirmant, vous souscrivez à {productName} et votre carte sera
+            débitée immédiatement.
           </p>
         ),
       };
 
-    case "upgrade":
+    case AttachAction.Purchase:
       return {
-        title: <p>Upgrade to {productName}</p>,
+        title: <p>Acheter {productName}</p>,
         message: (
           <p>
-            By clicking confirm, you will upgrade to {productName} and your
-            payment method will be charged immediately.
-          </p>
-        ),
-      };
-
-    case "downgrade":
-      return {
-        title: <p>Downgrade to {productName}</p>,
-        message: (
-          <p>
-            By clicking confirm, your current subscription to{" "}
-            {current_product.name} will be cancelled and a new subscription to{" "}
-            {productName} will begin on {nextCycleAtStr}.
-          </p>
-        ),
-      };
-
-    case "cancel":
-      return {
-        title: <p>Cancel</p>,
-        message: (
-          <p>
-            By clicking confirm, your subscription to {current_product.name}{" "}
-            will end on {nextCycleAtStr}.
+            En confirmant, vous finalisez l&apos;achat de {productName}.
           </p>
         ),
       };
 
     default:
-      return {
-        title: <p>Change Subscription</p>,
-        message: <p>You are about to change your subscription.</p>,
-      };
+      break;
   }
+
+  return {
+    title: <p>Modifier l&apos;abonnement</p>,
+    message: <p>Vous êtes sur le point de modifier votre abonnement.</p>,
+  };
 };
+
+/** Filtre les lignes de plan affichées comme « prix » (hors simples drapeaux booléens). */
+export function isPlanItemPricedRow(item: {
+  feature?: { type?: string | null } | null;
+}): boolean {
+  return item.feature?.type !== "boolean";
+}

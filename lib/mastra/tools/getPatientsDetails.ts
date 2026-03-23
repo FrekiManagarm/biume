@@ -44,7 +44,7 @@ export const getPatientDetailsTool = createTool({
     ),
     reportCount: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
       if (!organization) throw new Error("Organization not found");
@@ -52,7 +52,7 @@ export const getPatientDetailsTool = createTool({
       const petData = await db.query.pets.findFirst({
         where: (pets, { eq, and }) =>
           and(
-            eq(pets.id, context.petId),
+            eq(pets.id, inputData.petId),
             eq(pets.organizationId, organization.id),
           ),
         with: {
@@ -80,7 +80,7 @@ export const getPatientDetailsTool = createTool({
           createdAt: advancedReport.createdAt,
         })
         .from(advancedReport)
-        .where(eq(advancedReport.patientId, context.petId))
+        .where(eq(advancedReport.patientId, inputData.petId))
         .orderBy(desc(advancedReport.createdAt))
         .limit(20);
 

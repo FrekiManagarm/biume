@@ -32,10 +32,10 @@ export const getAppointmentsWithoutReportTool = createTool({
     summary: z.string(),
     totalAppointments: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const appointments = await getAppointmentsWithoutReport(
-        context.daysBack || 30,
+        inputData.daysBack || 30,
       );
 
       // Transformer les données pour l'agent

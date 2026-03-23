@@ -65,7 +65,7 @@ export function RecentActivity({ items }: { items: ActivityItem[] }) {
           </div>
         ) : (
           <div className="space-y-1">
-            <div className="relative space-y-0 before:absolute before:left-[15px] before:top-3 before:h-[calc(100%-1.5rem)] before:w-px before:bg-border/60">
+            <div className="relative space-y-0 before:absolute before:left-3.75 before:top-3 before:h-[calc(100%-1.5rem)] before:w-px before:bg-border/60">
               {items.map((item, index) => (
                 <div
                   key={index}
@@ -166,7 +166,7 @@ export function ClienteleBySpecies({
         ) : (
           <div className="space-y-6">
             {/* Graphique en barres verticales */}
-            <ChartContainer config={chartConfig} className="h-[200px] w-full">
+            <ChartContainer config={chartConfig} className="h-50 w-full">
               <BarChart data={chartData}>
                 <CartesianGrid vertical={false} strokeDasharray="3 3" />
                 <XAxis
@@ -230,7 +230,7 @@ export function ClienteleBySpeciesLoading() {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          <div className="h-[200px] w-full">
+          <div className="h-50 w-full">
             <Skeleton className="h-full w-full" />
           </div>
           <div className="grid grid-cols-2 gap-4 rounded-lg border bg-muted/30 p-4">

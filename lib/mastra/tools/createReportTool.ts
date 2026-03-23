@@ -20,7 +20,7 @@ export const createReportTool = createTool({
     reportId: z.string().optional(),
     message: z.string(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       const organization = await getCurrentOrganization();
 
@@ -29,11 +29,11 @@ export const createReportTool = createTool({
       const [newReport] = await db
         .insert(advancedReport)
         .values({
-          title: context.title,
-          consultationReason: context.consultationReason,
-          patientId: context.patientId,
+          title: inputData.title,
+          consultationReason: inputData.consultationReason,
+          patientId: inputData.patientId,
           createdBy: organization.id,
-          notes: context.notes || "",
+          notes: inputData.notes || "",
           status: "draft",
           createdAt: new Date(),
         })
@@ -45,7 +45,7 @@ export const createReportTool = createTool({
       return {
         success: true,
         reportId: newReport.id,
-        message: `Rapport "${context.title}" créé avec succès.`,
+        message: `Rapport "${inputData.title}" créé avec succès.`,
       };
     } catch (error) {
       console.error("Erreur lors de la création du rapport:", error);

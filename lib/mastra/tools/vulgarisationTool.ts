@@ -18,13 +18,13 @@ export const vulgarisationTool = createTool({
     context: z.string().optional(),
     message: z.string(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
       // Si un reportId est fourni, on pourrait récupérer le contexte du rapport
       // Pour l'instant, on retourne simplement une confirmation
-      if (context.reportId) {
+      if (inputData.reportId) {
         return {
-          context: `Contexte du rapport ${context.reportId} disponible`,
+          context: `Contexte du rapport ${inputData.reportId} disponible`,
           message:
             "Le texte technique est prêt à être vulgarisé avec le contexte du rapport.",
         };

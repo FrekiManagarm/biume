@@ -8,10 +8,11 @@ import { scheduleAgent } from "./schedule-agent";
 import { tasksAgent } from "./tasks-agent";
 
 export const unifiedAssistant = new Agent({
-  name: "Biume Assistant",
-  description:
-    "Assistant orchestrateur qui route les demandes vers les agents spécialisés",
-  instructions: `
+   id: "unified-assistant",
+   name: "Biume Assistant",
+   description:
+      "Assistant orchestrateur qui route les demandes vers les agents spécialisés",
+   instructions: `
 Tu es l'assistant orchestrateur de Biume. Tu analyses les demandes et les routes vers les agents spécialisés.
 
 # TON RÔLE
@@ -84,18 +85,13 @@ Je peux vous aider à :
 📋 Suivre vos tâches et rappels
 
 Comment puis-je vous aider aujourd'hui ?"`,
-  model: openai("gpt-4o-mini"),
-  agents: {
-    searchAgent,
-    creatorAgent,
-    resumeAgent,
-    analyseAgent,
-    scheduleAgent,
-    tasksAgent,
-  },
-  defaultGenerateOptions: {
-    maxSteps: 3,
-    temperature: 0.7,
-    maxTokens: 600,
-  },
+   model: openai("gpt-4o-mini"),
+   agents: {
+      searchAgent,
+      creatorAgent,
+      resumeAgent,
+      analyseAgent,
+      scheduleAgent,
+      tasksAgent,
+   },
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import { CredenzaDescription, CredenzaTitle } from "@/components/ui/credenza";
-import { useStepper, utils } from "../hooks/useStepperAnimal";
+import { useStepper } from "../hooks/useStepperAnimal";
 
 import InformationsPetAllergiesStep from "./informations-pet-allergies-step";
 import InformationsPetDeseasesStep from "./informations-pet-deseases-step";
@@ -10,7 +10,6 @@ import InformationsPetStep from "./informations-pet-step";
 import { Loader2 } from "lucide-react";
 import { Pet } from "@/lib/schemas";
 import PetCompleteStep from "../forms/pet-complete-step";
-import React from "react";
 import StepIndicator from "@/components/onboarding/components/step-indicator";
 import { getPatientById } from "@/lib/api/actions/patients.action";
 import { useQuery } from "@tanstack/react-query";
@@ -21,8 +20,8 @@ interface EditPetStepperProps {
 }
 
 const EditPetStepper = ({ onComplete, petId }: EditPetStepperProps) => {
-  const { next, prev, current, all, isLast, switch: switchStep } = useStepper();
-  const currentIndex = utils.getIndex(current.id);
+  const { flow, navigation: { next, prev, goTo, reset }, state, lifecycle, lookup } = useStepper();
+  const currentIndex = lookup.getIndex(state.current.data.id);
 
   // Utilisation de useQuery pour charger les données de l'animal
   const { data: petData, isLoading } = useQuery({
@@ -45,14 +44,14 @@ const EditPetStepper = ({ onComplete, petId }: EditPetStepperProps) => {
       <div className="flex flex-row items-center space-x-4">
         <StepIndicator
           currentStep={currentIndex + 1}
-          totalSteps={all.length}
-          isLast={isLast}
+          totalSteps={state.all.length}
+          isLast={state.isLast}
           size={100}
           strokeWidth={10}
         />
         <div className="space-y-1 flex flex-col">
-          <CredenzaTitle>{current.title}</CredenzaTitle>
-          <CredenzaDescription>{current.description}</CredenzaDescription>
+          <CredenzaTitle>{state.current.data.title}</CredenzaTitle>
+          <CredenzaDescription>{state.current.data.description}</CredenzaDescription>
         </div>
       </div>
 
@@ -61,7 +60,7 @@ const EditPetStepper = ({ onComplete, petId }: EditPetStepperProps) => {
           <Loader2 className="w-4 h-4 animate-spin" />
         </div>
       ) : (
-        switchStep({
+        flow.switch({
           pet: () => (
             <InformationsPetStep
               nextStep={next}

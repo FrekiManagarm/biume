@@ -21,7 +21,8 @@ const Providers = ({ children }: PropsWithChildren) => {
     return (
       <AutumnProvider
         includeCredentials
-        betterAuthUrl={process.env.BETTER_AUTH_URL}
+        useBetterAuth
+        backendUrl={process.env.BETTER_AUTH_URL || ""}
       >
         <HotkeysProvider>
           <QueryClientProvider client={queryClient}>
@@ -45,7 +46,8 @@ const Providers = ({ children }: PropsWithChildren) => {
   return (
     <AutumnProvider
       includeCredentials
-      betterAuthUrl={process.env.BETTER_AUTH_URL}
+      useBetterAuth
+      backendUrl={process.env.BETTER_AUTH_URL || ""}
     >
       <HotkeysProvider>
         <QueryClientProvider client={queryClient}>

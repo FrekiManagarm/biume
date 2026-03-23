@@ -1,7 +1,6 @@
 import { Form } from "@/components/ui/form";
 import { CreateOrganizationSchema, Organization } from "@/lib/schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import ProfileLogoSection from "./profile/profile-logo-section";

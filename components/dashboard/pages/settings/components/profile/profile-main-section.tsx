@@ -157,7 +157,7 @@ const ProfileMainSection = ({ form }: ProfileMainInfoSectionProps) => {
                   {...field}
                   value={field.value ?? ""}
                   placeholder="Décrivez votre activité de thérapeute animalier..."
-                  className="min-h-[100px]"
+                  className="min-h-25"
                 />
               </FormControl>
               <FormMessage />

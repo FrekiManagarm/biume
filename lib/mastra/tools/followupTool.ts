@@ -38,9 +38,9 @@ export const followupTool = createTool({
     summary: z.string(),
     totalReports: z.number(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     try {
-      const patient = await getPatientById(context.petId);
+      const patient = await getPatientById(inputData.petId);
 
       if (!patient) {
         return {

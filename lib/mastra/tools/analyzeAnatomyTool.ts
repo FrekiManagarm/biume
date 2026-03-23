@@ -7,7 +7,7 @@ import { anatomicalPart } from "@/lib/schemas/anatomicalPart";
 import { and, desc, eq, gte, lte, inArray } from "drizzle-orm";
 
 export const analyzeAnatomyTool = createTool({
-  id: "analyze-anatomy",
+  id: "analyze-anatomy-tool",
   description:
     "Analyse les observations anatomiques d'un patient (zones, types, latéralité, sévérité) en agrégeant par partie anatomique.",
   inputSchema: z.object({
@@ -40,19 +40,19 @@ export const analyzeAnatomyTool = createTool({
     ),
     summaryText: z.string(),
   }),
-  execute: async ({ context }) => {
+  execute: async (inputData) => {
     // Récupérer les rapports du patient, bornés par dates si fourni
-    const reportWhere = [eq(advancedReport.patientId, context.petId)];
-    if (context.from)
-      reportWhere.push(gte(advancedReport.createdAt, context.from));
-    if (context.to) reportWhere.push(lte(advancedReport.createdAt, context.to));
+    const reportWhere = [eq(advancedReport.patientId, inputData.petId)];
+    if (inputData.from)
+      reportWhere.push(gte(advancedReport.createdAt, inputData.from));
+    if (inputData.to) reportWhere.push(lte(advancedReport.createdAt, inputData.to));
 
     const reports = await db
       .select({ id: advancedReport.id, createdAt: advancedReport.createdAt })
       .from(advancedReport)
       .where(and(...reportWhere))
       .orderBy(desc(advancedReport.createdAt))
-      .limit(context.limit);
+      .limit(inputData.limit || 200);
 
     if (reports.length === 0) {
       return {

@@ -3,6 +3,7 @@ import { Agent } from "@mastra/core/agent";
 import { vulgarisationTool } from "../tools/vulgarisationTool";
 
 export const vulgarisationAgent = new Agent({
+  id: "vulgarisation-agent",
   name: "Biume Vulgarisation Assistant",
   description:
     "Transforme le langage technique vétérinaire en texte clair pour les clients",
@@ -26,11 +27,6 @@ Style de communication :
 - Français correct et fluide`,
   model: openai("gpt-4o-mini"),
   tools: { vulgarisationTool },
-  defaultGenerateOptions: {
-    maxSteps: 3,
-    temperature: 0.7,
-    maxTokens: 500,
-  },
 });
 
 

@@ -94,7 +94,7 @@ const ProfileLogoSection = ({
                 className="object-cover rounded-full"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-blue-50 to-blue-100 rounded-full border border-muted">
+              <div className="w-full h-full flex items-center justify-center bg-linear-to-r from-blue-50 to-blue-100 rounded-full border border-muted">
                 <p className="text-sm text-muted-foreground text-center px-4">
                   Ajoutez votre logo
                 </p>
