@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Linkedin, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card";
 
 interface TeamMember {
@@ -91,7 +92,7 @@ export function TeamSection() {
                           {member.role}
                         </p>
                         <div className="flex items-center gap-2 text-sm text-primary">
-                          <Linkedin className="w-4 h-4" />
+                          <LinkedInLogoIcon className="w-4 h-4" />
                           <span className="group-hover:underline">
                             Voir le profil LinkedIn
                           </span>

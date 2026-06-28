@@ -11,13 +11,15 @@ export async function generateMetadata(): Promise<Metadata> {
     "Biume - Application santé animale avec IA pour thérapeutes animaliers";
   const description =
     "Application santé animale dotée d'assistants IA spécialisés : vulgarisation automatique de rapports, planification optimisée et suivi patient proactif. L'outil IA pour thérapeutes animaliers qui simplifie votre pratique quotidienne.";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://biume.com";
+  const assetUrl = (path: string) => new URL(path, appUrl).toString();
 
   return {
     title: {
       default: title,
       template: `%s | Biume`,
     },
-    metadataBase: new URL(`${process.env.NEXT_PUBLIC_APP_URL}`),
+    metadataBase: new URL(appUrl),
     description,
     icons: {
       icon: [
@@ -42,7 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Biume",
       statusBarStyle: "default",
       startupImage: {
-        url: `${process.env.NEXT_PUBLIC_APP_URL}/apple-touch-icon.png`,
+        url: assetUrl("/apple-touch-icon.png"),
         media: "image/png",
       },
     },
@@ -55,7 +57,7 @@ export async function generateMetadata(): Promise<Metadata> {
       siteName: "Biume",
       images: [
         {
-          url: `${process.env.NEXT_PUBLIC_APP_URL}/assets/images/cover-image.png`,
+          url: assetUrl("/assets/images/cover-image.png"),
           width: 1200,
           height: 630,
           alt: "Biume - Application santé animale avec assistants IA pour thérapeutes animaliers",
@@ -66,9 +68,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: [
-        `${process.env.NEXT_PUBLIC_APP_URL}/assets/images/biume-logo.png`,
-      ],
+      images: [assetUrl("/assets/images/biume-logo.png")],
       creator: "@BiumeApp",
       site: "@BiumeApp",
     },
