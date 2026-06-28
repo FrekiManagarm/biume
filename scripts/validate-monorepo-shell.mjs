@@ -5,6 +5,9 @@ const requiredFiles = [
   "turbo.json",
   "apps/marketing/package.json",
   "apps/marketing/src/app/(main)/page.tsx",
+  "apps/marketing/src/components/landing/index.tsx",
+  "apps/marketing/src/hooks/useAppContext.ts",
+  "apps/marketing/src/lib/api/actions/auth.action.ts",
   "apps/app/package.json",
   "apps/app/src/routes/__root.tsx",
   "packages/ui/package.json",
@@ -22,8 +25,10 @@ const fail = (message) => {
   process.exit(1);
 };
 
-if (existsSync(join(root, "app"))) {
-  fail("Root app/ must not exist; routes must live inside apps/* workspaces.");
+for (const legacyDir of ["app", "components", "lib", "hooks"]) {
+  if (existsSync(join(root, legacyDir))) {
+    fail(`Root ${legacyDir}/ must not exist; application code must live inside apps/* workspaces.`);
+  }
 }
 
 const missing = requiredFiles.filter((file) => !existsSync(join(root, file)));

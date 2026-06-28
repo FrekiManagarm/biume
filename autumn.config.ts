@@ -1,5 +1,8 @@
 import { feature, item, plan } from "atmn";
-import { autumnFeatureIds, autumnPlanIds } from "@/lib/constants/autumn-ids";
+import {
+  autumnFeatureIds,
+  autumnPlanIds,
+} from "./apps/marketing/src/lib/constants/autumn-ids";
 
 // Features
 export const supportPrioritaire = feature({
