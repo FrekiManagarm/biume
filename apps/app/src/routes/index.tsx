@@ -13,14 +13,14 @@ function AppHome() {
         <div className="grid w-full gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-center">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-              Biume product app
+              Espace praticien Biume
             </p>
             <h1 className="mt-5 text-4xl font-semibold leading-none tracking-tight md:text-6xl">
               Le rapport devient le centre du cabinet.
             </h1>
             <p className="mt-6 max-w-[58ch] text-base leading-7 text-muted-foreground">
-              Cette app TanStack Start accueillera les rapports, patients,
-              clients, agenda et reglages autour du compte rendu anatomique.
+              Cet espace centralisera les rapports, patients, clients, agenda
+              et reglages autour du compte rendu anatomique.
             </p>
             <Button className="mt-8" size="lg">
               Preparer le premier rapport
@@ -36,7 +36,7 @@ function AppHome() {
               <div>
                 <p className="font-semibold">Rapport en cours</p>
                 <p className="text-sm text-muted-foreground">
-                  Structure app prete pour la migration.
+                  Structure prete pour les premiers workflows.
                 </p>
               </div>
             </div>
