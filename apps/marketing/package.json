@@ -1,0 +1,28 @@
+{
+  "name": "marketing",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate": "bun -e \"console.log('marketing app ok')\""
+  },
+  "dependencies": {
+    "@biume/ui": "workspace:*",
+    "lucide-react": "^1.21.0",
+    "next": "16.2.9",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@biume/config": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@tailwindcss/postcss": "^4.3.1",
+    "typescript": "catalog:"
+  }
+}
