@@ -1,0 +1,31 @@
+{
+  "name": "@biume/db",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./client": "./src/client.ts",
+    "./schema": "./src/schema/index.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate": "bun -e \"import('./src/schema/index.ts').then(() => console.log('@biume/db ok'))\"",
+    "db:push": "drizzle-kit push --config drizzle.config.ts",
+    "db:generate": "drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "drizzle-kit migrate --config drizzle.config.ts",
+    "db:studio": "drizzle-kit studio --config drizzle.config.ts"
+  },
+  "dependencies": {
+    "@biume/env": "workspace:*",
+    "@neondatabase/serverless": "^1.1.0",
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "@biume/config": "workspace:*",
+    "@types/node": "catalog:",
+    "dotenv": "^17.2.3",
+    "drizzle-kit": "^0.31.10",
+    "typescript": "catalog:"
+  }
+}

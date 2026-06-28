@@ -1,0 +1,22 @@
+{
+  "name": "@biume/auth",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./session": "./src/session.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate": "bun -e \"import('./src/session.ts').then(() => console.log('@biume/auth ok'))\""
+  },
+  "dependencies": {
+    "@biume/env": "workspace:*",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@biume/config": "workspace:*",
+    "typescript": "catalog:"
+  }
+}
