@@ -4,3 +4,7 @@ import type { NextRequest } from "next/server";
 export default function proxy(_request: NextRequest) {
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: "/__biume_disabled_proxy",
+};
