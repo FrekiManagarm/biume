@@ -11,6 +11,5 @@ node_modules/
 
 # Bun
 bun.lockb
-bun.lock
 .vercel/
 .trigger

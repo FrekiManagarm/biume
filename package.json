@@ -16,13 +16,14 @@
     "legacy:build": "next build",
     "legacy:start": "next start",
     "legacy:lint": "eslint",
-    "db:push": "turbo -F @biume/db db:push",
-    "db:generate": "turbo -F @biume/db db:generate",
-    "db:migrate": "turbo -F @biume/db db:migrate",
-    "db:studio": "turbo -F @biume/db db:studio",
+    "db:push": "drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
     "email:dev": "email dev --port=3001",
     "email:prod": "email build --packageManager=bun",
-    "email:start": "email start"
+    "email:start": "email start",
+    "start": "next start"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.47",

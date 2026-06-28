@@ -133,12 +133,14 @@ The root `package.json` should use Bun workspaces:
     "lint": "turbo lint",
     "dev:marketing": "turbo -F marketing dev",
     "dev:app": "turbo -F app dev",
-    "db:generate": "turbo -F @biume/db db:generate",
-    "db:migrate": "turbo -F @biume/db db:migrate",
-    "db:studio": "turbo -F @biume/db db:studio"
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   }
 }
 ```
+
+Keep root `db:*` scripts on the existing legacy Drizzle schema during Phase 1. Use package-filtered commands such as `bun -F @biume/db db:generate` only after real schemas are migrated into `packages/db`.
 
 The `turbo.json` should define:
 

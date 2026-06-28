@@ -165,15 +165,18 @@ Keep the current dependency lists intact during Phase 1. Add `workspaces`, add `
   "legacy:build": "next build",
   "legacy:start": "next start",
   "legacy:lint": "eslint",
-  "db:push": "turbo -F @biume/db db:push",
-  "db:generate": "turbo -F @biume/db db:generate",
-  "db:migrate": "turbo -F @biume/db db:migrate",
-  "db:studio": "turbo -F @biume/db db:studio",
+  "db:push": "drizzle-kit push",
+  "db:generate": "drizzle-kit generate",
+  "db:migrate": "drizzle-kit migrate",
+  "db:studio": "drizzle-kit studio",
   "email:dev": "email dev --port=3001",
   "email:prod": "email build --packageManager=bun",
-  "email:start": "email start"
+  "email:start": "email start",
+  "start": "next start"
 }
 ```
+
+Keep root `db:*` scripts on the legacy Drizzle config in Phase 1. The package-level `@biume/db` scripts are available for v2 once the real schemas move out of `lib/schemas`.
 
 Add this top-level field:
 
@@ -1434,10 +1437,10 @@ function AppHome() {
               Le rapport devient le centre du cabinet.
             </h1>
             <p className="mt-6 max-w-[58ch] text-base leading-7 text-muted-foreground">
-              Cette app TanStack Start accueillera les rapports, patients, clients, agenda et reglages autour du compte rendu anatomique.
+              Cette app TanStack Start accueillera les rapports, patients, clients, agenda et réglages autour du compte rendu anatomique.
             </p>
             <Button className="mt-8" size="lg">
-              Preparer le premier rapport
+              Préparer le premier rapport
               <ArrowRight className="size-4" />
             </Button>
           </div>

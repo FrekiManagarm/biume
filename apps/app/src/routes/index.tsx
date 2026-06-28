@@ -20,10 +20,10 @@ function AppHome() {
             </h1>
             <p className="mt-6 max-w-[58ch] text-base leading-7 text-muted-foreground">
               Cet espace centralisera les rapports, patients, clients, agenda
-              et reglages autour du compte rendu anatomique.
+              et réglages autour du compte rendu anatomique.
             </p>
             <Button className="mt-8" size="lg">
-              Preparer le premier rapport
+              Préparer le premier rapport
               <ArrowRight className="size-4" />
             </Button>
           </div>
@@ -36,7 +36,7 @@ function AppHome() {
               <div>
                 <p className="font-semibold">Rapport en cours</p>
                 <p className="text-sm text-muted-foreground">
-                  Structure prete pour les premiers workflows.
+                  Structure prête pour les premiers workflows.
                 </p>
               </div>
             </div>
