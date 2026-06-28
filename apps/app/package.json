@@ -1,0 +1,38 @@
+{
+  "name": "app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --port 3001",
+    "build": "vite build",
+    "serve": "vite preview --port 3001",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint .",
+    "validate": "bun -e \"console.log('product app ok')\""
+  },
+  "dependencies": {
+    "@biume/auth": "workspace:*",
+    "@biume/db": "workspace:*",
+    "@biume/env": "workspace:*",
+    "@biume/ui": "workspace:*",
+    "@tailwindcss/vite": "^4.3.1",
+    "@tanstack/react-query": "^5.101.1",
+    "@tanstack/react-router": "^1.168.22",
+    "@tanstack/react-start": "^1.167.41",
+    "lucide-react": "^1.21.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "vite": "^8.0.8"
+  },
+  "devDependencies": {
+    "@biume/config": "workspace:*",
+    "@tanstack/react-router-devtools": "^1.166.13",
+    "@tanstack/router-plugin": "^1.168.18",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "^6.0.1",
+    "typescript": "catalog:",
+    "vite-tsconfig-paths": "^6.0.3"
+  }
+}
