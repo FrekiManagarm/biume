@@ -127,7 +127,8 @@ The root `package.json` should use Bun workspaces:
   },
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build",
+    "build": "next build",
+    "build:apps": "turbo build",
     "check-types": "turbo check-types",
     "lint": "turbo lint",
     "dev:marketing": "turbo -F marketing dev",
@@ -386,7 +387,7 @@ This should be staged.
 - keep existing code available while the new structure boots;
 - create shared `packages/ui` from current shadcn primitives;
 - create shared `packages/db`, `packages/auth`, and `packages/env`;
-- verify `turbo build`, `turbo check-types`, and individual dev scripts.
+- verify `bun run build:apps`, `turbo check-types`, and individual dev scripts.
 
 ### Phase 2: Marketing rebuild
 
@@ -448,7 +449,8 @@ Minimum verification for each phase:
 - `bun install`;
 - `bun run check-types`;
 - `bun run lint`;
-- `bun run build`;
+- `bun run build:apps` for the Phase 1 workspace apps;
+- `bun run build` for the current legacy root deployment until Vercel topology is migrated;
 - targeted app builds with Turbo filters;
 - visual QA for marketing desktop/mobile;
 - auth/session route checks for app;

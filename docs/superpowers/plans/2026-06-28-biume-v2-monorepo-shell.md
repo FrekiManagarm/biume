@@ -153,7 +153,8 @@ Keep the current dependency lists intact during Phase 1. Add `workspaces`, add `
 ```json
 {
   "dev": "turbo dev",
-  "build": "turbo build",
+  "build": "next build",
+  "build:apps": "turbo build",
   "lint": "turbo lint",
   "check-types": "turbo check-types",
   "validate": "turbo validate",
@@ -784,13 +785,22 @@ const webEnvSchema = z.object({
   NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
 });
 
-export const webEnv = webEnvSchema.parse({
-  NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-  NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
-  NEXT_PUBLIC_POSTHOG_HOST: process.env.NEXT_PUBLIC_POSTHOG_HOST,
-});
-
 export type WebEnv = z.infer<typeof webEnvSchema>;
+
+type PublicEnvSource = Partial<Record<keyof WebEnv, string | undefined>>;
+
+const nodePublicEnv =
+  typeof process === "undefined" ? undefined : (process.env as PublicEnvSource);
+
+export function parseWebEnv(source: PublicEnvSource = nodePublicEnv ?? {}): WebEnv {
+  return webEnvSchema.parse({
+    NEXT_PUBLIC_APP_URL: source.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_POSTHOG_KEY: source.NEXT_PUBLIC_POSTHOG_KEY,
+    NEXT_PUBLIC_POSTHOG_HOST: source.NEXT_PUBLIC_POSTHOG_HOST,
+  });
+}
+
+export const webEnv = parseWebEnv();
 ```
 
 - [ ] **Step 4: Create server env schema**
@@ -1242,9 +1252,9 @@ Create `apps/app/package.json`:
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev --port 3001",
+    "dev": "vite dev --port 3002",
     "build": "vite build",
-    "serve": "vite preview --port 3001",
+    "serve": "vite preview --port 3002",
     "check-types": "tsc --noEmit",
     "lint": "eslint .",
     "validate": "bun -e \"console.log('product app ok')\""
@@ -1271,8 +1281,7 @@ Create `apps/app/package.json`:
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^6.0.1",
-    "typescript": "catalog:",
-    "vite-tsconfig-paths": "^6.0.3"
+    "typescript": "catalog:"
   }
 }
 ```
@@ -1302,17 +1311,16 @@ import tailwindcss from "@tailwindcss/vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   server: {
-    port: 3001,
+    port: 3002,
     strictPort: true,
   },
   resolve: {
     tsconfigPaths: true,
   },
-  plugins: [tailwindcss(), tanstackStart(), viteReact(), tsConfigPaths()],
+  plugins: [tailwindcss(), tanstackStart(), viteReact()],
 });
 ```
 
@@ -1527,7 +1535,7 @@ Expected: TypeScript passes for the new apps/packages. If legacy root TypeScript
 Run:
 
 ```bash
-bun run build
+bun run build:apps
 ```
 
 Expected: `marketing` and `app` build through Turbo. The legacy root Next app is not part of the Turbo workspace build in Phase 1.
@@ -1548,7 +1556,7 @@ Terminal 2:
 bun run dev:app
 ```
 
-Expected: Vite/TanStack Start serves the product app at `http://localhost:3001`.
+Expected: Vite/TanStack Start serves the product app at `http://localhost:3002`.
 
 - [ ] **Step 6: Smoke test pages in browser**
 
@@ -1556,7 +1564,7 @@ Open:
 
 ```txt
 http://localhost:3000
-http://localhost:3001
+http://localhost:3002
 ```
 
 Expected:

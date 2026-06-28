@@ -12,10 +12,10 @@ export default function Page() {
             Biume v2
           </Badge>
           <h1 className="text-4xl font-semibold leading-none tracking-tight text-foreground sm:text-5xl md:text-6xl">
-            Le compte rendu anatomique que vous etes fier d'envoyer.
+            Le compte rendu anatomique que vous êtes fier d'envoyer.
           </h1>
           <p className="mt-6 max-w-[58ch] text-base leading-7 text-muted-foreground md:text-lg">
-            Transformez vos consultations animales en rapports visuels, clairs et professionnels pour aider les proprietaires a comprendre votre travail.
+            Transformez vos consultations animales en rapports visuels, clairs et professionnels pour aider les propriétaires à comprendre votre travail.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
             <Button size="lg">
@@ -46,7 +46,7 @@ export default function Page() {
                 <div className="h-3 w-full rounded-full bg-muted" />
                 <div className="h-3 w-3/5 rounded-full bg-muted" />
                 <div className="mt-5 rounded-2xl border border-secondary/20 bg-secondary/10 p-4 text-sm leading-6">
-                  Version proprietaire claire, rassurante et prete a envoyer.
+                  Version propriétaire claire, rassurante et prête à envoyer.
                 </div>
               </div>
             </div>

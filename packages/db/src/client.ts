@@ -2,12 +2,28 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { serverEnv } from "@biume/env/server";
 
-const databaseUrl = serverEnv.DATABASE_URL;
+type DatabaseClient = ReturnType<typeof drizzle>;
 
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required to create the Biume database client.");
+let cachedDb: DatabaseClient | undefined;
+
+export function getDb(): DatabaseClient {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  const databaseUrl = serverEnv.DATABASE_URL;
+
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is required to create the Biume database client.");
+  }
+
+  cachedDb = drizzle(neon(databaseUrl));
+
+  return cachedDb;
 }
 
-const sql = neon(databaseUrl);
-
-export const db = drizzle(sql);
+export const db = new Proxy({} as DatabaseClient, {
+  get(_target, property, receiver) {
+    return Reflect.get(getDb(), property, receiver);
+  },
+});
