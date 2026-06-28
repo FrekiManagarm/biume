@@ -3,7 +3,6 @@ import { Credenza } from "@/components/ui/credenza";
 import { auth } from "@/lib/auth/auth-server";
 import { headers } from "next/headers";
 import React from "react";
-import OnboardingExplications from "./onboarding-explications";
 import OrganizationConnect from "./organization-connect";
 import { Organization } from "@/lib/schemas";
 import { autumn } from "@/lib/utils/autumn";
@@ -19,10 +18,6 @@ export const OnboardingGuard = async ({
   const organization = await auth.api.getFullOrganization({
     headers: await headers(),
   });
-
-  console.log(organization, "current organization");
-
-  console.log(organizations, "organizations");
 
   if (organizations?.length < 1) {
     return (
@@ -52,16 +47,8 @@ export const OnboardingGuard = async ({
     },
   });
 
-  console.log(customer, "customer");
-
   return (
     <>
-      <OnboardingExplications
-        open={Boolean(
-          organization?.onBoardingComplete &&
-          !organization?.onBoardingExplications,
-        )}
-      />
       <NonPayedSubscriptionModal
         open={
           (organization?.onBoardingComplete &&

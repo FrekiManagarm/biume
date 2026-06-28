@@ -37,9 +37,15 @@ export function proMenuList(pathname: string): Group[] {
       menus: [
         {
           href: `/dashboard`,
-          label: "Tableau de bord",
+          label: "Atelier",
           active: pathname === `/dashboard`,
           icon: LayoutGrid,
+        },
+        {
+          href: `/dashboard/reports`,
+          label: "Comptes rendus",
+          active: pathname.startsWith(`/dashboard/reports`),
+          icon: NotepadText,
         },
         {
           href: `/dashboard/agenda`,
@@ -50,11 +56,11 @@ export function proMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "Gestion",
+      groupLabel: "Suivi",
       menus: [
         {
           href: `/dashboard/clients`,
-          label: "Clients",
+          label: "Propriétaires",
           active: pathname === `/dashboard/clients`,
           icon: Contact2,
         },
@@ -63,17 +69,6 @@ export function proMenuList(pathname: string): Group[] {
           label: "Patients",
           active: pathname === `/dashboard/patients`,
           icon: PawPrint,
-        },
-      ],
-    },
-    {
-      groupLabel: "Services",
-      menus: [
-        {
-          href: `/dashboard/reports`,
-          label: "Comptes rendus",
-          active: pathname.startsWith(`/dashboard/reports`),
-          icon: NotepadText,
         },
       ],
     },

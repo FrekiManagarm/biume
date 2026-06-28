@@ -16,10 +16,10 @@ export async function DashboardHeader() {
     <div className="flex items-center justify-between gap-3">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">
-          Bonjour, {session.user.name} 👋
+          Bonjour, {session.user.name}
         </h1>
         <p className="text-muted-foreground mt-1 text-sm">
-          Voici un aperçu de votre activité aujourd&apos;hui
+          Vos comptes rendus anatomiques et suivis patients du jour.
         </p>
       </div>
       <DropdownMenu>
@@ -39,9 +39,9 @@ export async function DashboardHeader() {
                 <FileText className="size-4" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">Nouveau rapport</p>
+                <p className="text-sm font-medium">Nouveau compte rendu</p>
                 <p className="text-xs text-muted-foreground">
-                  Créer un compte rendu
+                  Créer un compte rendu anatomique
                 </p>
               </div>
             </Link>
@@ -71,9 +71,9 @@ export async function DashboardHeader() {
                 <Users className="size-4" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">Ajouter un client</p>
+                <p className="text-sm font-medium">Ajouter un propriétaire</p>
                 <p className="text-xs text-muted-foreground">
-                  Nouveau propriétaire
+                  Relier un animal à son référent
                 </p>
               </div>
             </Link>

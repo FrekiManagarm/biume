@@ -19,6 +19,7 @@
     "@tanstack/react-query": "^5.101.1",
     "@tanstack/react-router": "^1.168.22",
     "@tanstack/react-start": "^1.167.41",
+    "autumn-js": "^1.2.33",
     "lucide-react": "^1.21.0",
     "react": "catalog:",
     "react-dom": "catalog:",

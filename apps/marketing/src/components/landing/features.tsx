@@ -2,145 +2,136 @@
 
 import { motion } from "framer-motion";
 import {
-  BrainCircuit,
-  FileText,
-  Users,
   CalendarCheck,
+  FileText,
+  History,
+  Languages,
   Sparkles,
 } from "lucide-react";
-import { cn } from "@/lib/style";
 
 const features = [
   {
-    id: "ai",
-    title: "Intelligence Artificielle",
+    eyebrow: "Rapport",
+    title: "Transformer vos notes en compte rendu anatomique",
     description:
-      "L'IA analyse vos observations en temps réel, reformule vos comptes-rendus en langage professionnel et suggère des plans de traitement basés sur l'historique.",
-    icon: BrainCircuit,
-    gradient: "from-violet-500/10 to-purple-500/10",
-    iconBg: "bg-violet-500/10",
-    iconColor: "text-violet-600 dark:text-violet-400",
-    span: "md:col-span-2",
-  },
-  {
-    id: "reports",
-    title: "Rapports Automatisés",
-    description:
-      "Générez des rapports PDF impeccables en un clic. Personnalisez vos modèles, ajoutez votre logo et laissez Biume gérer la mise en page.",
+      "Structure claire, zones travaillées, recommandations et export PDF dans un document prêt à envoyer.",
     icon: FileText,
-    gradient: "from-blue-500/10 to-cyan-500/10",
-    iconBg: "bg-blue-500/10",
-    iconColor: "text-blue-600 dark:text-blue-400",
-    span: "",
   },
   {
-    id: "management",
-    title: "Suivi Patient 360°",
+    eyebrow: "Propriétaire",
+    title: "Expliquer sans perdre votre précision",
     description:
-      "Accédez à l'historique complet de chaque animal : consultations, courbes de poids, documents et échanges avec les propriétaires.",
-    icon: Users,
-    gradient: "from-orange-500/10 to-amber-500/10",
-    iconBg: "bg-orange-500/10",
-    iconColor: "text-orange-600 dark:text-orange-400",
-    span: "",
+      "Une version vulgarisée aide le propriétaire à comprendre ce qui a été observé, traité et conseillé.",
+    icon: Languages,
   },
   {
-    id: "agenda",
-    title: "Agenda & Tournées",
+    eyebrow: "Suivi",
+    title: "Garder l'historique de chaque animal",
     description:
-      "Synchronisez votre agenda et calculez intelligemment vos itinéraires pour réduire vos temps de trajet et frais kilométriques.",
+      "Les séances, zones suivies et conseils restent reliés au même patient pour reprendre le fil facilement.",
+    icon: History,
+  },
+  {
+    eyebrow: "Cabinet",
+    title: "Organiser autour du rapport",
+    description:
+      "Clients, animaux, documents et rendez-vous soutiennent le compte rendu sans devenir la promesse principale.",
     icon: CalendarCheck,
-    gradient: "from-emerald-500/10 to-green-500/10",
-    iconBg: "bg-emerald-500/10",
-    iconColor: "text-emerald-600 dark:text-emerald-400",
-    span: "md:col-span-2",
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
-
 export function FeaturesSection() {
   return (
-    <section id="features" className="py-24 md:py-32 relative overflow-hidden">
+    <section
+      id="features"
+      className="relative scroll-mt-24 overflow-hidden py-24 md:py-32"
+    >
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[160px]" />
+        <div className="absolute left-1/2 top-1/2 h-[560px] w-[560px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/4 blur-[140px]" />
       </div>
 
       <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16 max-w-2xl mx-auto"
-        >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/6 text-primary text-xs font-medium mb-6">
-            <Sparkles className="w-3 h-3" />
-            Plateforme tout-en-un
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
-            Conçu pour votre{" "}
-            <span className="text-primary">tranquillité d&apos;esprit</span>
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            Libérez-vous des tâches administratives et concentrez-vous sur ce
-            qui compte vraiment : le soin des animaux.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5 max-w-5xl mx-auto"
-        >
-          {features.map((feature) => (
-            <motion.div
-              key={feature.id}
-              variants={cardVariants}
-              className={cn(
-                "group relative rounded-2xl border border-border/40 bg-card/50 backdrop-blur-sm p-7 md:p-8 transition-all duration-300 hover:border-border/60 hover:shadow-lg hover:shadow-black/2 dark:hover:shadow-black/10 hover:-translate-y-0.5",
-                feature.span
-              )}
-            >
-              <div
-                className={cn(
-                  "absolute inset-0 rounded-2xl bg-linear-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10",
-                  feature.gradient
-                )}
-              />
-
-              <div
-                className={cn(
-                  "w-11 h-11 rounded-xl flex items-center justify-center mb-5 transition-transform group-hover:scale-105",
-                  feature.iconBg
-                )}
-              >
-                <feature.icon className={cn("w-5 h-5", feature.iconColor)} />
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.55 }}
+            className="mb-12 grid gap-6 md:grid-cols-[0.9fr_1.1fr] md:items-end"
+          >
+            <div>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/6 px-3 py-1 text-xs font-medium text-primary">
+                <Sparkles className="h-3 w-3" />
+                Ce que Biume fait
               </div>
+              <h2 className="max-w-xl text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
+                Un meilleur rapport, pas un logiciel de plus
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground md:justify-self-end md:text-lg">
+              Biume part du moment le plus important après la séance : produire
+              un compte rendu clair, professionnel et utile pour le suivi.
+            </p>
+          </motion.div>
 
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
-        </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 22 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6 }}
+            className="overflow-hidden rounded-3xl border border-border/45 bg-card/60 shadow-[0_24px_80px_-60px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+          >
+            <div className="divide-y divide-border/35">
+              {features.map((feature, index) => (
+                <motion.div
+                  key={feature.title}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.08 + index * 0.04 }}
+                  className="grid gap-4 p-5 md:grid-cols-[180px_1fr] md:gap-8 md:p-7"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <feature.icon className="h-5 w-5" />
+                    </div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                      {feature.eyebrow}
+                    </p>
+                  </div>
+                  <div className="grid gap-2 md:grid-cols-[0.9fr_1.1fr] md:gap-8">
+                    <h3 className="text-lg font-semibold leading-snug">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="grid border-t border-border/35 bg-background/35 md:grid-cols-2">
+              <div className="border-b border-border/35 p-5 md:border-b-0 md:border-r md:p-7">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                  Outils de gestion
+                </p>
+                <p className="text-base font-semibold md:text-lg">
+                  Ils organisent l'activité.
+                </p>
+              </div>
+              <div className="bg-primary/5 p-5 md:p-7">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-primary">
+                  Biume
+                </p>
+                <p className="text-base font-semibold md:text-lg">
+                  Il produit le rapport que le propriétaire comprend et que le
+                  praticien garde.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

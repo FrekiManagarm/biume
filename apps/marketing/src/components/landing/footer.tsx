@@ -2,7 +2,7 @@ import { PawPrint } from "lucide-react";
 import Link from "next/link";
 
 const productLinks = [
-  { href: "/#features", label: "Fonctionnalités" },
+  { href: "/#features", label: "Rapports anatomiques" },
   { href: "/#pricing", label: "Tarifs" },
   { href: "https://cal.com/mathieu-chambaud-biume", label: "Réserver une démo" },
   { href: "/blog", label: "Blog" },
@@ -11,7 +11,7 @@ const productLinks = [
 const legalLinks = [
   { href: "/privacy", label: "Confidentialité" },
   { href: "/cgu", label: "CGU" },
-  { href: "/contact", label: "Contact" },
+  { href: "https://cal.com/mathieu-chambaud-biume", label: "Contact" },
 ];
 
 const LandingFooter = () => {
@@ -27,8 +27,8 @@ const LandingFooter = () => {
               <span className="font-bold text-lg">Biume</span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
-              La solution complète pour les thérapeutes animaliers. Gagnez du
-              temps sur vos rapports et concentrez-vous sur le soin.
+              Des comptes rendus anatomiques, clairs et envoyables pour les
+              professionnels du soin animalier.
             </p>
           </div>
 
@@ -59,6 +59,9 @@ const LandingFooter = () => {
                   <Link
                     href={link.href}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    {...(link.href.startsWith("http")
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
                   >
                     {link.label}
                   </Link>

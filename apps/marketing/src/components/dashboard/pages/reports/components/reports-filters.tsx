@@ -38,9 +38,9 @@ export function ReportsFilters({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="tous">Tous les statuts</SelectItem>
-          <SelectItem value="brouillon">Brouillon</SelectItem>
-          <SelectItem value="finalisé">Finalisé</SelectItem>
-          <SelectItem value="envoyé">Envoyé</SelectItem>
+          <SelectItem value="draft">A compléter</SelectItem>
+          <SelectItem value="finalized">Prêt à envoyer</SelectItem>
+          <SelectItem value="sent">Envoyé</SelectItem>
         </SelectContent>
       </Select>
     </div>

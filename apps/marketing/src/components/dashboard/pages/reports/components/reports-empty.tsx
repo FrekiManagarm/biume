@@ -23,17 +23,17 @@ export function ReportsEmpty() {
               <EmptyMedia variant="icon">
                 <FileText />
               </EmptyMedia>
-              <EmptyTitle>Aucun rapport</EmptyTitle>
+              <EmptyTitle>Aucun compte rendu</EmptyTitle>
               <EmptyDescription>
-                Vous n&apos;avez pas encore de rapports avancés. Commencez par en
-                créer un.
+                Vous n&apos;avez pas encore de comptes rendus anatomiques.
+                Commencez par en créer un.
               </EmptyDescription>
             </EmptyHeader>
             <EmptyContent>
               <Button asChild variant="default">
                 <Link href="/reports/new">
                   <Plus />
-                  Créer votre premier rapport
+                  Créer votre premier compte rendu
                 </Link>
               </Button>
             </EmptyContent>

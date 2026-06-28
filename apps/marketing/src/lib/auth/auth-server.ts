@@ -25,6 +25,44 @@ import { ac, member, admin, owner } from "./auth-constants";
 import { render } from "@react-email/render";
 import { autumn as autumnLib } from "../utils/autumn";
 
+const defaultProductAppUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3002"
+    : "https://app.biume.com";
+
+const productAppUrl =
+  process.env.NEXT_PUBLIC_PRODUCT_APP_URL ?? defaultProductAppUrl;
+
+const authBaseUrl =
+  process.env.BETTER_AUTH_URL &&
+  process.env.BETTER_AUTH_URL !== process.env.NEXT_PUBLIC_APP_URL
+    ? process.env.BETTER_AUTH_URL
+    : productAppUrl;
+
+const trustedOrigins = Array.from(
+  new Set(
+    [
+      authBaseUrl,
+      productAppUrl,
+      process.env.NEXT_PUBLIC_APP_URL,
+      process.env.NODE_ENV === "development" ? "http://localhost:3000" : null,
+      process.env.NODE_ENV === "development" ? "http://localhost:3002" : null,
+    ].filter((origin): origin is string => Boolean(origin)),
+  ),
+);
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const socialProviders =
+  googleClientId && googleClientSecret
+    ? {
+        google: {
+          clientId: googleClientId,
+          clientSecret: googleClientSecret,
+        },
+      }
+    : {};
+
 // Fonction wrapper manuelle pour scrypt
 const scryptAsync = (
   password: string,
@@ -74,6 +112,8 @@ export type BaseOrganization = {
 export const auth = betterAuth({
   appName: "Biume",
   secret: process.env.BETTER_AUTH_SECRET,
+  baseURL: authBaseUrl,
+  trustedOrigins,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -88,12 +128,7 @@ export const auth = betterAuth({
     },
     usePlural: true,
   }),
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    },
-  },
+  socialProviders,
   emailAndPassword: {
     enabled: true,
     password: {

@@ -152,7 +152,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
             </Link>
           </Button>
           <span className="font-semibold text-sm truncate">
-            Détails du rapport
+            Détails du compte rendu
           </span>
         </div>
         <h1 className="text-lg font-bold leading-tight mb-1">{report.title}</h1>
@@ -201,7 +201,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
       <div className="p-4 border-t bg-background/50 backdrop-blur-sm space-y-2">
         <Button onClick={handleEdit} className="w-full" variant="outline">
           <Edit className="h-4 w-4 mr-2" />
-          Modifier le rapport
+          Modifier le compte rendu
         </Button>
         <div className="grid grid-cols-2 gap-2">
           <Button onClick={handlePrint} variant="ghost" size="sm">
@@ -223,7 +223,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
                 type="advanced_report"
               />
             }
-            fileName={`rapport-${report.id}.pdf`}
+            fileName={`compte-rendu-${report.id}.pdf`}
           >
             {({ loading }) => (
               <Button
@@ -252,7 +252,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
             <FileText className="h-6 w-6" />
           </div>
           <div>
-            <h3 className="font-semibold text-lg">État du rapport</h3>
+            <h3 className="font-semibold text-lg">État du compte rendu</h3>
             <p className="text-sm text-muted-foreground">
               Dernière mise à jour le{" "}
               {report.updatedAt
@@ -571,7 +571,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
             Aucune recommandation
           </h3>
           <p className="text-sm">
-            Aucune recommandation n'a été ajoutée à ce rapport pour le moment.
+            Aucune recommandation n'a été ajoutée à ce compte rendu pour le moment.
           </p>
         </div>
       )}
@@ -608,7 +608,7 @@ const ReportDetails = ({ report }: ReportDetailsProps) => {
             Aucune note complémentaire
           </h3>
           <p className="text-sm">
-            Aucune note n'a été ajoutée à ce rapport pour le moment.
+            Aucune note n'a été ajoutée à ce compte rendu pour le moment.
           </p>
         </div>
       )}

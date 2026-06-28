@@ -1,6 +1,6 @@
 export const breadcrumbProList = (reportId?: string) => [
   {
-    title: "Tableau de bord",
+    title: "Atelier",
     href: `/dashboard`,
   },
   {
@@ -8,7 +8,7 @@ export const breadcrumbProList = (reportId?: string) => [
     href: `/dashboard/agenda`,
   },
   {
-    title: "Clients",
+    title: "Propriétaires",
     href: `/dashboard/clients`,
   },
   {
@@ -16,15 +16,15 @@ export const breadcrumbProList = (reportId?: string) => [
     href: `/dashboard/patients`,
   },
   {
-    title: "Rapports",
+    title: "Comptes rendus",
     href: `/dashboard/reports`,
     items: [
       {
-        title: "Nouveau rapport",
+        title: "Nouveau compte rendu",
         href: `/dashboard/reports/new`,
       },
       {
-        title: "Rapport",
+        title: "Compte rendu",
         href: `/dashboard/reports/${reportId}`,
       },
       {

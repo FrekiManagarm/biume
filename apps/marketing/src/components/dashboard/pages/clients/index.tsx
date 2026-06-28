@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import {
   Search,
   UserPlus,
@@ -11,6 +12,7 @@ import {
   Edit,
   Trash2,
   UserCircle,
+  FileText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,6 +53,7 @@ import { useQueryStates, parseAsInteger, parseAsString } from "nuqs";
 import { Client } from "@/lib/schemas";
 import { ClientDetailsDialog } from "@/components/dashboard/pages/clients/components/ClientDetailsDialog";
 import { ClientDialog } from "./components/ClientDialog/ClientDialog";
+import { ReportStatusBadge } from "@/components/dashboard/report-ui";
 
 // Fonction de formatage de date
 const formatDate = (date: Date) => {
@@ -95,6 +98,17 @@ export function ClientsTable({
   const endIndex = startIndex + itemsPerPage;
   const currentClients = items?.slice(startIndex, endIndex) ?? [];
 
+  const getLatestClientReport = (client: Client) => {
+    return client.pets
+      .flatMap((pet) => pet.advancedReport ?? [])
+      .filter((report) => report?.createdAt)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt as unknown as string).getTime() -
+          new Date(a.createdAt as unknown as string).getTime(),
+      )[0];
+  };
+
   return (
     <div className="space-y-4">
       {/* Header séparé */}
@@ -102,16 +116,16 @@ export function ClientsTable({
         <CardContent>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
-              <h1 className="text-3xl font-bold tracking-tight bg-linear-to-r from-primary to-secondary bg-clip-text text-transparent">
-                Mes Clients
+              <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+                Propriétaires
               </h1>
               <p className="text-muted-foreground text-sm">
-                Aperçu de vos clients
+                Retrouvez les propriétaires, leurs animaux et le dernier compte rendu partagé.
               </p>
             </div>
             <Button onClick={() => setOpenAddClient(true)}>
               <UserPlus />
-              Ajouter un client
+              Ajouter un propriétaire
             </Button>
           </div>
         </CardContent>
@@ -158,7 +172,7 @@ export function ClientsTable({
 
               {/* Statistiques */}
               <div className="text-muted-foreground text-sm">
-                {items?.length} client
+                {items?.length} propriétaire
                 {items?.length && items?.length > 1 ? "s" : ""} trouvé
                 {items?.length && items?.length > 1 ? "s" : ""}
               </div>
@@ -172,7 +186,7 @@ export function ClientsTable({
                     </EmptyMedia>
                     <EmptyTitle>Aucun résultat</EmptyTitle>
                     <EmptyDescription>
-                      Aucun client ne correspond à vos critères de recherche.
+                      Aucun propriétaire ne correspond à vos critères de recherche.
                       Essayez de modifier vos filtres.
                     </EmptyDescription>
                   </EmptyHeader>
@@ -193,9 +207,10 @@ export function ClientsTable({
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Client</TableHead>
+                          <TableHead>Propriétaire</TableHead>
                           <TableHead>Contact</TableHead>
                           <TableHead>Patients</TableHead>
+                          <TableHead>Dernier compte rendu</TableHead>
                           <TableHead>Créé le</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -226,6 +241,23 @@ export function ClientsTable({
                                 {client.pets.length > 1 ? "s" : ""}
                               </Badge>
                             </TableCell>
+                            <TableCell className="text-muted-foreground text-sm">
+                              {(() => {
+                                const latestReport = getLatestClientReport(client);
+                                if (!latestReport) return "—";
+                                return (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="max-w-[180px] truncate text-foreground">
+                                      {latestReport.title}
+                                    </span>
+                                    <ReportStatusBadge
+                                      status={latestReport.status}
+                                      compact
+                                    />
+                                  </div>
+                                );
+                              })()}
+                            </TableCell>
                             {/* <TableCell>{getStatusBadge(client.status) ?? "Actif"}</TableCell>
                           <TableCell className="text-muted-foreground text-sm">
                             {client.lastVisit
@@ -247,6 +279,12 @@ export function ClientsTable({
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem asChild>
+                                    <Link href="/dashboard/reports">
+                                      <FileText className="size-4" />
+                                      Nouveau compte rendu
+                                    </Link>
+                                  </DropdownMenuItem>
                                   <DropdownMenuItem
                                     onClick={() => {
                                       setSelectedClient(client);
@@ -324,16 +362,16 @@ export function ClientsTable({
                 <EmptyMedia variant="icon">
                   <UserCircle />
                 </EmptyMedia>
-                <EmptyTitle>Aucun client</EmptyTitle>
+                <EmptyTitle>Aucun propriétaire</EmptyTitle>
                 <EmptyDescription>
-                  Vous n&apos;avez pas encore de clients. Commencez par en
-                  ajouter un.
+                  Vous n&apos;avez pas encore de propriétaires. Commencez par en
+                  ajouter un pour relier patients et comptes rendus.
                 </EmptyDescription>
               </EmptyHeader>
               <EmptyContent>
                 <Button onClick={() => setOpenAddClient(true)}>
                   <UserPlus />
-                  Ajouter votre premier client
+                  Ajouter votre premier propriétaire
                 </Button>
               </EmptyContent>
             </Empty>

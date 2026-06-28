@@ -13,7 +13,7 @@ export const PetList = React.memo(function PetList(props: {
       <AnimatePresence initial={false}>
         {props.fields.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground text-sm border border-dashed rounded-md">
-            Aucun animal ajouté pour ce client
+            Aucun animal ajouté pour ce propriétaire
           </div>
         ) : (
           props.fields.map((pet, index) => (

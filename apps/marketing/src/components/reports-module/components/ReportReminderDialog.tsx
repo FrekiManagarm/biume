@@ -58,11 +58,11 @@ export function ReportReminderDialog({
   const handleFinalizeWithoutReminder = async () => {
     try {
       await onFinalize();
-      toast.success("Rapport finalisé avec succès");
+      toast.success("Compte rendu finalisé avec succès");
       handleClose();
     } catch (error) {
       console.error("Erreur lors de la finalisation:", error);
-      toast.error("Erreur lors de la finalisation du rapport");
+      toast.error("Erreur lors de la finalisation du compte rendu");
     }
   };
 
@@ -123,7 +123,7 @@ export function ReportReminderDialog({
     }
 
     try {
-      // Finaliser le rapport
+      // Finaliser le compte rendu
       await onFinalize();
 
       // Programmer le rappel
@@ -134,7 +134,7 @@ export function ReportReminderDialog({
       });
 
       if (reminderResult.success) {
-        toast.success("Rapport finalisé et rappel programmé avec succès");
+        toast.success("Compte rendu finalisé et rappel programmé avec succès");
         handleClose();
       } else {
         toast.error(
@@ -143,7 +143,7 @@ export function ReportReminderDialog({
       }
     } catch (error) {
       console.error("Erreur lors de la finalisation:", error);
-      toast.error("Erreur lors de la finalisation du rapport");
+      toast.error("Erreur lors de la finalisation du compte rendu");
     }
   };
 
@@ -153,15 +153,14 @@ export function ReportReminderDialog({
         <CredenzaHeader>
           <CredenzaTitle className="flex items-center gap-2">
             <BellIcon className="h-5 w-5" />
-            Programmer un rappel pour le client
+            Préparer l&apos;envoi propriétaire
           </CredenzaTitle>
         </CredenzaHeader>
         <CredenzaBody className="space-y-4">
           <div className="space-y-2">
             <p className="text-sm text-muted-foreground">
-              Configurez un rappel qui sera envoyé au client pour lui rappeler
-              de reprendre rendez-vous. Le client recevra un email à la date et
-              l&apos;heure choisies.
+              Finalisez le compte rendu anatomique puis programmez, si besoin,
+              un rappel de suivi pour le propriétaire.
             </p>
           </div>
 
@@ -231,11 +230,11 @@ export function ReportReminderDialog({
 
             <div className="space-y-2">
               <Label htmlFor="reminder-message">
-                Message pour le client (optionnel)
+                Message pour le propriétaire (optionnel)
               </Label>
               <Textarea
                 id="reminder-message"
-                placeholder="Ajoutez un message personnalisé pour le client..."
+                placeholder="Ajoutez un message clair et rassurant pour le propriétaire..."
                 value={reminderMessage}
                 onChange={(e) => setReminderMessage(e.target.value)}
                 rows={3}
@@ -258,7 +257,7 @@ export function ReportReminderDialog({
               disabled={isFinalizing}
               className="flex-1 sm:flex-initial"
             >
-              {isFinalizing ? "Finalisation..." : "Finaliser sans rappel"}
+              {isFinalizing ? "Finalisation..." : "Finaliser le compte rendu"}
             </Button>
             <Button
               onClick={handleScheduleReminder}
@@ -276,4 +275,3 @@ export function ReportReminderDialog({
     </Credenza>
   );
 }
-

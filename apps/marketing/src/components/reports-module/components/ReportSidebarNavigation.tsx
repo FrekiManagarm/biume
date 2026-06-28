@@ -16,6 +16,7 @@ import {
   Maximize2Icon,
   Minimize2Icon,
   HomeIcon,
+  WandSparklesIcon,
 } from "lucide-react";
 import { cn } from "@/lib/style";
 import { Separator } from "@/components/ui/separator";
@@ -48,6 +49,7 @@ export function ReportSidebarNavigation({
   onGoBack,
   onPreview,
   onShortcuts,
+  onVulgarize,
   onSave,
   isSaving,
   getTabProgress,
@@ -67,6 +69,7 @@ export function ReportSidebarNavigation({
   onGoBack: () => void;
   onPreview: () => void;
   onShortcuts: () => void;
+  onVulgarize?: () => void;
   onSave: () => void;
   isSaving: boolean;
   getTabProgress: (tabId: string) => boolean;
@@ -306,7 +309,7 @@ export function ReportSidebarNavigation({
                     id="title"
                     value={title}
                     onChange={(e) => onTitleChange?.(e.target.value)}
-                    placeholder="Titre du rapport"
+                    placeholder="Titre du compte rendu"
                     className="text-base font-semibold h-9"
                   />
                   {hasUnsavedChanges && (
@@ -565,6 +568,18 @@ export function ReportSidebarNavigation({
               </div>
             )}
 
+            {!focusMode && !isCollapsed && onVulgarize && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onVulgarize}
+                className="h-9 w-full text-xs"
+              >
+                <WandSparklesIcon className="h-3.5 w-3.5 mr-1.5" />
+                Vulgariser pour le propriétaire
+              </Button>
+            )}
+
             {!focusMode && isCollapsed && (
               <div className="flex flex-col gap-2">
                 <Tooltip>
@@ -598,6 +613,24 @@ export function ReportSidebarNavigation({
                     <p>Raccourcis clavier</p>
                   </TooltipContent>
                 </Tooltip>
+
+                {onVulgarize && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={onVulgarize}
+                        className="h-10 w-10"
+                      >
+                        <WandSparklesIcon className="h-4 w-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      <p>Vulgariser pour le propriétaire</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </div>
             )}
 
@@ -652,13 +685,15 @@ export function ReportSidebarNavigation({
                 >
                   <SaveIcon className={cn("h-4 w-4", !isCollapsed && "mr-2")} />
                   {!isCollapsed &&
-                    (isSaving ? "Enregistrement..." : "Finaliser le rapport")}
+                    (isSaving
+                      ? "Enregistrement..."
+                      : "Préparer l'envoi")}
                 </Button>
               </TooltipTrigger>
               {isCollapsed && (
                 <TooltipContent side="right">
                   <p>
-                    {isSaving ? "Enregistrement..." : "Finaliser le rapport"}
+                    {isSaving ? "Enregistrement..." : "Préparer l'envoi"}
                   </p>
                 </TooltipContent>
               )}

@@ -57,12 +57,12 @@ export function ClientDialog({ open, onOpenChange }: ClientDialogProps) {
       setIsSubmitting(true);
     },
     onSuccess: () => {
-      toast.success("Le client a été créé avec succès");
+      toast.success("Le propriétaire a été créé avec succès");
       handleCancel();
       setIsSubmitting(false);
     },
     onError: () => {
-      toast.error("Une erreur est survenue lors de la création du client");
+      toast.error("Une erreur est survenue lors de la création du propriétaire");
       setIsSubmitting(false);
     },
   });
@@ -100,9 +100,9 @@ export function ClientDialog({ open, onOpenChange }: ClientDialogProps) {
       <Credenza open={open} onOpenChange={onOpenChange}>
         <CredenzaContent className="sm:max-w-[600px] p-0 overflow-hidden">
           <CredenzaHeader className="p-6 pb-2">
-            <CredenzaTitle>Créer un nouveau client</CredenzaTitle>
+            <CredenzaTitle>Créer un nouveau propriétaire</CredenzaTitle>
             <CredenzaDescription>
-              Ajoutez un nouveau client à votre tableau de bord.
+              Ajoutez un propriétaire et ses animaux pour préparer le suivi anatomique.
             </CredenzaDescription>
           </CredenzaHeader>
 
@@ -207,7 +207,7 @@ export function ClientDialog({ open, onOpenChange }: ClientDialogProps) {
                   <AnimatePresence initial={false}>
                     {pets.length === 0 ? (
                       <div className="text-center py-8 text-muted-foreground text-sm border border-dashed rounded-md">
-                        Aucun animal ajouté pour ce client
+                        Aucun animal ajouté pour ce propriétaire
                       </div>
                     ) : (
                       <PetList
@@ -225,7 +225,7 @@ export function ClientDialog({ open, onOpenChange }: ClientDialogProps) {
                 Annuler
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Création..." : "Créer le client"}
+                {isSubmitting ? "Création..." : "Créer le propriétaire"}
               </Button>
             </div>
           </form>

@@ -22,7 +22,7 @@ export function ReportsNoResults({ onResetFilters }: ReportsNoResultsProps) {
         </EmptyMedia>
         <EmptyTitle>Aucun résultat</EmptyTitle>
         <EmptyDescription>
-          Aucun rapport ne correspond à vos critères de recherche.
+          Aucun compte rendu ne correspond à vos critères de recherche.
           Essayez de modifier vos filtres.
         </EmptyDescription>
       </EmptyHeader>

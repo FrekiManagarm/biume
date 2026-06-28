@@ -9,38 +9,329 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignUpRouteImport } from './routes/sign-up'
+import { Route as SignInRouteImport } from './routes/sign-in'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as DashboardSettingsRouteImport } from './routes/dashboard/settings'
+import { Route as DashboardPatientsRouteImport } from './routes/dashboard/patients'
+import { Route as DashboardClientsRouteImport } from './routes/dashboard/clients'
+import { Route as DashboardAgendaRouteImport } from './routes/dashboard/agenda'
+import { Route as ApiVulgarisationRouteImport } from './routes/api/vulgarisation'
+import { Route as ApiUploadthingRouteImport } from './routes/api/uploadthing'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
+import { Route as DashboardReportsIndexRouteImport } from './routes/dashboard/reports/index'
+import { Route as TransactionsSubscriptionsSuccessRouteImport } from './routes/transactions/subscriptions/success'
+import { Route as DashboardReportsIdRouteImport } from './routes/dashboard/reports/$id'
+import { Route as ApiReportsAnalyzeHistoryRouteImport } from './routes/api/reports/analyze-history'
+import { Route as ApiAutumnSplatRouteImport } from './routes/api/autumn/$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as DashboardReportsIdEditRouteImport } from './routes/dashboard/reports/$id/edit'
 
+const SignUpRoute = SignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardPatientsRoute = DashboardPatientsRouteImport.update({
+  id: '/patients',
+  path: '/patients',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardClientsRoute = DashboardClientsRouteImport.update({
+  id: '/clients',
+  path: '/clients',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardAgendaRoute = DashboardAgendaRouteImport.update({
+  id: '/agenda',
+  path: '/agenda',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const ApiVulgarisationRoute = ApiVulgarisationRouteImport.update({
+  id: '/api/vulgarisation',
+  path: '/api/vulgarisation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadthingRoute = ApiUploadthingRouteImport.update({
+  id: '/api/uploadthing',
+  path: '/api/uploadthing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardReportsIndexRoute = DashboardReportsIndexRouteImport.update({
+  id: '/reports/',
+  path: '/reports/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const TransactionsSubscriptionsSuccessRoute =
+  TransactionsSubscriptionsSuccessRouteImport.update({
+    id: '/transactions/subscriptions/success',
+    path: '/transactions/subscriptions/success',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DashboardReportsIdRoute = DashboardReportsIdRouteImport.update({
+  id: '/reports/$id',
+  path: '/reports/$id',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const ApiReportsAnalyzeHistoryRoute =
+  ApiReportsAnalyzeHistoryRouteImport.update({
+    id: '/api/reports/analyze-history',
+    path: '/api/reports/analyze-history',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiAutumnSplatRoute = ApiAutumnSplatRouteImport.update({
+  id: '/api/autumn/$',
+  path: '/api/autumn/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardReportsIdEditRoute = DashboardReportsIdEditRouteImport.update({
+  id: '/edit',
+  path: '/edit',
+  getParentRoute: () => DashboardReportsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/api/vulgarisation': typeof ApiVulgarisationRoute
+  '/dashboard/agenda': typeof DashboardAgendaRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/patients': typeof DashboardPatientsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
+  '/api/reports/analyze-history': typeof ApiReportsAnalyzeHistoryRoute
+  '/dashboard/reports/$id': typeof DashboardReportsIdRouteWithChildren
+  '/transactions/subscriptions/success': typeof TransactionsSubscriptionsSuccessRoute
+  '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/reports/$id/edit': typeof DashboardReportsIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/api/vulgarisation': typeof ApiVulgarisationRoute
+  '/dashboard/agenda': typeof DashboardAgendaRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/patients': typeof DashboardPatientsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
+  '/api/reports/analyze-history': typeof ApiReportsAnalyzeHistoryRoute
+  '/dashboard/reports/$id': typeof DashboardReportsIdRouteWithChildren
+  '/transactions/subscriptions/success': typeof TransactionsSubscriptionsSuccessRoute
+  '/dashboard/reports': typeof DashboardReportsIndexRoute
+  '/dashboard/reports/$id/edit': typeof DashboardReportsIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/sign-in': typeof SignInRoute
+  '/sign-up': typeof SignUpRoute
+  '/api/chat': typeof ApiChatRoute
+  '/api/uploadthing': typeof ApiUploadthingRoute
+  '/api/vulgarisation': typeof ApiVulgarisationRoute
+  '/dashboard/agenda': typeof DashboardAgendaRoute
+  '/dashboard/clients': typeof DashboardClientsRoute
+  '/dashboard/patients': typeof DashboardPatientsRoute
+  '/dashboard/settings': typeof DashboardSettingsRoute
+  '/dashboard/': typeof DashboardIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/autumn/$': typeof ApiAutumnSplatRoute
+  '/api/reports/analyze-history': typeof ApiReportsAnalyzeHistoryRoute
+  '/dashboard/reports/$id': typeof DashboardReportsIdRouteWithChildren
+  '/transactions/subscriptions/success': typeof TransactionsSubscriptionsSuccessRoute
+  '/dashboard/reports/': typeof DashboardReportsIndexRoute
+  '/dashboard/reports/$id/edit': typeof DashboardReportsIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/sign-in'
+    | '/sign-up'
+    | '/api/chat'
+    | '/api/uploadthing'
+    | '/api/vulgarisation'
+    | '/dashboard/agenda'
+    | '/dashboard/clients'
+    | '/dashboard/patients'
+    | '/dashboard/settings'
+    | '/dashboard/'
+    | '/api/auth/$'
+    | '/api/autumn/$'
+    | '/api/reports/analyze-history'
+    | '/dashboard/reports/$id'
+    | '/transactions/subscriptions/success'
+    | '/dashboard/reports/'
+    | '/dashboard/reports/$id/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/sign-in'
+    | '/sign-up'
+    | '/api/chat'
+    | '/api/uploadthing'
+    | '/api/vulgarisation'
+    | '/dashboard/agenda'
+    | '/dashboard/clients'
+    | '/dashboard/patients'
+    | '/dashboard/settings'
+    | '/dashboard'
+    | '/api/auth/$'
+    | '/api/autumn/$'
+    | '/api/reports/analyze-history'
+    | '/dashboard/reports/$id'
+    | '/transactions/subscriptions/success'
+    | '/dashboard/reports'
+    | '/dashboard/reports/$id/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/forgot-password'
+    | '/reset-password'
+    | '/sign-in'
+    | '/sign-up'
+    | '/api/chat'
+    | '/api/uploadthing'
+    | '/api/vulgarisation'
+    | '/dashboard/agenda'
+    | '/dashboard/clients'
+    | '/dashboard/patients'
+    | '/dashboard/settings'
+    | '/dashboard/'
+    | '/api/auth/$'
+    | '/api/autumn/$'
+    | '/api/reports/analyze-history'
+    | '/dashboard/reports/$id'
+    | '/transactions/subscriptions/success'
+    | '/dashboard/reports/'
+    | '/dashboard/reports/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  SignInRoute: typeof SignInRoute
+  SignUpRoute: typeof SignUpRoute
+  ApiChatRoute: typeof ApiChatRoute
+  ApiUploadthingRoute: typeof ApiUploadthingRoute
+  ApiVulgarisationRoute: typeof ApiVulgarisationRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiAutumnSplatRoute: typeof ApiAutumnSplatRoute
+  ApiReportsAnalyzeHistoryRoute: typeof ApiReportsAnalyzeHistoryRoute
+  TransactionsSubscriptionsSuccessRoute: typeof TransactionsSubscriptionsSuccessRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sign-up': {
+      id: '/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof SignUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sign-in': {
+      id: '/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof SignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +339,163 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/patients': {
+      id: '/dashboard/patients'
+      path: '/patients'
+      fullPath: '/dashboard/patients'
+      preLoaderRoute: typeof DashboardPatientsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/clients': {
+      id: '/dashboard/clients'
+      path: '/clients'
+      fullPath: '/dashboard/clients'
+      preLoaderRoute: typeof DashboardClientsRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/agenda': {
+      id: '/dashboard/agenda'
+      path: '/agenda'
+      fullPath: '/dashboard/agenda'
+      preLoaderRoute: typeof DashboardAgendaRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/api/vulgarisation': {
+      id: '/api/vulgarisation'
+      path: '/api/vulgarisation'
+      fullPath: '/api/vulgarisation'
+      preLoaderRoute: typeof ApiVulgarisationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/uploadthing': {
+      id: '/api/uploadthing'
+      path: '/api/uploadthing'
+      fullPath: '/api/uploadthing'
+      preLoaderRoute: typeof ApiUploadthingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/reports/': {
+      id: '/dashboard/reports/'
+      path: '/reports'
+      fullPath: '/dashboard/reports/'
+      preLoaderRoute: typeof DashboardReportsIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/transactions/subscriptions/success': {
+      id: '/transactions/subscriptions/success'
+      path: '/transactions/subscriptions/success'
+      fullPath: '/transactions/subscriptions/success'
+      preLoaderRoute: typeof TransactionsSubscriptionsSuccessRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/reports/$id': {
+      id: '/dashboard/reports/$id'
+      path: '/reports/$id'
+      fullPath: '/dashboard/reports/$id'
+      preLoaderRoute: typeof DashboardReportsIdRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/api/reports/analyze-history': {
+      id: '/api/reports/analyze-history'
+      path: '/api/reports/analyze-history'
+      fullPath: '/api/reports/analyze-history'
+      preLoaderRoute: typeof ApiReportsAnalyzeHistoryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/autumn/$': {
+      id: '/api/autumn/$'
+      path: '/api/autumn/$'
+      fullPath: '/api/autumn/$'
+      preLoaderRoute: typeof ApiAutumnSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/reports/$id/edit': {
+      id: '/dashboard/reports/$id/edit'
+      path: '/edit'
+      fullPath: '/dashboard/reports/$id/edit'
+      preLoaderRoute: typeof DashboardReportsIdEditRouteImport
+      parentRoute: typeof DashboardReportsIdRoute
+    }
   }
 }
 
+interface DashboardReportsIdRouteChildren {
+  DashboardReportsIdEditRoute: typeof DashboardReportsIdEditRoute
+}
+
+const DashboardReportsIdRouteChildren: DashboardReportsIdRouteChildren = {
+  DashboardReportsIdEditRoute: DashboardReportsIdEditRoute,
+}
+
+const DashboardReportsIdRouteWithChildren =
+  DashboardReportsIdRoute._addFileChildren(DashboardReportsIdRouteChildren)
+
+interface DashboardRouteChildren {
+  DashboardAgendaRoute: typeof DashboardAgendaRoute
+  DashboardClientsRoute: typeof DashboardClientsRoute
+  DashboardPatientsRoute: typeof DashboardPatientsRoute
+  DashboardSettingsRoute: typeof DashboardSettingsRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+  DashboardReportsIdRoute: typeof DashboardReportsIdRouteWithChildren
+  DashboardReportsIndexRoute: typeof DashboardReportsIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardAgendaRoute: DashboardAgendaRoute,
+  DashboardClientsRoute: DashboardClientsRoute,
+  DashboardPatientsRoute: DashboardPatientsRoute,
+  DashboardSettingsRoute: DashboardSettingsRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+  DashboardReportsIdRoute: DashboardReportsIdRouteWithChildren,
+  DashboardReportsIndexRoute: DashboardReportsIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  SignInRoute: SignInRoute,
+  SignUpRoute: SignUpRoute,
+  ApiChatRoute: ApiChatRoute,
+  ApiUploadthingRoute: ApiUploadthingRoute,
+  ApiVulgarisationRoute: ApiVulgarisationRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiAutumnSplatRoute: ApiAutumnSplatRoute,
+  ApiReportsAnalyzeHistoryRoute: ApiReportsAnalyzeHistoryRoute,
+  TransactionsSubscriptionsSuccessRoute: TransactionsSubscriptionsSuccessRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

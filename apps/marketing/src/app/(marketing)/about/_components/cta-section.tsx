@@ -4,6 +4,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { productAppHref } from "@/lib/config/product-app-url";
+
+const signUpHref = productAppHref("/sign-up");
 
 export function CTASection() {
   return (
@@ -55,7 +58,7 @@ export function CTASection() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button asChild size="lg" className="text-lg px-8 py-6 group">
-                  <Link href="/sign-up">
+                  <Link href={signUpHref}>
                     Commencer gratuitement
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Link>

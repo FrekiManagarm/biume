@@ -27,9 +27,11 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
           />
         }
         header={
-          <SidebarInset>
+          <SidebarInset className="bg-muted/20">
             <DashboardHeader />
-            <div className="w-full overflow-y-auto p-4 mb-4">{children}</div>
+            <div className="w-full flex-1 overflow-y-auto px-5 py-7 md:px-8 lg:px-10">
+              <div className="mx-auto w-full max-w-[1480px]">{children}</div>
+            </div>
           </SidebarInset>
         }
       >

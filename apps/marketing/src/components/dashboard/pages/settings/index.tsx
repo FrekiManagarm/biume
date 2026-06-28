@@ -22,12 +22,12 @@ const SettingsPageComponent = ({ org }: { org: Organization }) => {
   const tabs = [
     {
       id: "profile",
-      title: "Profil",
+      title: "Profil praticien",
       icon: User,
     },
     {
       id: "notifications",
-      title: "Notifications",
+      title: "Envoi propriétaire",
       icon: Bell,
     },
     {
@@ -50,7 +50,8 @@ const SettingsPageComponent = ({ org }: { org: Organization }) => {
             <CardHeader>
               <CardTitle>Paramètres</CardTitle>
               <CardDescription>
-                Gérez vos paramètres et les préférences de votre compte.
+                Configurez ce qui rend vos comptes rendus plus professionnels:
+                identité du cabinet, notifications, PDF et facturation.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col gap-2 px-2">

@@ -7,12 +7,16 @@ import { cn } from "@/lib/style";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/landing-legacy/mode-toggle";
 import { motion, AnimatePresence } from "framer-motion";
+import { productAppHref } from "@/lib/config/product-app-url";
 
 const navLinks = [
-  { href: "/#features", label: "Fonctionnalités" },
+  { href: "/#features", label: "Rapports" },
   { href: "/#pricing", label: "Tarifs" },
   { href: "/blog", label: "Blog" },
 ];
+
+const signInHref = productAppHref("/sign-in");
+const signUpHref = productAppHref("/sign-up");
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -74,15 +78,15 @@ export function Header() {
                 size="sm"
                 className="text-muted-foreground hover:text-foreground"
               >
-                <Link href="/sign-in">Connexion</Link>
+                <Link href={signInHref}>Connexion</Link>
               </Button>
               <Button
                 asChild
                 size="sm"
                 className="rounded-full px-5 shadow-md shadow-primary/15 hover:shadow-primary/25 transition-all hover:scale-[1.02]"
               >
-                <Link href="/sign-up">
-                  Essai gratuit
+                <Link href={signUpHref}>
+                  Tester un rapport
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </Link>
               </Button>
@@ -163,7 +167,7 @@ export function Header() {
                   className="w-full justify-center py-6 text-base rounded-xl"
                 >
                   <Link
-                    href="/sign-in"
+                    href={signInHref}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Connexion
@@ -174,10 +178,10 @@ export function Header() {
                   className="w-full justify-center py-6 text-base rounded-xl shadow-lg shadow-primary/20"
                 >
                   <Link
-                    href="/sign-up"
+                    href={signUpHref}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Commencer gratuitement
+                    Tester un rapport
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>

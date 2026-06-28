@@ -55,7 +55,7 @@ export function ClientDetailsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-3xl p-0 gap-0 overflow-hidden border-none shadow-2xl">
         <VisuallyHidden>
-          <DialogTitle>Détails du client - {client.name}</DialogTitle>
+          <DialogTitle>Détails du propriétaire - {client.name}</DialogTitle>
         </VisuallyHidden>
 
         {/* Header avec Background */}
@@ -83,7 +83,7 @@ export function ClientDetailsDialog({
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <h2 className="text-2xl font-bold tracking-tight text-foreground">
-                {client.name || "Client sans nom"}
+                  {client.name || "Propriétaire sans nom"}
               </h2>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <span className="flex items-center gap-1.5">
@@ -216,7 +216,7 @@ export function ClientDetailsDialog({
                   </div>
                   <p className="text-sm font-medium text-foreground">Aucun patient</p>
                   <p className="text-xs text-muted-foreground max-w-[200px] mt-1">
-                    Ce client n'a pas encore d'animaux enregistrés.
+                    Ce propriétaire n'a pas encore d'animaux enregistrés.
                   </p>
                 </div>
               )}

@@ -17,6 +17,7 @@ import {
   PawPrint,
   Edit,
   Trash2,
+  FileText,
 } from "lucide-react";
 
 import { Appointment } from "@/lib/schemas";
@@ -28,9 +29,11 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useMutation } from "@tanstack/react-query";
 import { deleteAppointment } from "@/lib/api/actions/appointments.action";
+import { createReport } from "@/lib/api/actions/reports.action";
 import { toast } from "sonner";
 import { useState } from "react";
 import { NewAppointmentForm } from "./new-appointment-form";
+import { useRouter } from "next/navigation";
 
 interface AppointmentDetailsProps {
   appointment: Appointment;
@@ -63,16 +66,7 @@ export function AppointmentDetails({
   onOpenChange,
 }: AppointmentDetailsProps) {
   const [isEditFormOpen, setIsEditFormOpen] = useState(false);
-
-  if (!appointment) return null;
-
-  if (!appointment.beginAt || !appointment.endAt) return null;
-
-  const startTime = new Date(appointment.beginAt);
-  const endTime = new Date(appointment.endAt);
-  const duration = Math.round(
-    (endTime.getTime() - startTime.getTime()) / 1000 / 60,
-  );
+  const router = useRouter();
 
   const { mutateAsync: deleteAppointmentMutation, isPending: isDeleting } =
     useMutation({
@@ -88,6 +82,31 @@ export function AppointmentDetails({
       },
     });
 
+  const { mutateAsync: createReportMutation, isPending: isCreatingReport } =
+    useMutation({
+      mutationFn: createReport,
+      onSuccess: (data) => {
+        if (data.success) {
+          toast.success("Compte rendu créé");
+          onOpenChange(false);
+          router.push(`/dashboard/reports/${data.reportId}/edit`);
+        }
+      },
+      onError: () => {
+        toast.error("Erreur lors de la création du compte rendu");
+      },
+    });
+
+  if (!appointment) return null;
+
+  if (!appointment.beginAt || !appointment.endAt) return null;
+
+  const startTime = new Date(appointment.beginAt);
+  const endTime = new Date(appointment.endAt);
+  const duration = Math.round(
+    (endTime.getTime() - startTime.getTime()) / 1000 / 60,
+  );
+
   const handleEditClick = () => {
     setIsEditFormOpen(true);
   };
@@ -98,6 +117,17 @@ export function AppointmentDetails({
 
   const handleEditSubmit = () => {
     setIsEditFormOpen(false);
+  };
+
+  const handleCreateReport = async () => {
+    await createReportMutation({
+      title: `Compte rendu - ${appointment.patient.name} - ${format(startTime, "dd/MM/yyyy")}`,
+      petId: appointment.patientId ?? "",
+      appointmentId: appointment.id,
+      consultationReason:
+        appointment.note || `Séance du ${format(startTime, "d MMMM yyyy", { locale: fr })}`,
+      status: "draft",
+    });
   };
 
   return (
@@ -173,6 +203,14 @@ export function AppointmentDetails({
               </div>
 
               <div className="flex gap-2 mt-6 pt-6 border-t space-y-2">
+                <Button
+                  className="justify-start"
+                  onClick={handleCreateReport}
+                  disabled={isCreatingReport}
+                >
+                  <FileText className="h-4 w-4" />
+                  Créer le compte rendu
+                </Button>
                 <Button
                   variant="outline"
                   className="justify-start"

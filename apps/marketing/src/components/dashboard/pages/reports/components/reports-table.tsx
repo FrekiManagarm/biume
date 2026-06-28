@@ -314,7 +314,7 @@ export function ReportsTable({ reports }: ReportsTableProps) {
                             type="advanced_report"
                           />
                         }
-                        fileName={`rapport-${report.id}.pdf`}
+                        fileName={`compte-rendu-${report.id}.pdf`}
                       >
                         {({ loading }) => (
                           <div

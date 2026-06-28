@@ -15,5 +15,20 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "src/components/ai",
+    "src/components/ai-elements",
+    "src/components/dashboard",
+    "src/components/onboarding",
+    "src/components/reports-module",
+    "src/components/subscription",
+    "src/hooks/useAppContext.ts",
+    "src/lib/api",
+    "src/lib/auth",
+    "src/lib/mastra",
+    "src/lib/schemas",
+    "src/lib/trigger",
+    "src/lib/uploadthing"
+  ]
 }

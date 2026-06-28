@@ -4,19 +4,22 @@ import {
   Sparkles,
   CheckCircle2,
   ArrowRight,
-  TrendingUp,
-  Star,
+  FileText,
+  Languages,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { productAppHref } from "@/lib/config/product-app-url";
 
 const benefits = [
-  "Essai gratuit de 15 jours",
-  "Formation personnalisée incluse",
-  "Support dédié 7j/7",
-  "Migration de vos données offerte",
+  "Un ancien rapport transformé en exemple concret",
+  "Une version professionnelle et une version propriétaire",
+  "Vos premiers patients, modèles et habitudes pris en compte",
+  "Aucun engagement si le résultat ne vous parle pas",
 ];
+
+const signUpHref = productAppHref("/sign-up");
 
 export function CTASection() {
   return (
@@ -36,17 +39,18 @@ export function CTASection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 mb-6 rounded-full bg-primary/6 border border-primary/10 text-primary text-sm font-medium">
             <Sparkles className="w-3.5 h-3.5" />
-            Prêt à démarrer ?
+            Le meilleur test est un vrai cas
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight mb-5">
-            Transformez votre activité{" "}
+            Essayez Biume avec un rapport{" "}
             <span className="bg-linear-to-r from-primary via-primary/80 to-secondary bg-clip-text text-transparent">
-              dès aujourd&apos;hui
+              que vous avez déjà écrit
             </span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Rejoignez les professionnels qui font confiance à Biume pour gérer
-            leur activité au quotidien.
+            Pas besoin d&apos;imaginer. Prenez une consultation passée, faites-la
+            passer dans Biume, et voyez si le rendu mérite d&apos;entrer dans
+            votre routine.
           </p>
         </motion.div>
 
@@ -63,11 +67,12 @@ export function CTASection() {
           <div className="relative grid md:grid-cols-2 gap-10 md:gap-14 items-center">
             <div>
               <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                Lancez-vous sans risque
+                Un premier essai très concret
               </h3>
               <p className="text-muted-foreground mb-8 leading-relaxed">
-                Testez toutes les fonctionnalités pendant 15 jours, sans carte
-                bancaire. Notre équipe vous accompagne à chaque étape.
+                L&apos;objectif n&apos;est pas de vous vendre une plateforme entière
+                dès le premier clic. C&apos;est de vérifier si Biume rend vos
+                rapports plus clairs, plus beaux et plus utiles.
               </p>
 
               <div className="space-y-3 mb-8">
@@ -94,12 +99,17 @@ export function CTASection() {
                   size="lg"
                   className="rounded-full shadow-lg shadow-primary/15 hover:shadow-primary/25 hover:scale-[1.01] active:scale-[0.99] transition-all"
                 >
-                  <Link href="/sign-up">
-                    Commencer gratuitement
+                  <Link href={signUpHref}>
+                    Transformer mon premier rapport
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Link>
                 </Button>
-                <Button asChild variant="outline" size="lg" className="rounded-full">
+                <Button
+                  asChild
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full"
+                >
                   <Link
                     href="https://cal.com/mathieu-chambaud-biume"
                     target="_blank"
@@ -111,32 +121,42 @@ export function CTASection() {
               </div>
             </div>
 
-            {/* Testimonial */}
+            {/* Product proof */}
             <div className="relative">
               <div className="rounded-2xl border border-border/40 bg-background/60 backdrop-blur-lg p-7 md:p-8 shadow-sm">
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-
-                <blockquote className="text-base md:text-lg mb-6 leading-relaxed italic text-foreground/90">
-                  &quot;Biume a révolutionné ma pratique. Je gagne 2 heures par
-                  jour sur l&apos;administratif et mes clients adorent la
-                  clarté de mes rapports.&quot;
-                </blockquote>
-
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-linear-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-                    <span className="text-sm font-bold">MC</span>
+                <div className="flex items-center gap-2 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="font-semibold text-sm">Marie C.</p>
+                    <p className="font-semibold text-sm">Rapport de séance</p>
                     <p className="text-xs text-muted-foreground">
-                      Ostéopathe équin, Paris
+                      Synthèse prête à envoyer
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="rounded-xl border border-border/35 bg-card/70 p-4">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+                      Côté praticien
+                    </p>
+                    <p className="text-sm leading-relaxed">
+                      Dysfonction T12-L1, hypomobilité sacro-iliaque droite,
+                      recommandations de suivi.
+                    </p>
+                  </div>
+
+                  <div className="rounded-xl border border-secondary/25 bg-secondary/5 p-4">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Languages className="w-3.5 h-3.5 text-secondary" />
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-secondary">
+                        Côté propriétaire
+                      </p>
+                    </div>
+                    <p className="text-sm leading-relaxed">
+                      Zone du dos moins mobile et bassin droit à surveiller,
+                      avec conseils simples avant la prochaine séance.
                     </p>
                   </div>
                 </div>
@@ -150,8 +170,10 @@ export function CTASection() {
                 className="absolute -bottom-3 -right-3 md:-bottom-4 md:-right-4 px-4 py-2 rounded-full bg-card border border-border/50 shadow-lg"
               >
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-green-600 dark:text-green-400" />
-                  <span className="text-sm font-semibold">98% satisfait</span>
+                  <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  <span className="text-sm font-semibold">
+                    Testable en 15 jours
+                  </span>
                 </div>
               </motion.div>
             </div>

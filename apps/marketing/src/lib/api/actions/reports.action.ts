@@ -96,10 +96,16 @@ export async function getAllReports(params: GetAllReportsParams = {}) {
 
     const conditions = [eq(advancedReport.createdBy, organization.id)];
 
-    if (status === "brouillons") {
+    if (status === "brouillons" || status === "brouillon" || status === "draft") {
       conditions.push(eq(advancedReport.status, "draft"));
-    } else if (status === "finalises") {
+    } else if (
+      status === "finalises" ||
+      status === "finalisé" ||
+      status === "finalized"
+    ) {
       conditions.push(eq(advancedReport.status, "finalized"));
+    } else if (status === "envoyé" || status === "sent") {
+      conditions.push(eq(advancedReport.status, "sent"));
     }
 
     if (search.trim().length > 0) {

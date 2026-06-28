@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const webEnvSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_PRODUCT_APP_URL: z.string().url().optional(),
   NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
   NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
 });
@@ -16,6 +17,7 @@ const nodePublicEnv =
 export function parseWebEnv(source: PublicEnvSource = nodePublicEnv ?? {}): WebEnv {
   return webEnvSchema.parse({
     NEXT_PUBLIC_APP_URL: source.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_PRODUCT_APP_URL: source.NEXT_PUBLIC_PRODUCT_APP_URL,
     NEXT_PUBLIC_POSTHOG_KEY: source.NEXT_PUBLIC_POSTHOG_KEY,
     NEXT_PUBLIC_POSTHOG_HOST: source.NEXT_PUBLIC_POSTHOG_HOST,
   });

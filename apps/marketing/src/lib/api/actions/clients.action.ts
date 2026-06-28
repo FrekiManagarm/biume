@@ -47,6 +47,7 @@ export async function getAllClients(params: GetAllClientsParams = {}) {
         },
         with: {
           animal: true,
+          advancedReport: true,
         },
       },
     },

@@ -8,7 +8,9 @@ import {
   Edit,
   Trash2,
   PawPrint,
+  FileText,
 } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +51,7 @@ import { Pet } from "@/lib/schemas";
 import { AnimalCredenza } from "@/components/animal-folder/index";
 import { useState } from "react";
 import { PatientStepperDialog } from "./components/PatientStepperDialog";
+import { ReportStatusBadge } from "@/components/dashboard/report-ui";
 
 // Types pour les patients
 type PetType = "Chien" | "Chat" | "Oiseau" | "Cheval" | "Vache" | "NAC";
@@ -71,23 +74,18 @@ interface Patient {
 // Fonction helper pour le badge de type (tolère une string générique)
 const getTypeBadge = (type: string) => {
   const variants = {
-    Chien: { variant: "default" as const, emoji: "🐕" },
-    Chat: { variant: "secondary" as const, emoji: "🐈" },
-    Oiseau: { variant: "outline" as const, emoji: "🦜" },
-    Cheval: { variant: "outline" as const, emoji: "🐴" },
-    Vache: { variant: "outline" as const, emoji: "🐄" },
-    NAC: { variant: "outline" as const, emoji: "🐹" },
+    Chien: { variant: "default" as const },
+    Chat: { variant: "secondary" as const },
+    Oiseau: { variant: "outline" as const },
+    Cheval: { variant: "outline" as const },
+    Vache: { variant: "outline" as const },
+    NAC: { variant: "outline" as const },
   };
 
   const normalized =
     type in variants ? (type as keyof typeof variants) : ("NAC" as const);
   const config = variants[normalized];
-  return (
-    <Badge variant={config.variant}>
-      <span className="mr-1">{config.emoji}</span>
-      {type || "NAC"}
-    </Badge>
-  );
+  return <Badge variant={config.variant}>{type || "NAC"}</Badge>;
 };
 
 type PatientsTableProps = {
@@ -149,11 +147,11 @@ export function PatientsTable({
         <CardContent>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="space-y-1">
-              <h1 className="bg-linear-to-r from-primary to-secondary bg-clip-text text-3xl font-bold tracking-tight text-transparent">
-                Mes Patients
+              <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+                Patients
               </h1>
               <p className="text-muted-foreground text-sm">
-                Aperçu de vos patients
+                Suivez les animaux, leur propriétaire et leur dernier compte rendu anatomique.
               </p>
             </div>
             <Button onClick={() => setOpenAddPatient(true)}>
@@ -244,7 +242,7 @@ export function PatientsTable({
                           <TableHead>Sexe</TableHead>
                           <TableHead>Âge</TableHead>
                           <TableHead>Propriétaire</TableHead>
-                          <TableHead>Dernier rapport</TableHead>
+                          <TableHead>Dernier compte rendu</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -308,11 +306,21 @@ export function PatientsTable({
                                 const d = new Date(
                                   latest.createdAt as unknown as string,
                                 );
-                                return d.toLocaleDateString("fr-FR", {
-                                  year: "numeric",
-                                  month: "2-digit",
-                                  day: "2-digit",
-                                });
+                                return (
+                                  <div className="flex flex-col gap-1">
+                                    <span className="text-foreground">
+                                      {d.toLocaleDateString("fr-FR", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                      })}
+                                    </span>
+                                    <ReportStatusBadge
+                                      status={latest.status}
+                                      compact
+                                    />
+                                  </div>
+                                );
                               })()}
                             </TableCell>
                             <TableCell className="text-right">
@@ -327,6 +335,12 @@ export function PatientsTable({
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                  <DropdownMenuItem asChild>
+                                    <Link href="/dashboard/reports">
+                                      <FileText className="size-4" />
+                                      Nouveau compte rendu
+                                    </Link>
+                                  </DropdownMenuItem>
                                   <DropdownMenuItem
                                     onClick={() => {
                                       setSelectedPatient(patient);

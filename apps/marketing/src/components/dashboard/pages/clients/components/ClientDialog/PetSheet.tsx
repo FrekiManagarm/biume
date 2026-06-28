@@ -105,7 +105,7 @@ export function PetSheet({
           <SheetDescription>
             {isEditing
               ? "Modifiez les informations de votre animal"
-              : "Ajoutez un nouvel animal à votre client"}
+              : "Ajoutez un nouvel animal à ce propriétaire"}
           </SheetDescription>
         </SheetHeader>
         <div className="px-6">

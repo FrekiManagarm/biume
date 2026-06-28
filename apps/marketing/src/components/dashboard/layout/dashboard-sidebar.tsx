@@ -87,6 +87,10 @@ export function DashboardSidebar({
 
   // Récupérer les menus
   const menuGroups = proMenuList(pathname || "");
+  const menuButtonClassName =
+    "h-12 rounded-[1.15rem] px-4 text-[15px] font-semibold text-muted-foreground transition-all hover:bg-secondary/10 hover:text-secondary data-[active=true]:border data-[active=true]:border-secondary/30 data-[active=true]:bg-secondary/10 data-[active=true]:text-secondary data-[active=true]:shadow-sm";
+  const subMenuButtonClassName =
+    "h-9 rounded-xl text-muted-foreground hover:bg-secondary/10 hover:text-secondary data-[active=true]:bg-secondary/10 data-[active=true]:text-secondary";
 
   const handleOrganizationSwitch = async (orgId: string) => {
     setSwitchingOrg(orgId);
@@ -127,7 +131,11 @@ export function DashboardSidebar({
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <SidebarMenuButton isActive={menu.active} tooltip={menu.label}>
+            <SidebarMenuButton
+              isActive={menu.active}
+              tooltip={menu.label}
+              className={menuButtonClassName}
+            >
               {menu.icon && <menu.icon className="h-4 w-4" />}
               <span>{menu.label}</span>
               <ChevronRight className="ml-auto h-4 w-4" />
@@ -162,7 +170,10 @@ export function DashboardSidebar({
       <Collapsible defaultOpen={menu.active}>
         <SidebarMenuItem>
           <CollapsibleTrigger asChild>
-            <SidebarMenuButton className="group" isActive={menu.active}>
+            <SidebarMenuButton
+              className={cn("group", menuButtonClassName)}
+              isActive={menu.active}
+            >
               {menu.icon && <menu.icon className="h-4 w-4" />}
               <span>{menu.label}</span>
               <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-90" />
@@ -172,7 +183,11 @@ export function DashboardSidebar({
             <SidebarMenuSub>
               {menu.submenus?.map((submenu: Submenu, index: number) => (
                 <SidebarMenuSubItem key={index}>
-                  <SidebarMenuSubButton asChild isActive={submenu.active}>
+                  <SidebarMenuSubButton
+                    asChild
+                    isActive={submenu.active}
+                    className={subMenuButtonClassName}
+                  >
                     <Link
                       href={submenu.href}
                       className="flex items-center gap-2"
@@ -191,35 +206,40 @@ export function DashboardSidebar({
   };
 
   return (
-    <Sidebar variant="sidebar" collapsible="icon">
-      <SidebarHeader className="pb-2">
+    <Sidebar variant="sidebar" collapsible="icon" className="border-border/70">
+      <SidebarHeader className="p-5 pb-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton size="lg">
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                <SidebarMenuButton
+                  size="lg"
+                  className="h-14 rounded-[1.25rem] px-3 data-[state=open]:bg-secondary/10 data-[state=open]:text-secondary"
+                >
+                  <div className="flex aspect-square size-10 items-center justify-center overflow-hidden rounded-2xl bg-secondary/10 text-secondary">
                     {activeOrganization?.logo ? (
                       <Image
                         src={activeOrganization?.logo ?? ""}
                         alt={activeOrganization?.name ?? ""}
-                        width={32}
-                        height={32}
-                        className="object-cover rounded-xl"
+                        width={40}
+                        height={40}
+                        className="h-full w-full object-cover"
                       />
                     ) : (
-                      <Building className="size-4" />
+                      <Building className="size-5" />
                     )}
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {activeOrganization?.name}
+                      {activeOrganization?.name ?? "Biume"}
                     </span>
-                    <span className="truncate text-xs">
-                      {activeOrganization?.name}
+                    <span className="truncate text-xs text-muted-foreground">
+                      Espace praticien
                     </span>
                   </div>
-                  <ChevronsUpDown className="ml-auto" />
+                  <span className="rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-bold text-secondary group-data-[collapsible=icon]:hidden">
+                    BETA
+                  </span>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -243,7 +263,7 @@ export function DashboardSidebar({
                                 ? "bg-primary/10 text-primary font-medium shadow-sm"
                                 : "hover:bg-accent hover:translate-x-1 hover:shadow-sm",
                               switchingOrg === org.id &&
-                              "animate-pulse opacity-70",
+                                "animate-pulse opacity-70",
                             )}
                             onSelect={() => handleOrganizationSwitch(org.id)}
                             disabled={switchingOrg !== null}
@@ -265,7 +285,7 @@ export function DashboardSidebar({
                                   className={cn(
                                     "h-full w-full object-cover transition-transform duration-300",
                                     activeOrganization?.id !== org.id &&
-                                    "hover:scale-110",
+                                      "hover:scale-110",
                                   )}
                                 />
                               </div>
@@ -326,15 +346,15 @@ export function DashboardSidebar({
         </SidebarMenu>
       </SidebarHeader>
 
-      <SidebarSeparator />
+      <SidebarSeparator className="bg-border/70" />
 
-      <SidebarContent>
+      <SidebarContent className="gap-1 px-3 py-4">
         {/* Menus principaux sans groupe */}
         {menuGroups
           .filter((group) => !group.groupLabel)
           .map((group, groupIndex) => (
-            <SidebarGroup key={groupIndex}>
-              <SidebarMenu>
+            <SidebarGroup key={groupIndex} className="p-0">
+              <SidebarMenu className="gap-1.5">
                 {group.menus.map((menu, menuIndex) => {
                   if (menu.submenus) {
                     return state === "collapsed" ? (
@@ -348,6 +368,7 @@ export function DashboardSidebar({
                       <SidebarMenuButton
                         asChild
                         isActive={menu.active}
+                        className={menuButtonClassName}
                         tooltip={state === "collapsed" ? menu.label : undefined}
                       >
                         <a
@@ -373,12 +394,12 @@ export function DashboardSidebar({
           .filter((group) => group.groupLabel)
           .map((group, groupIndex) => {
             return (
-              <SidebarGroup key={groupIndex}>
-                <SidebarGroupLabel className="flex items-center gap-2">
+              <SidebarGroup key={groupIndex} className="mt-3 p-0">
+                <SidebarGroupLabel className="flex h-9 items-center gap-2 px-4 text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground/80">
                   <span>{group.groupLabel}</span>
                 </SidebarGroupLabel>
 
-                <SidebarMenu>
+                <SidebarMenu className="gap-1.5">
                   {group.menus.map((menu, menuIndex) => {
                     if (menu.submenus) {
                       return state === "collapsed" ? (
@@ -393,6 +414,7 @@ export function DashboardSidebar({
                           asChild
                           isActive={menu.active && !menu.comingSoon}
                           disabled={menu.comingSoon}
+                          className={menuButtonClassName}
                           tooltip={
                             state === "collapsed" ? menu.label : undefined
                           }
@@ -416,21 +438,21 @@ export function DashboardSidebar({
             );
           })}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t border-border/70 p-4">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  className="h-14 rounded-[1.25rem] px-3 data-[state=open]:bg-secondary/10 data-[state=open]:text-secondary"
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
+                  <Avatar className="h-10 w-10 rounded-2xl">
                     <AvatarImage
                       src={session.user.image ?? ""}
                       alt={session.user.name ?? ""}
                     />
-                    <AvatarFallback className="rounded-lg">
+                    <AvatarFallback className="rounded-2xl bg-muted font-semibold">
                       {session.user.name?.charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>

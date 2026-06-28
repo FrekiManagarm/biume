@@ -30,18 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     },
     {
-      url: `${baseUrl}/contact`,
-      lastModified: currentDate,
-      changeFrequency: "weekly",
-      priority: 0.8,
-      alternates: {
-        languages: {
-          fr: `${baseUrl}/contact`,
-          "fr-FR": `${baseUrl}/contact`,
-        },
-      },
-    },
-    {
       url: `${baseUrl}/privacy`,
       lastModified: currentDate,
       changeFrequency: "monthly",
@@ -62,30 +50,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
         languages: {
           fr: `${baseUrl}/cgu`,
           "fr-FR": `${baseUrl}/cgu`,
-        },
-      },
-    },
-    {
-      url: `${baseUrl}/sign-in`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-      alternates: {
-        languages: {
-          fr: `${baseUrl}/sign-in`,
-          "fr-FR": `${baseUrl}/sign-in`,
-        },
-      },
-    },
-    {
-      url: `${baseUrl}/sign-up`,
-      lastModified: currentDate,
-      changeFrequency: "monthly",
-      priority: 0.6,
-      alternates: {
-        languages: {
-          fr: `${baseUrl}/sign-up`,
-          "fr-FR": `${baseUrl}/sign-up`,
         },
       },
     },

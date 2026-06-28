@@ -1,12 +1,13 @@
 "use server";
 
-import { and, eq, gte, desc } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { db } from "@/lib/utils/db";
 import { clients } from "@/lib/schemas/clients";
 import { pets } from "@/lib/schemas/pets";
 import { animals } from "@/lib/schemas/animals";
 import { advancedReport } from "@/lib/schemas/advancedReport/advancedReport";
 import { getCurrentOrganization } from "./auth.action";
+import { appointments } from "@/lib/schemas/appointments";
 
 // Calcule une date de début sur N jours glissants
 function getStartDateFromDaysAgo(days: number): Date {
@@ -474,4 +475,241 @@ export async function getRecentReports(
       (r.createdAt as unknown as Date)?.toISOString?.() ??
       new Date().toISOString(),
   }));
+}
+
+export type WorkbenchReport = {
+  id: string;
+  title: string;
+  status: "draft" | "finalized" | "sent";
+  patientName: string;
+  ownerName: string;
+  ownerEmail?: string | null;
+  animalName?: string | null;
+  consultationReason?: string | null;
+  createdAt: string;
+  updatedAt?: string | null;
+  anatomicalIssueCount: number;
+  recommendationCount: number;
+};
+
+export type WorkbenchAppointment = {
+  id: string;
+  patientId: string;
+  patientName: string;
+  ownerName: string;
+  animalName?: string | null;
+  beginAt: string;
+  endAt: string;
+  status: string;
+  note?: string | null;
+};
+
+export type WorkbenchPatient = {
+  id: string;
+  name: string;
+  ownerName: string;
+  animalName?: string | null;
+  breed?: string | null;
+  latestReport?: {
+    id: string;
+    title: string;
+    status: "draft" | "finalized" | "sent";
+    createdAt: string;
+  } | null;
+};
+
+export type DashboardWorkbenchData = {
+  drafts: WorkbenchReport[];
+  readyToSend: WorkbenchReport[];
+  sentReports: WorkbenchReport[];
+  appointmentsWithoutReport: WorkbenchAppointment[];
+  recentPatients: WorkbenchPatient[];
+  totals: {
+    drafts: number;
+    readyToSend: number;
+    sent: number;
+    appointmentsWithoutReport: number;
+  };
+};
+
+function toIsoString(value?: Date | string | null) {
+  if (!value) return null;
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+}
+
+function mapWorkbenchReport(report: {
+  id: string;
+  title: string;
+  status: "draft" | "finalized" | "sent";
+  consultationReason?: string | null;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+  patient?: {
+    name?: string | null;
+    animal?: { name?: string | null } | null;
+    owner?: { name?: string | null; email?: string | null } | null;
+  } | null;
+  anatomicalIssues?: unknown[];
+  recommendations?: unknown[];
+}): WorkbenchReport {
+  return {
+    id: report.id,
+    title: report.title || "Compte rendu anatomique",
+    status: report.status,
+    patientName: report.patient?.name || "Patient non renseigné",
+    ownerName: report.patient?.owner?.name || "Propriétaire non renseigné",
+    ownerEmail: report.patient?.owner?.email,
+    animalName: report.patient?.animal?.name,
+    consultationReason: report.consultationReason,
+    createdAt: toIsoString(report.createdAt) ?? new Date().toISOString(),
+    updatedAt: toIsoString(report.updatedAt),
+    anatomicalIssueCount: report.anatomicalIssues?.length ?? 0,
+    recommendationCount: report.recommendations?.length ?? 0,
+  };
+}
+
+export async function getDashboardWorkbenchData(): Promise<DashboardWorkbenchData> {
+  const org = await getCurrentOrganization();
+  if (!org) throw new Error("Organization not found");
+
+  const now = new Date();
+  const pastWindow = new Date(now);
+  pastWindow.setDate(now.getDate() - 14);
+  const futureWindow = new Date(now);
+  futureWindow.setDate(now.getDate() + 14);
+
+  const [reportRows, appointmentRows, patientRows] = await Promise.all([
+    db.query.advancedReport.findMany({
+      where: eq(advancedReport.createdBy, org.id),
+      orderBy: [desc(advancedReport.updatedAt), desc(advancedReport.createdAt)],
+      limit: 24,
+      with: {
+        patient: {
+          with: {
+            owner: {
+              columns: {
+                name: true,
+                email: true,
+              },
+            },
+            animal: {
+              columns: {
+                name: true,
+              },
+            },
+          },
+        },
+        anatomicalIssues: true,
+        recommendations: true,
+      },
+    }),
+    db.query.appointments.findMany({
+      where: and(
+        eq(appointments.organizationId, org.id),
+        gte(appointments.beginAt, pastWindow),
+        lte(appointments.beginAt, futureWindow),
+      ),
+      orderBy: [asc(appointments.beginAt)],
+      limit: 16,
+      with: {
+        patient: {
+          with: {
+            owner: {
+              columns: {
+                name: true,
+              },
+            },
+            animal: {
+              columns: {
+                name: true,
+              },
+            },
+          },
+        },
+        reports: {
+          columns: {
+            id: true,
+          },
+        },
+      },
+    }),
+    db.query.pets.findMany({
+      where: eq(pets.organizationId, org.id),
+      orderBy: [desc(pets.updatedAt), desc(pets.createdAt)],
+      limit: 8,
+      with: {
+        owner: true,
+        animal: true,
+        advancedReport: true,
+      },
+    }),
+  ]);
+
+  const mappedReports = reportRows.map(mapWorkbenchReport);
+  const drafts = mappedReports.filter((report) => report.status === "draft");
+  const readyToSend = mappedReports.filter(
+    (report) => report.status === "finalized",
+  );
+  const sentReports = mappedReports.filter((report) => report.status === "sent");
+
+  const appointmentsWithoutReport = appointmentRows
+    .filter((appointment) => {
+      const reports = (appointment as typeof appointment & { reports?: unknown[] })
+        .reports;
+      return appointment.status !== "CANCELLED" && (!reports || reports.length === 0);
+    })
+    .slice(0, 5)
+    .map((appointment) => ({
+      id: appointment.id,
+      patientId: appointment.patientId ?? "",
+      patientName: appointment.patient?.name || "Patient non renseigné",
+      ownerName:
+        appointment.patient?.owner?.name || "Propriétaire non renseigné",
+      animalName: appointment.patient?.animal?.name,
+      beginAt: appointment.beginAt.toISOString(),
+      endAt: appointment.endAt.toISOString(),
+      status: appointment.status,
+      note: appointment.note,
+    }));
+
+  const recentPatients = patientRows.map((patient) => {
+    const latestReport = [...(patient.advancedReport ?? [])]
+      .filter((report) => report.createdAt)
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt as Date).getTime() -
+          new Date(a.createdAt as Date).getTime(),
+      )[0];
+
+    return {
+      id: patient.id,
+      name: patient.name,
+      ownerName: patient.owner?.name || "Propriétaire non renseigné",
+      animalName: patient.animal?.name,
+      breed: patient.breed,
+      latestReport: latestReport
+        ? {
+            id: latestReport.id,
+            title: latestReport.title,
+            status: latestReport.status,
+            createdAt:
+              toIsoString(latestReport.createdAt) ?? new Date().toISOString(),
+          }
+        : null,
+    };
+  });
+
+  return {
+    drafts: drafts.slice(0, 5),
+    readyToSend: readyToSend.slice(0, 5),
+    sentReports: sentReports.slice(0, 4),
+    appointmentsWithoutReport,
+    recentPatients,
+    totals: {
+      drafts: drafts.length,
+      readyToSend: readyToSend.length,
+      sent: sentReports.length,
+      appointmentsWithoutReport: appointmentsWithoutReport.length,
+    },
+  };
 }

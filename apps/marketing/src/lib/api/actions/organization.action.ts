@@ -2,6 +2,7 @@
 
 import { organizationImagesFormSchema } from "@/components/dashboard/pages/settings/components/profile/profile-logo-section";
 import { auth } from "@/lib/auth/auth-server";
+import { proBasicInformationsSchema } from "@/components/onboarding/types/onboarding-schemas";
 import {
   CreateOrganizationSchema,
   Organization,
@@ -15,12 +16,10 @@ import z from "zod";
 import { getCurrentOrganization, getUser } from "./auth.action";
 
 export const createOrganization = async (
-  input: z.infer<typeof CreateOrganizationSchema>,
+  input: z.infer<typeof proBasicInformationsSchema>,
 ) => {
   try {
-    const data = CreateOrganizationSchema.parse(input);
-
-    console.log(data, "data");
+    const data = proBasicInformationsSchema.parse(input);
 
     const user = await getUser();
 
@@ -30,14 +29,15 @@ export const createOrganization = async (
 
     const result = await auth.api.createOrganization({
       body: {
-        name: data.name as string,
-        slug: data.name?.toLowerCase().replace(/\s+/g, "-") as string,
-        logo: data.logo as string,
+        name: data.name,
+        slug: createOrganizationSlug(data.name, user.user?.id as string),
+        logo: "",
         metadata: {},
         userId: user.user?.id as string,
-        onBoardingComplete: false,
-        description: data.description as string,
-        email: data.email as string,
+        onBoardingComplete: true,
+        onBoardingExplications: true,
+        description: "",
+        email: data.email,
         keepCurrentActiveOrganization: false,
       },
     });
@@ -59,6 +59,19 @@ export const createOrganization = async (
     console.error("Erreur lors de la création de l'organisation:", error);
     throw new Error("Impossible de créer l'organisation");
   }
+};
+
+const createOrganizationSlug = (name: string, userId: string) => {
+  const baseSlug = name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
+  return `${baseSlug || "organisation"}-${userId.slice(0, 8)}`;
 };
 
 export const updateOrganization = async (

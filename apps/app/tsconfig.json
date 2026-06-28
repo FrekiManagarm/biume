@@ -4,7 +4,15 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/emails/*": ["../../emails/*"],
+      "#app/*": ["./src/*"],
+      "@/*": ["../marketing/src/*", "../../*"],
+      "next/cache": ["./src/next-compat/cache.ts"],
+      "next/headers": ["./src/next-compat/headers.ts"],
+      "next/image": ["./src/next-compat/image.tsx"],
+      "next/link": ["./src/next-compat/link.tsx"],
+      "next/navigation": ["./src/next-compat/navigation.ts"],
+      "next/server": ["./src/next-compat/server.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],

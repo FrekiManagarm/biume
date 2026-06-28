@@ -46,7 +46,7 @@ export function DashboardHeader() {
             (item as { items: { title: string; href: string }[] }).items,
           ) &&
           (item as { items: { title: string; href: string }[] }).items.length >
-          0
+            0
         ) {
           let deepest = null as null | { title: string; href: string };
           for (const sub of (
@@ -76,18 +76,18 @@ export function DashboardHeader() {
 
   return (
     <>
-      <div className="flex flex-row justify-between items-center h-16 px-4 py-4">
+      <div className="flex h-[76px] flex-row items-center justify-between border-b bg-background/95 px-5 py-4 backdrop-blur md:px-8">
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
-            className="h-10 w-10 rounded-xl border-border transition-all duration-300 hover:shadow-md p-0 m-0 bg-sidebar"
+            className="m-0 h-9 w-9 rounded-full border-border bg-background p-0 shadow-sm transition-all duration-300 hover:shadow-md"
             onClick={toggleSidebar}
           >
-            <PanelLeft size={24} />
+            <PanelLeft size={18} />
           </Button>
-          <Separator orientation="vertical" className="mx-2 h-4 bg-accent" />
+          <Separator orientation="vertical" className="mx-3 h-5 bg-border/70" />
           <Breadcrumb>
-            <BreadcrumbList>
+            <BreadcrumbList className="text-sm">
               {trail.map((crumb, index) => {
                 const isLast = index === trail.length - 1;
                 return (
@@ -110,7 +110,7 @@ export function DashboardHeader() {
         </div>
         <div className="flex items-center justify-center gap-2">
           {(trialingProduct && trialingProduct.currentPeriodEnd) ||
-            isLoading ? (
+          isLoading ? (
             <TrialCountdownComponent
               endTime={trialingProduct?.currentPeriodEnd ?? 0}
               isLoading={isLoading}

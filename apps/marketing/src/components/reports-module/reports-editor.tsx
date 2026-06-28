@@ -377,7 +377,7 @@ export function AdvancedReportEditor({
       await handleUpdateReport("draft");
     },
     {
-      description: "Sauvegarder le rapport (Cmd/Ctrl+S)",
+      description: "Sauvegarder le compte rendu (Cmd/Ctrl+S)",
       preventDefault: true,
       enableOnFormTags: true,
       enableOnContentEditable: true,
@@ -481,7 +481,7 @@ export function AdvancedReportEditor({
     mutationFn: updateReport,
     onSuccess: (data) => {
       if (data?.success) {
-        toast.success("Rapport mis à jour avec succès");
+        toast.success("Compte rendu mis à jour avec succès");
         // Mettre à jour l'état de sauvegarde après succès
         setLastSavedState({
           title,
@@ -497,11 +497,11 @@ export function AdvancedReportEditor({
           toggleFocusMode();
         }
       } else {
-        toast.error("Erreur lors de la mise à jour du rapport");
+        toast.error("Erreur lors de la mise à jour du compte rendu");
       }
     },
     onError: (_) => {
-      toast.error("Erreur lors de la mise à jour du rapport");
+      toast.error("Erreur lors de la mise à jour du compte rendu");
     },
   });
 
@@ -736,12 +736,12 @@ export function AdvancedReportEditor({
     },
     {
       id: "recommendations",
-      name: "Recommandations & Notes",
+      name: "Version propriétaire",
       icon: <HeartHandshakeIcon className="h-5 w-5 mr-2" />,
       tabs: [
         {
           id: "recommendations",
-          label: "Recommandations",
+          label: "Conseils à transmettre",
           icon: <CheckIcon className="h-4 w-4" />,
         },
         {
@@ -786,6 +786,7 @@ export function AdvancedReportEditor({
               onGoBack={handleGoBack}
               onPreview={() => setShowPreview(true)}
               onShortcuts={() => setIsShortcutsModalOpen(true)}
+              onVulgarize={() => setIsVulgarisationOpen(true)}
               onSave={handleOpenReminderDialog}
               isSaving={updateReportMutation.isPending}
               getTabProgress={getTabProgress}
@@ -827,13 +828,13 @@ export function AdvancedReportEditor({
                     </div>
                     <div className="space-y-2">
                       <h2 className="text-lg font-semibold text-foreground">
-                        Module rapports bientôt disponible pour le chat
+                        Module comptes rendus bientôt disponible pour le chat
                       </h2>
                       <p className="text-sm text-muted-foreground leading-relaxed">
                         Le module de comptes rendus n&apos;est pas encore
                         disponible pour les chats. Sélectionnez un autre type
                         d&apos;animal pour continuer, ou sélectionnez un autre
-                        type de rapport. Merci de votre compréhension.
+                        type de compte rendu. Merci de votre compréhension.
                       </p>
                     </div>
                   </div>
@@ -923,7 +924,9 @@ export function AdvancedReportEditor({
               </Button>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-lg font-semibold">Modifier le rapport</h1>
+                  <h1 className="text-lg font-semibold">
+                    Modifier le compte rendu
+                  </h1>
                   {hasUnsavedChanges && (
                     <div
                       className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"
@@ -934,7 +937,7 @@ export function AdvancedReportEditor({
                 <p className="text-xs text-muted-foreground">
                   {selectedPet
                     ? `${selectedPet.name} • ${selectedPet.animal?.name || selectedPet.type}`
-                    : "Compte rendu détaillé"}
+                    : "Compte rendu anatomique"}
                 </p>
               </div>
             </div>
@@ -1272,7 +1275,7 @@ export function AdvancedReportEditor({
                 </div>
                 <div className="flex items-center justify-between py-1">
                   <span className="text-sm text-muted-foreground">
-                    Sauvegarder le rapport
+                    Sauvegarder le compte rendu
                   </span>
                   <kbd className="px-2 py-1 text-xs bg-muted rounded border font-mono">
                     Cmd+S
