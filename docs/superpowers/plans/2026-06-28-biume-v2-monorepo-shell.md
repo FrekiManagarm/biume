@@ -88,7 +88,7 @@ Do not move current root files in this phase.
 - Create: `scripts/validate-monorepo-shell.mjs`
 
 **Interfaces:**
-- Produces: root scripts `dev`, `build`, `lint`, `check-types`, `dev:marketing`, `dev:app`, `legacy:dev`, `legacy:build`, `legacy:lint`, `validate:monorepo`.
+- Produces: root scripts `dev`, `dev:apps`, `build`, `build:apps`, `lint`, `lint:apps`, `check-types`, `dev:marketing`, `dev:app`, `legacy:dev`, `legacy:build`, `legacy:lint`, `validate:monorepo`.
 - Produces: Turbo tasks `build`, `dev`, `lint`, `check-types`, `validate`.
 - Consumes: existing root package dependencies and existing root Next app.
 
@@ -152,10 +152,12 @@ Keep the current dependency lists intact during Phase 1. Add `workspaces`, add `
 
 ```json
 {
-  "dev": "turbo dev",
+  "dev": "next dev",
+  "dev:apps": "turbo dev",
   "build": "next build",
   "build:apps": "turbo build",
-  "lint": "turbo lint",
+  "lint": "eslint",
+  "lint:apps": "turbo lint",
   "check-types": "turbo check-types",
   "validate": "turbo validate",
   "validate:monorepo": "bun scripts/validate-monorepo-shell.mjs",

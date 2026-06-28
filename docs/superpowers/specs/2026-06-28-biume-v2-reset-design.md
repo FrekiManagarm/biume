@@ -126,11 +126,13 @@ The root `package.json` should use Bun workspaces:
     "packages": ["apps/*", "packages/*"]
   },
   "scripts": {
-    "dev": "turbo dev",
+    "dev": "next dev",
+    "dev:apps": "turbo dev",
     "build": "next build",
     "build:apps": "turbo build",
     "check-types": "turbo check-types",
-    "lint": "turbo lint",
+    "lint": "eslint",
+    "lint:apps": "turbo lint",
     "dev:marketing": "turbo -F marketing dev",
     "dev:app": "turbo -F app dev",
     "db:generate": "drizzle-kit generate",
