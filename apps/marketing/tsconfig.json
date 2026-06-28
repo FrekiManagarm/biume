@@ -4,7 +4,8 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["../../*"],
+      "fumadocs-mdx:collections/*": ["./.source/*"]
     }
   },
   "include": [

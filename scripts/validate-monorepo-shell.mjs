@@ -4,7 +4,7 @@ import { join } from "node:path";
 const requiredFiles = [
   "turbo.json",
   "apps/marketing/package.json",
-  "apps/marketing/src/app/page.tsx",
+  "apps/marketing/src/app/(main)/page.tsx",
   "apps/app/package.json",
   "apps/app/src/routes/__root.tsx",
   "packages/ui/package.json",
@@ -16,6 +16,16 @@ const requiredFiles = [
 ];
 
 const root = process.cwd();
+
+const fail = (message) => {
+  console.error(message);
+  process.exit(1);
+};
+
+if (existsSync(join(root, "app"))) {
+  fail("Root app/ must not exist; routes must live inside apps/* workspaces.");
+}
+
 const missing = requiredFiles.filter((file) => !existsSync(join(root, file)));
 
 if (missing.length > 0) {
@@ -26,11 +36,6 @@ if (missing.length > 0) {
   process.exit(1);
 }
 
-const fail = (message) => {
-  console.error(message);
-  process.exit(1);
-};
-
 const packageJson = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
 const packages = packageJson.workspaces?.packages ?? [];
 
@@ -39,13 +44,13 @@ if (!packages.includes("apps/*") || !packages.includes("packages/*")) {
 }
 
 const expectedRootScripts = {
-  dev: "next dev",
+  dev: "turbo dev",
   "dev:apps": "turbo dev",
-  build: "next build",
+  build: "turbo build",
   "build:apps": "turbo build",
-  lint: "eslint",
+  lint: "turbo lint",
   "lint:apps": "turbo lint",
-  start: "next start",
+  start: "bun -F marketing start",
   "db:push": "drizzle-kit push",
   "db:generate": "drizzle-kit generate",
   "db:migrate": "drizzle-kit migrate",
@@ -54,8 +59,16 @@ const expectedRootScripts = {
 
 for (const [script, expected] of Object.entries(expectedRootScripts)) {
   if (packageJson.scripts?.[script] !== expected) {
-    fail(`Root package.json script "${script}" must be "${expected}" during Phase 1.`);
+    fail(`Root package.json script "${script}" must be "${expected}" after app migration.`);
   }
+}
+
+const legacyScripts = Object.keys(packageJson.scripts ?? {}).filter((script) =>
+  script.startsWith("legacy:"),
+);
+
+if (legacyScripts.length > 0) {
+  fail(`Root package.json must not keep legacy Next scripts: ${legacyScripts.join(", ")}.`);
 }
 
 const gitignore = readFileSync(join(root, ".gitignore"), "utf8")

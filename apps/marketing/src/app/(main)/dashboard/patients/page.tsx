@@ -1,5 +1,5 @@
 import { PatientsTable } from "@/components/dashboard/pages/patients";
-import { patientsSearchCache } from "./search-params";
+import { patientsSearchCache } from "@/lib/search-params/patients";
 import { getAllPatients } from "@/lib/api/actions/patients.action";
 import { Pet } from "@/lib/schemas";
 

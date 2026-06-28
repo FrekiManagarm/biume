@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
+import { ourFileRouter } from "@/lib/uploadthing/core";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { NuqsAdapter } from "nuqs/adapters/next";
 

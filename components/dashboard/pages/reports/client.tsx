@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { useQueryStates } from "nuqs";
-import { reportsSearchParsers } from "@/app/(main)/dashboard/reports/search-params";
+import { reportsSearchParsers } from "@/lib/search-params/reports";
 import { AdvancedReport } from "@/lib/schemas/advancedReport/advancedReport";
 import { AdvancedReportsTable } from ".";
 

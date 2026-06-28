@@ -1,5 +1,5 @@
 import { ClientsTable } from "@/components/dashboard/pages/clients";
-import { clientsSearchCache } from "@/app/(main)/dashboard/clients/search-params";
+import { clientsSearchCache } from "@/lib/search-params/clients";
 import { getAllClients } from "@/lib/api/actions/clients.action";
 
 type Props = {

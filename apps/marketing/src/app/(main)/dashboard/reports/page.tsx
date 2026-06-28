@@ -1,6 +1,6 @@
 import ReportsPageClient from "@/components/dashboard/pages/reports/client";
 import { getAllReports } from "@/lib/api/actions/reports.action";
-import { reportsSearchCache } from "./search-params";
+import { reportsSearchCache } from "@/lib/search-params/reports";
 
 type Props = {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
